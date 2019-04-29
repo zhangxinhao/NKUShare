@@ -24,7 +24,9 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/index'
+      'pages/index',
+      'pages/help/helping',
+      'pages/help/post'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -46,7 +48,6 @@ export default class extends wepy.app {
   onLaunch() {
     this.testAsync()
   }
-
   sleep (s) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
