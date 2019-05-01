@@ -29,7 +29,7 @@
 <template>
   <view class="panel">
     <slot name="title">
-      Title
+      拼单
     </slot>
     <slot>
     </slot>
@@ -38,6 +38,6 @@
 <script>
   import wepy from 'wepy'
 
-  export default class Panel extends wepy.component {
+  export default class Panel2 extends wepy.component {
   }
 </script>

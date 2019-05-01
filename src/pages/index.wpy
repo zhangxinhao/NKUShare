@@ -1,93 +1,64 @@
 <style lang="less">
 </style>
 <template>
-  <view>
-  <basics v-if="PageCur=='basics'"></basics>
-  <components v-if="PageCur=='component'"></components>
-  <plugin v-if="PageCur=='plugin'"></plugin>
-  <about v-if="PageCur=='about'"></about>
-  <view class="cu-bar tabbar bg-white shadow foot">
-    <view class="action" @tap="toHelpingPage" data-cur="basics">
-      <view class='cuIcon-cu-image'>
-        <image src="/images/basics{{PageCur=='basics'?'_cur':''}}.png"></image>
+  <view class="container">
+    <panel wx:if="{{PageCur == 'basics'}}"></panel>
+    <panel1 wx:if="{{PageCur == 'component'}}"></panel1>
+    <panel2 wx:if="{{PageCur == 'plugin'}}"></panel2>
+    <view class="cu-bar tabbar bg-white shadow foot">
+			<view class="action" @tap="NavChange" data-cur="basics">
+				<view class='cuIcon-cu-image'>
+					<image src="{{'../static/tabbar/basics' + [PageCur=='basics'?'_cur':''] + '.png'}}"></image>
+				</view>
+				<view class="PageCur=='basics'?'text-green':'text-gray'">帮帮</view>
+			</view>
+			<view class="action" @tap="NavChange" data-cur="component">
+				<view class='cuIcon-cu-image'>
+					<image src="{{'../static/tabbar/component' + [PageCur == 'component'?'_cur':''] + '.png'}}"></image>
+				</view>
+				<view class="PageCur=='component'?'text-green':'text-gray'">失物招领</view>
+			</view>
+			<view class="action" @tap="NavChange" data-cur="plugin">
+				<view class='cuIcon-cu-image'>
+					<image src="{{'../static/tabbar/plugin' + [PageCur == 'plugin'?'_cur':''] + '.png'}}"></image>
+				</view>
+				<view class="PageCur=='plugin'?'text-green':'text-gray'">拼单</view>
+			</view>
+      <view class="action" bindtap="NavChange" data-cur="about">
+        <view class='cuIcon-cu-image'>
+          <image src="{{'../static/tabbar/about' + [PageCur=='about'?'_cur':''] + '.png'}}"></image>
+        </view>
+        <view class="{{PageCur=='about'?'text-green':'text-gray'}}">关于</view>
       </view>
-      <view class="{{PageCur=='basics'?'text-green':'text-gray'}}">首页</view>
-    </view>
-    <view class="action" @tap="toHelpingPage" data-cur="component">
-      <view class='cuIcon-cu-image'>
-        <image src="/images/component{{PageCur=='component'?'_cur':''}}.png"></image>
-      </view>
-      <view class="{{PageCur=='component'?'text-green':'text-gray'}}">失物招领</view>
-    </view>
-    <view class="action" @tap="toHelpingPage" data-cur="plugin">
-      <view class='cuIcon-cu-image'>
-        <image src="/images/plugin{{PageCur=='plugin'?'_cur':''}}.png"></image>
-      </view>
-      <view class="{{PageCur=='plugin'?'text-green':'text-gray'}}">帮帮</view>
-    </view>
-    <view class="action" @tap="toHelpingPage" data-cur="about">
-      <view class='cuIcon-cu-image'>
-        <image src="/images/about{{PageCur=='about'?'_cur':''}}.png"></image>
-      </view>
-      <view class="{{PageCur=='about'?'text-green':'text-gray'}}">关于</view>
-    </view>
-  </view>
+		</view>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
-  import { connect } from 'wepy-redux'
-  import Panel from '@/components/panel' // alias example
-  import Counter from 'counter' // alias example
-  import List from '../components/list' // aliasFields example
-  import moduleA from 'module-a' // aliasFields ignore module example
-  import Group from '../components/group'
-  import Toast from 'wepy-com-toast'
-  import testMixin from '../mixins/test'
+  import Helping from '@/components/help/helping'
+  import Post from '@/components/help/post'
+  import Panel2 from '@/components/panel2'
 
-  console.log('moduleA ignored: ', moduleA) // => moduleA ignored: {}
-
-  @connect({
-    num (state) {
-      return state.counter.num
-    },
-    asyncNum (state) {
-      return state.counter.asyncNum
-    },
-    sumNum (state) {
-      return state.counter.num + state.counter.asyncNum
-    }
-  })
   export default class Index extends wepy.page {
     config = {
       navigationBarTitleText: 'test'
     }
     components = {
-      panel: Panel,
-      counter1: Counter,
-      counter2: Counter,
-      list: List,
-      group: Group,
-      toast: Toast
+      panel: Helping,
+      panel1: Post,
+      panel2: Panel2
     }
-    mixins = [testMixin]
-    data = {PageCur: 'basics'}
-    computed = {}
+    data = {
+      PageCur: 'basics'
+    }
     methods = {
-  onShareAppMessage() {
-    return {
-      title: 'ColorUI-高颜值的小程序UI组件库',
-      imageUrl: '/images/share.jpg',
-      path: '/pages/index'
+      NavChange: function(e) {
+        this.PageCur = e.currentTarget.dataset.cur
+      }
     }
-  },
-  toHelpingPage : function() {
-       wx.navigateTo({
-           url: 'help/helping'
-       });
+    onLoad() {
+      console.log('onLoad')
     }
   }
-  events = {}
-}
 </script>

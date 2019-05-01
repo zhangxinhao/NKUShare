@@ -28,20 +28,17 @@
 <script>
 import wepy from 'wepy'
 
- export default class ListTest extends wepy.page {
-    config = {navigationBarTitleText: 'posts'};
-    components = {};
-    data = {
-    ColorList: app.globalData.ColorList,
+export default class Post extends wepy.component {
+    // config = {navigationBarTitleText: 'posts'};
+    // components = {};
+  data = {
+    // ColorList: app.globalData.ColorList,
     avatar: [
       'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
       'https://ossweb-img.qq.com/images/lol/web201310/skin/big81005.jpg',
       'https://ossweb-img.qq.com/images/lol/web201310/skin/big25002.jpg',
       'https://ossweb-img.qq.com/images/lol/web201310/skin/big91012.jpg'
-  ]};
-    methods = {};
-
-    events = {};
-    onLoad() {};
+    ]
+  }
  }
 </script>
