@@ -12,7 +12,8 @@ export default class extends wepy.app {
       'pages/index',
       'pages/launchActivity',
       'pages/detailsOfActivity',
-      'pages/order/orderList'
+      'pages/order/orderList',
+      'pages/order/orderDetail'
     ],
     window: {
       backgroundTextStyle: 'light',

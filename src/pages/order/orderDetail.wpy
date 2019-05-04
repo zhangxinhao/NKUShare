@@ -1,0 +1,96 @@
+<template>
+  <view class="padding-sm">
+    <view class="bg-white radius shadow-blur grid col-1 margin-bottom">
+      <view class="text-xl padding" role="" aria-label="">
+        <text class="text-black text-bold">单号:123456</text>
+      </view>
+      <view class="cu-list menu {{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}">
+        <view class="cu-item {{menuArrow?'arrow':''}}">
+          <view class="content">
+            <text class="cuIcon-circlefill text-grey"></text>
+            <text class="text-grey">创建者:</text>
+          </view>
+        </view>
+        <view class="cu-item {{menuArrow?'arrow':''}}">
+          <button class="cu-btn content" open-type="contact">
+            <text class="cuIcon-btn text-olive"></text>
+            <text class="text-grey">创建时间:</text>
+          </button>
+        </view>
+        <view class="cu-item {{menuArrow?'arrow':''}}">
+          <button class="cu-btn content" open-type="contact">
+            <text class="cuIcon-btn text-olive"></text>
+            <text class="text-grey">截止时间:</text>
+          </button>
+        </view>
+        <view class="cu-item {{menuArrow?'arrow':''}}">
+          <view class="content">
+            <text class="cuIcon-warn text-green"></text>
+            <text class="text-grey">订单描述</text>
+          </view>
+          <view class="action">
+            <text class="text-grey text-sm">小目标还没有实现！</text>
+          </view>
+        </view>
+        <view class="cu-item {{menuArrow?'arrow':''}}">
+          <view class="content">
+            <text class="cuIcon-emojiflashfill text-pink"></text>
+            <text class="text-grey">头像组</text>
+          </view>
+          <view class="action">
+            <view class="cu-avatar-group">
+              <view class="cu-avatar round sm" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10004.jpg);"></view>
+              <view class="cu-avatar round sm" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10003.jpg);"></view>
+              <view class="cu-avatar round sm" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10002.jpg);"></view>
+              <view class="cu-avatar round sm" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg);"></view>
+            </view>
+            <text class="text-grey text-sm">4 人</text>
+          </view>
+        </view>
+        <view class="cu-item {{menuArrow?'arrow':''}}">
+          <view class="content">
+            <text class="cuIcon-tagfill text-red"></text>
+            <text class="text-grey">标签</text>
+          </view>
+          <view class="action">
+            <view class="cu-tag round bg-orange light">音乐</view>
+            <view class="cu-tag round bg-olive light">电影</view>
+            <view class="cu-tag round bg-blue light">旅行</view>
+          </view>
+        </view>
+        <view class="cu-item">
+          <view class="content padding-tb-sm">
+            <view>
+              <text class="cuIcon-clothesfill text-blue margin-right-xs"></text>详细描述</view>
+            <view class="text-gray text-sm">
+              <text class="cuIcon-infofill margin-right-xs"></text>小目标还没有实现！萨达所所大多撒大多所富商大贾的时光萨达所所大多撒大多所富商大贾的时光萨达所所大多撒大多所富商大贾的时光</view>
+          </view>
+        </view>
+      </view>
+      <view class="text-center">
+        <view class="margin-top margin-bottom">
+          <button class="cu-btn round bg-red lg" role="button" aria-label="" aria-disabled="false">
+            加入拼单
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class OrderDetail extends wepy.page {
+  config = {
+    navigationBarTitleText: '订单详情'
+  }
+
+  onLoad() {
+    console.log('Onload')
+  }
+}
+</script>
+
+<style>
+</style>
