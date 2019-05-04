@@ -1,0 +1,72 @@
+<style scoped>
+</style>
+
+<template>
+    <view class="cu-card case {{isCard?'no-card':''}}">
+        <view class="cu-item shadow">
+            <view class="cu-list menu-avatar">
+                <view class="cu-item">
+                    <view
+                        class="cu-avatar round lg"
+                        style="background-image:url({{activityThemeUrl}});"
+                    ></view>
+                    <view class="content flex-sub">
+                        <view class="text-grey">活动主题:{{theme}}</view>
+                        <view class="text-gray text-sm flex justify-between">时间:{{activityTime}}</view>
+                        <view class="text-gray text-sm flex justify-between">
+                            地点:{{activityLocation}}
+                            <text class="margin-lr-xs">人数：{{currentNum}}/{{sumNum}}</text>
+                        </view>
+                    </view>
+                </view>
+                <view class="bg-grey padding-sm radius margin-top-sm text-sm">
+                    <view class="flex">
+                        <view>参与成员:</view>
+                        <view class="action">
+                            <view class="cu-avatar-group">
+                                <repeat for="{{attendees}}" key="index" index="index" item="item">
+                                    <view
+                                        class="cu-avatar round sm"
+                                        style="background-image:url({{item}});"
+                                    ></view>
+                                </repeat>
+                            </view>
+                            <text class="text-grey text-sm">4 人</text>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</template>
+
+
+
+<script>
+import wepy from 'wepy'
+
+export default class activityCard extends wepy.component {
+  // config = {navigationBarTitleText: 'posts'};
+  // components = {};
+  props = {
+    theme: String,
+    activityTime: String,
+    activityLocation: String,
+    sumNum: Number,
+    activityThemeUrl: String,
+    attendees: Array
+  }
+  data = {}
+  methods = {}
+  onload() {
+    console.log('onLoad')
+  }
+
+  computed = {
+    currentNum() {
+      return this.attendees.length
+    }
+  }
+}
+</script>
+ 

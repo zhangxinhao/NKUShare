@@ -48,7 +48,7 @@
   import Helping from '@/components/help/helping'
   import Post from '@/components/help/post'
   import Panel2 from '@/components/panel2'
-  import ShowActivity from '@/components/show_activity'
+  import ShowActivity from '@/components/activity/showActivity'
 
   export default class Index extends wepy.page {
     config = {

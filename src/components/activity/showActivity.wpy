@@ -1,0 +1,90 @@
+<style lang = "less">
+</style>
+<template>
+  <view class="container">
+    <panel
+      :theme="theme"
+      :activityTime="activityTime"
+      :activityLocation="activityLoaction"
+      :sumNum="sumNum"
+      :activityThemeUrl="activityThemeUrl"
+      :attendees="attendees"
+    ></panel>
+    <panel
+      :theme="theme"
+      :activityTime="activityTime"
+      :activityLocation="activityLoaction"
+      :sumNum="sumNum"
+      :activityThemeUrl="activityThemeUrl"
+      :attendees="attendees"
+    ></panel>
+    <panel
+      :theme="theme"
+      :activityTime="activityTime"
+      :activityLocation="activityLoaction"
+      :sumNum="sumNum"
+      :activityThemeUrl="activityThemeUrl"
+      :attendees="attendees"
+    ></panel>
+    <panel
+      :theme="theme"
+      :activityTime="activityTime"
+      :activityLocation="activityLoaction"
+      :sumNum="sumNum"
+      :activityThemeUrl="activityThemeUrl"
+      :attendees="attendees"
+    ></panel>
+    <panel
+      :theme="theme"
+      :activityTime="activityTime"
+      :activityLocation="activityLoaction"
+      :sumNum="sumNum"
+      :activityThemeUrl="activityThemeUrl"
+      :attendees="attendees"
+    ></panel>
+    <launch/>
+  </view>
+</template>
+<script>
+import wepy from 'wepy'
+import activityCart from '@/components/activity/activityCard'
+import launch from '@/components/activity/addButton'
+export default class showActivity extends wepy.component {
+  data = {
+    theme: '篮球',
+    activityTime: '2019.05.01',
+    activityLoaction: '津南理科篮球场',
+    sumNum: 10,
+    activityThemeUrl: '../../static/tabbar/activity.png',
+    // 参与人员头像列表
+    attendees: [
+      'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
+      'https://ossweb-img.qq.com/images/lol/web201310/skin/big81005.jpg'
+    ]
+  }
+  components = {
+    panel: activityCart,
+    launch: launch
+  }
+  computed = {
+    theme() {
+      return this.theme
+    },
+    activityTime() {
+      return this.activityTime
+    },
+    activityLoaction() {
+      return this.activityLoaction
+    },
+    sumNum() {
+      return this.sumNum
+    },
+    activityThemeUrl() {
+      return this.activityThemeUrl
+    },
+    attendees() {
+      return this.attendees
+    }
+  }
+}
+</script>
