@@ -1,0 +1,34 @@
+<template>
+  <view class="padding-sm">
+    <view class="bg-white radius shadow-blur grid col-1 margin-bottom text-center">
+      <view>
+        <image src="http://188.131.238.75/orderLogo.png" />
+      </view>
+      <view class="solid-bottom text-xl padding" role="" aria-label="">
+        <text class="text-black text-bold">请选择您所在的校区</text>
+      </view>
+      <view class="margin-top margin-bottom">
+        <button class="cu-btn round bg-red lg" role="button" aria-label="" aria-disabled="false">南开大学八里台校区</button>
+      </view>
+      <view class="margin-bottom">
+        <button class="cu-btn round bg-yellow lg" role="button" aria-label="" aria-disabled="false">南开大学津南校区</button>
+      </view>
+      <view class="margin-bottom">
+        <button class="cu-btn round bg-blue lg" role="button" aria-label="" aria-disabled="false">南开大学泰达校区</button>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class Campus extends wepy.component {
+  data = {
+  }
+}
+</script>
+
+<style>
+</style>
+>

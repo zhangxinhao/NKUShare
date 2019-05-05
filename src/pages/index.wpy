@@ -4,8 +4,8 @@
   <view class="container">
     <panel wx:if="{{PageCur == 'basics'}}"></panel>
     <lostFound wx:if="{{PageCur == 'lostFound'}}"></lostFound>
-    <panel2 wx:if="{{PageCur == 'plugin'}}"></panel2>
     <panel3 wx:if="{{PageCur == 'activity'}}"></panel3>
+    <Campus wx:if="{{PageCur == 'plugin'}}"></Campus>
     <view class="cu-bar tabbar bg-white shadow foot">
 			<view class="action" @tap="NavChange" data-cur="basics">
 				<view class='cuIcon-cu-image'>
@@ -47,8 +47,8 @@
   import wepy from 'wepy'
   import Helping from '@/components/help/helping'
   import ShowLostFound from '@/components/lostFound/showLostFound'
-  import Panel2 from '@/components/panel2'
   import ShowActivity from '@/components/activity/showActivity'
+  import Campus from '@/components/order/chooseCampus'
 
   export default class Index extends wepy.page {
     config = {
@@ -57,8 +57,8 @@
     components = {
       panel: Helping,
       lostFound: ShowLostFound,
-      panel2: Panel2,
-      panel3: ShowActivity
+      panel3: ShowActivity,
+      Campus: Campus
     }
     data = {
       PageCur: 'basics'
