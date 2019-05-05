@@ -1,0 +1,119 @@
+<style>
+</style>
+<template>
+    <view>
+        <view class="solids-bottom padding-xs flex align-center">
+            <view class="flex-sub text-lgeft">
+                <view class="solid-bottom text-xl padding">
+                    <text class="text-black text-bold">活动主题:{{theme}}</text>
+                </view>
+                <view class="content flex-sub">
+                    <view class="padding text-lg flex justify-between">时间
+                        <view class="text-lg">
+                            <text class="margin-lr-xs">{{time}}</text>
+                        </view>
+                    </view>
+                </view>
+                <view class="content flex-sub">
+                    <view class="padding text-lg flex justify-between">地点
+                        <view class="text-lg">
+                            <text class="margin-lr-xs">{{location}}</text>
+                        </view>
+                    </view>
+                </view>
+                <view class="content flex-sub">
+                    <view class="padding text-lg flex justify-between">人数
+                        <view class="text-lg">
+                            <text class="margin-lr-xs">{{currentNum}}/{{sumNum}}</text>
+                        </view>
+                    </view>
+                </view>
+                <view class="content flex-sub">
+                    <view class="padding text-lg flex justify-between">发起人
+                        <view class="text-lg">
+                            <text class="margin-lr-xs">{{sponsorName}} {{sponsorCollege}}</text>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <!-- <view class="cu-bar bg-white margin-top solid-bottom">
+        <view class="action">
+            <text class="cuIcon-title text-blue"></text>
+            <text class="text-lgg">活动主题:{{theme}}</text>
+        </view>
+        </view>-->
+        <view class="bg-white">
+            <view class="bg-grey padding-sm radius margin-top-sm text-sm">
+                <view class="flex">
+                    <view>参与成员:</view>
+                    <view class="action">
+                        <view class="cu-avatar-group">
+                            <repeat for="{{attendeesAvatar}}" key="index" index="index" item="item">
+                                <view
+                                    class="cu-avatar round sm"
+                                    style="background-image:url({{item}});"
+                                ></view>
+                            </repeat>
+                        </view>
+                    </view>
+                </view>
+            </view>
+            <repeat for="{{attendees}}" key="index" index="index" item="item">
+                <view class="flex solid-bottom padding justify-between">
+                    <view class="bg-grey padding-sm margin-xs radius">{{item.name}}</view>
+                    <view class="bg-grey padding-sm margin-xs radius">{{item.college}}</view>
+                </view>
+            </repeat>
+        </view>
+        <view wx:if="{{hasJoin==false}}" class="padding flex flex-direction">
+            <button class="cu-btn bg-grey lg" @tap="attend">报名参加</button>
+        </view>
+        <comments wx:if="{{hasJoin==true}}"/>
+    </view>
+</template>
+<script>
+import wepy from 'wepy'
+import commentArea from '../components/activity/commentArea'
+// import launch from '../components/activity/addButton'
+
+export default class detailsOfActivity extends wepy.page {
+  components = {
+    comments: commentArea
+  }
+  data = {
+    id: Number,
+    theme: '软件篮球训练',
+    time: '2019.05.01 18:00-22:00',
+    location: '津南理科篮球场',
+    currentNum: 5,
+    sumNum: 10,
+    sponsorName: '王康',
+    sponsorCollege: '软件学院',
+    attendeesAvatar: [
+      'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
+      'https://ossweb-img.qq.com/images/lol/web201310/skin/big81005.jpg'
+    ],
+    attendees: [
+      {
+        name: '王康',
+        college: '软件学院'
+      },
+      {
+        name: '王康',
+        college: '软件学院'
+      }
+    ],
+    hasJoin: false
+  }
+  methods = {
+    attend(e) {
+      this.hasJoin = true
+    }
+  }
+  onLoad(options) {
+    this.id = options.id
+    console.log(options)
+  }
+}
+</script>

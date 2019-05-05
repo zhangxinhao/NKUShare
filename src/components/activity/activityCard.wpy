@@ -2,7 +2,7 @@
 </style>
 
 <template>
-    <view class="cu-card case {{isCard?'no-card':''}}">
+    <view class="cu-card case {{isCard?'no-card':''}}" @tap="showDetails">
         <view class="cu-item shadow">
             <view class="cu-list menu-avatar">
                 <view class="cu-item">
@@ -57,7 +57,13 @@ export default class activityCard extends wepy.component {
     attendees: Array
   }
   data = {}
-  methods = {}
+  methods = {
+    showDetails: function(e) {
+      wepy.navigateTo({
+        url: '../pages/detailsOfActivity?id=1'
+      })
+    }
+  }
   onload() {
     console.log('onLoad')
   }

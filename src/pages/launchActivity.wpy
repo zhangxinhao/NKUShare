@@ -35,28 +35,28 @@
             </view>
             <view class="cu-form-group">
                 <view class="title">开始时间选择</view>
-                <picker mode="time" value="time" start="09:01" end="21:01" @change="TimeChange">
-                    <view class="picker">{{time}}</view>
+                <picker mode="time" value="startTime" start="06:00" end="24:00" @change="StartTimeChange">
+                    <view class="picker">{{startTime}}</view>
                 </picker>
             </view>
             <view class="cu-form-group">
                 <view class="title">结束时间选择</view>
-                <picker mode="time" value="time" start="09:01" end="21:01" @change="TimeChange">
-                    <view class="picker">{{time}}</view>
+                <picker mode="time" value="endTime" start="06:00" end="24:00" @change="EndTimeChange">
+                    <view class="picker">{{endTime}}</view>
                 </picker>
             </view>
             <view class="cu-form-group">
                 <view class="title">报名截止时间选择</view>
-                <picker mode="time" value="time" start="09:01" end="21:01" @change="TimeChange">
-                    <view class="picker">{{time}}</view>
+                <picker mode="time" value="ddlTime" start="06:00" end="24:00" @change="DdlTimeChange">
+                    <view class="picker">{{ddlTime}}</view>
                 </picker>
             </view>
             <view class="cu-form-group align-start">
                 <view class="title">详细描述</view>
                 <textarea
                     maxlength="-1"
-                    disabled="modalName!=null"
-                    @input="textareaBInput"
+                    disabled="{{modalName!==null}}"
+                    @input="textareaInput"
                     placeholder="多行文本输入框"
                 ></textarea>
             </view>
@@ -97,10 +97,13 @@ export default class launchActivity extends wepy.page {
   data = {
     index: -1,
     picker: ['喵喵喵', '汪汪汪', '哼唧哼唧'],
-    time: '12:01',
+    startTime: '12:01',
+    endTime: '12:01',
+    ddlTime: '12:01',
     date: '2018-12-25',
     modalName: null,
-    imgList: []
+    imgList: [],
+    textAreaValue: ''
   }
   methods = {
     launchConfirm(e) {
@@ -110,14 +113,20 @@ export default class launchActivity extends wepy.page {
     PickerChange(e) {
       this.index = e.detail.value
     },
-    TimeChange(e) {
-      this.time = e.detail.value
+    StartTimeChange(e) {
+      this.startTime = e.detail.value
+    },
+    EndTimeChange(e) {
+      this.endTime = e.detail.value
+    },
+    DdlTimeChange(e) {
+      this.ddlTime = e.detail.value
     },
     DateChange(e) {
       this.date = e.detail.value
     },
-    textareaBInput(e) {
-      this.textareaBValue = e.detail.value
+    textareaInput(e) {
+      this.textareaValue = e.detail.value
     },
     ViewImage(e) {
       wx.previewImage({

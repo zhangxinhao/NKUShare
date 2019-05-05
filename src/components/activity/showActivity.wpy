@@ -47,7 +47,7 @@
 </template>
 <script>
 import wepy from 'wepy'
-import activityCart from '@/components/activity/activityCard'
+import activityCard from '@/components/activity/activityCard'
 import launch from '@/components/activity/addButton'
 export default class showActivity extends wepy.component {
   data = {
@@ -63,7 +63,7 @@ export default class showActivity extends wepy.component {
     ]
   }
   components = {
-    panel: activityCart,
+    panel: activityCard,
     launch: launch
   }
   computed = {

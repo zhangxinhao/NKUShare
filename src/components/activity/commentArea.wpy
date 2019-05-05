@@ -1,0 +1,72 @@
+<style scoped>
+</style>
+<template>
+    <view>
+        <view class="cu-bar bg-white solid-bottom margin-top">
+            <view class="action">
+                <text class="cuIcon-title text-orange"></text>消息列表
+            </view>
+        </view>
+        <repeat for="{{commentArray}}" key="index" index="index" item="item">
+            <view class="cu-list menu-avatar">
+                <view class="cu-item">
+                    <view
+                        class="cu-avatar round lg"
+                        style="background-image:url({{item.avatarUrl}});"
+                    ></view>
+                    <view class="content">
+                        <view class="text-grey">{{item.name}}</view>
+                        <view class="text-gray text-sm flex">
+                            <text class="text-cut">
+                                {{item.content}}
+                            </text>
+                        </view>
+                    </view>
+                    <view class="action">
+                        <view class="text-grey text-xs">{{item.date}}</view>
+                        <view class="cu-tag round bg-grey sm">{{item.time}}</view>
+                    </view>
+                </view>
+            </view>
+        </repeat>
+        <view class="cu-bar input">
+            <input placeholder="输入消息..." maxlength="200" name="input"/>
+            <button class="cu-btn bg-green shadow">发送</button>
+        </view>
+    </view>
+</template>
+<script>
+import wepy from 'wepy'
+
+export default class commentArea extends wepy.component {
+  data = {
+    InputBottom: 0,
+    commentArray: [
+      {
+        avatarUrl:
+          'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
+        name: '王康',
+        content:
+          '我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。',
+        date: '5-1',
+        time: '19：54'
+      },
+      {
+        avatarUrl:
+          'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
+        name: '王康',
+        content:
+          '我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。',
+        date: '5-1',
+        time: '19：54'
+      }
+    ]
+  }
+  methods = {}
+  onload() {
+    console.log('load commentArea')
+  }
+}
+</script>
+
+                
