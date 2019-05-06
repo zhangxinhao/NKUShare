@@ -1,0 +1,58 @@
+<style scoped>
+</style>
+
+<template>
+  <view class="cu-card case {{isCard?'no-card':''}}" @tap="showDetails">
+    <view class="cu-item shadow">
+      <view class="cu-list menu-avatar">
+        <view class="cu-item">
+          <view
+            class="cu-avatar round lg"
+            style="background-image:url({{lostFoungNameUrl}});"
+          ></view>
+          <view class="content flex-sub">
+            <view class="text-grey">{{typeName}}: {{name}}</view>
+            <view class="text-gray text-sm flex justify-between">时间: {{lostFoundTime}}</view>
+            <view class="text-gray text-sm flex justify-between">
+              地点: {{lostFoundLocation}}
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+
+
+<script>
+import wepy from 'wepy'
+
+export default class lostFoundCard extends wepy.component {
+  props = {
+    lostFoundType: String,
+    name: String,
+    lostFoundTime: String,
+    lostFoundLocation: String,
+    lostFoungNameUrl: String
+  }
+  data = {}
+  methods = {
+    showDetails: function(e) {
+      console.log('detile')
+    }
+  }
+  computed = {
+    typeName() {
+      if (this.lostFoundType === '1') {
+        return '失物招领'
+      } else {
+        return '寻物启事'
+      }
+    }
+  }
+  onload() {
+    console.log('onLoad')
+  }
+}
+</script>

@@ -1,0 +1,59 @@
+<style lang = "less">
+</style>
+<template>
+  <view class="container">
+    <card
+      :name="name"
+      :lostFoundTime="lostFoundTime"
+      :lostFoundLocation="lostFoundLocation"
+      :lostFoungNameUrl="lostFoungNameUrl"
+      :lostFoundType="type"
+    ></card>
+    <card2
+      :name="name"
+      :lostFoundTime="lostFoundTime"
+      :lostFoundLocation="lostFoundLocation"
+      :lostFoungNameUrl="lostFoungNameUrl"
+      :lostFoundType="type2"
+    ></card2>
+  </view>
+</template>
+<script>
+import wepy from 'wepy'
+import lostFoundCard from '@/components/lostFound/lostFoundCard'
+
+export default class showLostFound extends wepy.component {
+  data = {
+    lostFoundType: '1',
+    lostFoundType2: '2',
+    name: '学生证',
+    lostFoundTime: '2019.05.01',
+    lostFoundLocation: '津南理科篮食堂',
+    lostFoungNameUrl: '../../static/lostFound/card.jpg'
+  }
+  components = {
+    card: lostFoundCard,
+    card2: lostFoundCard
+  }
+  computed = {
+    name() {
+      return this.name
+    },
+    lostFoundTime() {
+      return this.lostFoundTime
+    },
+    lostFoundLocation() {
+      return this.lostFoundLocation
+    },
+    lostFoungNameUrl() {
+      return this.lostFoungNameUrl
+    },
+    type() {
+      return this.lostFoundType
+    },
+    type2() {
+      return this.lostFoundType2
+    }
+  }
+}
+</script>

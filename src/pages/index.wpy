@@ -3,7 +3,7 @@
 <template>
   <view class="container">
     <panel wx:if="{{PageCur == 'basics'}}"></panel>
-    <panel1 wx:if="{{PageCur == 'component'}}"></panel1>
+    <lostFound wx:if="{{PageCur == 'lostFound'}}"></lostFound>
     <panel2 wx:if="{{PageCur == 'plugin'}}"></panel2>
     <panel3 wx:if="{{PageCur == 'activity'}}"></panel3>
     <view class="cu-bar tabbar bg-white shadow foot">
@@ -13,11 +13,11 @@
 				</view>
 				<view class="PageCur=='basics'?'text-green':'text-gray'">帮帮</view>
 			</view>
-			<view class="action" @tap="NavChange" data-cur="component">
+			<view class="action" @tap="NavChange" data-cur="lostFound">
 				<view class='cuIcon-cu-image'>
-					<image src="{{'../static/tabbar/component' + [PageCur == 'component'?'_cur':''] + '.png'}}"></image>
+					<image src="{{'../static/tabbar/component' + [PageCur == 'lostFound'?'_cur':''] + '.png'}}"></image>
 				</view>
-				<view class="PageCur=='component'?'text-green':'text-gray'">失物招领</view>
+				<view class="PageCur=='lostFound'?'text-green':'text-gray'">失物招领</view>
 			</view>
 			<view class="action" @tap="NavChange" data-cur="plugin">
 				<view class='cuIcon-cu-image'>
@@ -46,7 +46,7 @@
 <script>
   import wepy from 'wepy'
   import Helping from '@/components/help/helping'
-  import Post from '@/components/help/post'
+  import ShowLostFound from '@/components/lostFound/showLostFound'
   import Panel2 from '@/components/panel2'
   import ShowActivity from '@/components/activity/showActivity'
 
@@ -56,7 +56,7 @@
     }
     components = {
       panel: Helping,
-      panel1: Post,
+      lostFound: ShowLostFound,
       panel2: Panel2,
       panel3: ShowActivity
     }
