@@ -1,4 +1,29 @@
 <style lang = "less">
+  .float-container {
+    position: fixed;
+    bottom: 140rpx;
+    right: 60rpx;
+    overflow: hidden;
+  }
+  .float-action {
+    width: 100rpx;
+    height: 100rpx;
+    border-radius: 50%;
+    background: #E14848;
+    z-index: 100;
+    text-align: center;
+    opacity: .5;
+    margin-left: 40rpx;
+    float: right;
+  }
+  .float-action:active {
+    opacity: 1
+  }
+  .float-action image {
+      width: 60rpx;
+      height: 60rpx;
+      margin-top: 20rpx;
+  }
 </style>
 <template>
   <view class="container">
@@ -16,11 +41,18 @@
       :lostFoungNameUrl="lostFoungNameUrl"
       :lostFoundType="type2"
     ></card2>
+    <view class="float-container">
+      <view class="float-action" @tap="addCard">
+        <image src="../../static/lostFound/plus.png" />
+      </view>
+    </view>
+    <!-- <fixedadd :backgroundColor="backgroundColor" :selectbackgroundColor="selectbackgroundColor" :color="color" :selectcolor="selectcolor" :addlistdata="addlistdata" @addlisttap="addlisttap"></fixedadd> -->
   </view>
 </template>
 <script>
 import wepy from 'wepy'
 import lostFoundCard from '@/components/lostFound/lostFoundCard'
+import FixedAdd from '@/components/lostFound/fixedadd'
 
 export default class showLostFound extends wepy.component {
   data = {
@@ -29,11 +61,39 @@ export default class showLostFound extends wepy.component {
     name: '学生证',
     lostFoundTime: '2019.05.01',
     lostFoundLocation: '津南理科篮食堂',
-    lostFoungNameUrl: '../../static/lostFound/card.jpg'
+    lostFoungNameUrl: '../../static/lostFound/card.jpg',
+    backgroundColor: '#228B22',
+    selectbackgroundColor: '#FFB233',
+    color: '#FFB233',
+    selectcolor: '#228B22',
+    addlistdata: [
+      {
+        title: '第一个',
+        src: '/static/logo.png'
+      },
+      {
+        title: '第二个',
+        src: '/static/log.png'
+      }
+    ]
+  }
+  methods = {
+    addlisttap (index) { /* 第一个序列为0,第二个为1,以此类推;当值为-1代表点击的是遮慕层 */
+      wx.showToast({
+        title: '点击的序列为' + index,
+        duration: 1000
+      })
+    },
+    addCard () {
+      wepy.navigateTo({
+        url: '../pages/lostFound/addLostFound'
+      })
+    }
   }
   components = {
     card: lostFoundCard,
-    card2: lostFoundCard
+    card2: lostFoundCard,
+    fixedadd: FixedAdd
   }
   computed = {
     name() {
