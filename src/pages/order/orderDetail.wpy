@@ -68,10 +68,52 @@
         </view>
       </view>
       <view class="text-center">
-        <view class="margin-top margin-bottom">
-          <button class="cu-btn round bg-red lg" role="button" aria-label="" aria-disabled="false">
+        <view wx:if="{{hasJoin==false}}" class="margin-top margin-bottom">
+          <button class="cu-btn round bg-red lg" role="button" aria-label="" aria-disabled="false" bindtap='joinOrder'>
             加入拼单
           </button>
+        </view>
+        <view wx:if="{{hasJoin==true}}" class="margin-top margin-bottom">
+          <button class="cu-btn round bg-red lg" role="button" aria-label="" aria-disabled="false" bindtap='leaveOrder'>
+            退出拼单
+          </button>
+        </view>
+        <view wx:if="{{hasJoin==true}}" class="margin-top margin-bottom">
+          <button class="cu-btn round bg-blue lg" role="button" aria-label="" aria-disabled="false" bindtap="showModal" data-target="DialogModal1">
+            评价拼单
+          </button>
+        </view>
+      </view>
+      <comments wx:if="{{hasJoin==true}}"/>
+
+      <view class="cu-modal {{modalName=='DialogModal1'?'show':''}}">
+        <view class="cu-dialog">
+          <view class="cu-bar bg-white justify-end">
+            <view class="content">评价</view>
+            <view class="action" bindtap="hideModal">
+              <text class="cuIcon-close text-red"></text>
+            </view>
+          </view>
+          <view class="padding-xl">
+            <view class="cu-form-group margin-top">
+              <view class="title">评分星级</view>
+              <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+                <view class="picker">
+                  {{index?picker[index]:'请选择其中一种'}}
+                </view>
+              </picker>
+            </view>
+            <view class="cu-form-group align-start">
+              <view class="title">具体评价</view>
+              <textarea maxlength="-1" disabled="{{modalName!=null}}" bindinput="textareaBInput" placeholder="请尽量详细描述商品和有关条件"></textarea>
+            </view>
+          </view>
+          <view class="cu-bar bg-white justify-end">
+            <view class="action">
+              <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
+              <button class="cu-btn bg-green margin-left" bindtap="hideModal">确认评价</button>
+            </view>
+          </view>
         </view>
       </view>
     </view>
@@ -80,10 +122,42 @@
 
 <script>
 import wepy from 'wepy'
+import commentArea from '../../components/activity/commentArea'
 
 export default class OrderDetail extends wepy.page {
   config = {
     navigationBarTitleText: '订单详情'
+  }
+
+  components = {
+    comments: commentArea
+  }
+
+  data = {
+    hasJoin: false,
+    modalName: null,
+    index: null,
+    picker: ['1', '2', '3', '4', '5']
+  }
+
+  PickerChange(e) {
+    this.index = e.detail.value
+  }
+
+  joinOrder(e) {
+    this.hasJoin = true
+  }
+
+  leaveOrder(e) {
+    this.hasJoin = false
+  }
+
+  showModal(e) {
+    this.modalName = e.currentTarget.dataset.target
+  }
+
+  hideModal(e) {
+    this.modalName = null
   }
 
   onLoad() {

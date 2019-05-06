@@ -1,8 +1,17 @@
 <template>
   <view>
     <swiper class="screen-swiper round-dot" indicator-dots="true" circular="true" autoplay="true" interval="5000" duration="500">
-      <swiper-item wx:for="{{4}}" wx:key>
-        <image src="https://image.weilanwl.com/img/4x3-{{index+1}}.jpg" mode='aspectFill' />
+      <swiper-item>
+        <image src="http://188.131.238.75/orderlist/coco.jpg" mode='aspectFill' />
+      </swiper-item>
+      <swiper-item>
+        <image src="http://188.131.238.75/orderlist/KFC.jpg" mode='aspectFill' />
+      </swiper-item>
+      <swiper-item>
+        <image src="http://188.131.238.75/orderlist/MaLaTang.png" mode='aspectFill' />
+      </swiper-item>
+      <swiper-item>
+        <image src="http://188.131.238.75/orderlist/crab.jpeg" mode='aspectFill' />
       </swiper-item>
     </swiper>
     <view class="cu-bar search bg-white">
@@ -33,7 +42,7 @@
                 <view class="cu-tag badge"></view>
               </view> -->
               <view class="content">
-                <view class="text">Coco奶茶,满减优惠，希望找几个队友哈哈哈哈哈哈哈哈哈撒啊发生发发发</view>
+                <view class="text">Coco奶茶,满减优惠</view>
               </view>
               <view class="action">
                 <view class="cu-tag round bg-orange sm">4/6人</view>
