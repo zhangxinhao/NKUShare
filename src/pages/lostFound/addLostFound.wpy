@@ -1,0 +1,109 @@
+<template>
+  <view>
+    <form>
+      <view class="cu-form-group margin-top">
+        <view class="title">名称</view>
+        <input placeholder="请输入名称" name="input"/>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">地点</view>
+        <input placeholder="请输入地点" name="input"/>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">日期选择</view>
+        <picker
+          mode="date"
+          value="date"
+          start="2015-09-01"
+          end="2020-09-01"
+          @change="DateChange"
+        >
+          <view class="picker">{{date}}</view>
+        </picker>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">时间选择</view>
+        <picker mode="time" value="time" start="06:00" end="24:00" @change="timeChange">
+            <view class="picker">{{time}}</view>
+        </picker>
+      </view>
+      <view class="cu-form-group align-start">
+        <view class="title">详细描述</view>
+        <textarea
+          maxlength="-1"
+          disabled="{{modalName!==null}}"
+          @input="textareaInput"
+          placeholder="多行文本输入框"
+        ></textarea>
+      </view>
+    </form>
+    <view class="padding flex flex-direction">
+      <button class="cu-btn bg-grey lg" @tap="launchConfirm">确认添加</button>
+    </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy'
+export default class addLostFound extends wepy.page {
+  data = {
+    index: -1,
+    picker: ['喵喵喵', '汪汪汪', '哼唧哼唧'],
+    time: '12:01',
+    date: '2018-12-25',
+    modalName: null,
+    imgList: [],
+    textAreaValue: ''
+  }
+  methods = {
+    launchConfirm(e) {
+      wx.navigateBack()
+      // 提示发起成功或者失败
+    },
+    PickerChange(e) {
+      this.index = e.detail.value
+    },
+    timeChange(e) {
+      this.time = e.detail.value
+    },
+    DateChange(e) {
+      this.date = e.detail.value
+    },
+    textareaInput(e) {
+      this.textareaValue = e.detail.value
+    },
+    ViewImage(e) {
+      wx.previewImage({
+        urls: this.imgList,
+        current: e.currentTarget.dataset.url
+      })
+    },
+    DelImg(e) {
+      wx.showModal({
+        title: '亲爱的用户',
+        content: '确定要删除这张照片吗？',
+        cancelText: '再看看',
+        confirmText: '再见',
+        success: res => {
+          if (res.confirm) {
+            this.imgList.splice(e.currentTarget.dataset.index, 1)
+          }
+        }
+      })
+    },
+    ChooseImage() {
+      wx.chooseImage({
+        count: 4, // 默认9
+        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: ['album'], // 从相册选择
+        success: res => {
+          if (this.imgList.length !== 0) {
+            this.imgList = this.imgList.concat(res.tempFilePaths)
+          } else {
+            this.imgList = res.tempFilePaths
+          }
+        }
+      })
+    }
+  }
+}
+</script>
