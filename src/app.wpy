@@ -12,6 +12,8 @@ export default class extends wepy.app {
       'pages/index',
       'pages/launchActivity',
       'pages/detailsOfActivity',
+      'pages/helping/addHelp',
+      'pages/helping/post',
       'pages/order/orderList',
       'pages/order/orderDetail',
       'pages/order/newOrder',

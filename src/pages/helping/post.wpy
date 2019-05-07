@@ -1,0 +1,73 @@
+<template>
+  <view>
+    <view class='cu-bar bg-white solid-bottom'>
+      <view class='action'>
+        <text class='cuIcon-title text-orange '></text>{{title}}
+      </view>
+    </view>
+    <view class="margin-left margin-right">
+      <view class='content'>
+        <text class='cuIcon-time'>时间</text>
+        <text class='text-grey'>{{time}}</text>
+      </view>
+      <view class='content'>
+        <text class='cuIcon-calendar'>日期</text>
+        <text class='text-grey'>{{date}}</text>
+      </view>
+      <view class='content'>
+        <text class='cuIcon-addressbook'>地址</text>
+        <text class='text-grey'>{{address}}</text>
+      </view>
+      <view class='content'>
+        <text class='cuIcon-people'>发起人</text>
+        <text class='text-grey'>{{people}}</text>
+      </view>
+    </view>
+    <view class='cu-bar bg-white solid-bottom margin-top'>
+      <view class='action'>
+        <text class='cuIcon-newsfill text-orange '></text>详情
+      </view>
+    </view>
+    <view>{{detail_content}}</view>
+    <view class="card">
+      <view class='cu-bar bg-white solid-bottom margin-top'>
+        <view class='action'>
+          <text class='cuIcon-comment text-orange '></text>评论
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<style scoped>
+
+</style>
+
+<script>
+import wepy from 'wepy'
+
+export default class Post extends wepy.page {
+    config = {navigationBarTitleText: 'posts'};
+    // components = {};
+  data = {
+    // ColorList: app.globalData.ColorList,
+    avatar: [
+      'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
+      'https://ossweb-img.qq.com/images/lol/web201310/skin/big81005.jpg',
+      'https://ossweb-img.qq.com/images/lol/web201310/skin/big25002.jpg',
+      'https://ossweb-img.qq.com/images/lol/web201310/skin/big91012.jpg'
+    ],
+    title:'带一份元和西饼',
+    detail_content:'带一份元和西饼！有偿！两个肉松小贝，两个甜甜圈',
+    people:'Joe',
+    address:'津南校区到八里台',
+    time:'15：00之前',
+    date:'2019-05-05'
+  }
+  methods= {
+  }
+  onLoad() {
+    console.log('hhh')
+  }
+}
+</script>

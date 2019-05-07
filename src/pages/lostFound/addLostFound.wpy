@@ -49,7 +49,7 @@ export default class addLostFound extends wepy.page {
     index: -1,
     picker: ['喵喵喵', '汪汪汪', '哼唧哼唧'],
     time: '12:01',
-    date: '2018-12-25',
+    date: '2018-12-26',
     modalName: null,
     imgList: [],
     textAreaValue: ''

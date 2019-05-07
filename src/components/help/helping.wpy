@@ -2,7 +2,7 @@
 import wepy from 'wepy'
 
 export default class Helping extends wepy.component {
-    // config = {navigationBarTitleText: 'helping'};
+     config = {navigationBarTitleText: 'helping'};
     // components = {};
 
   data = {
@@ -14,6 +14,18 @@ export default class Helping extends wepy.component {
       'https://ossweb-img.qq.com/images/lol/web201310/skin/big91012.jpg'
     ]
   }
+  methods = {
+    addHelp () {
+      wepy.navigateTo({
+        url: '../pages/helping/addHelp'
+      })
+    },
+    showDetail(){
+      wepy.navigateTo({
+        url: '../pages/helping/post'
+      })
+    }
+  }
 }
  </script>
 
@@ -21,7 +33,7 @@ export default class Helping extends wepy.component {
 <view>
   <view class="cu-card case {{isCard?'no-card':''}}">
     <view class="cu-item shadow">
-      <view class="cu-list menu-avatar">
+      <view class="cu-list menu-avatar" @tap="showDetail">
         <view class="cu-item">
           <view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"></view>
           <view class="content flex-sub">
@@ -42,9 +54,9 @@ export default class Helping extends wepy.component {
       </view>
     </view>
   </view>
-    <view class="cu-card case {{isCard?'no-card':''}}">
+  <view class="cu-card case {{isCard?'no-card':''}}">
     <view class="cu-item shadow">
-      <view class="cu-list menu-avatar">
+      <view class="cu-list menu-avatar" @tap="showDetail">
         <view class="cu-item">
           <view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"></view>
           <view class="content flex-sub">
@@ -65,9 +77,9 @@ export default class Helping extends wepy.component {
       </view>
     </view>
   </view>
-    <view class="cu-card case {{isCard?'no-card':''}}">
+  <view class="cu-card case {{isCard?'no-card':''}}">
     <view class="cu-item shadow">
-      <view class="cu-list menu-avatar">
+      <view class="cu-list menu-avatar" @tap="showDetail">
         <view class="cu-item">
           <view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"></view>
           <view class="content flex-sub">
@@ -86,6 +98,34 @@ export default class Helping extends wepy.component {
           </view>
         </view>
       </view>
+    </view>
+  </view>
+  <view class="cu-card case {{isCard?'no-card':''}}">
+    <view class="cu-item shadow">
+      <view class="cu-list menu-avatar" @tap="showDetail">
+        <view class="cu-item">
+          <view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"></view>
+          <view class="content flex-sub">
+            <view class="text-grey">小明</view>
+            <view class="text-gray text-sm flex justify-between">12:10 am
+              <view class="text-gray text-sm">
+                <text class="cuIcon-attentionfill margin-lr-xs"></text> 10
+                <text class="cuIcon-messagefill margin-lr-xs"></text> 30
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="bg-grey padding-sm radius margin-top-sm  text-sm">
+          <view class="flex">
+            <view>带一份元和西饼！！</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="float-container">
+    <view class="float-action" @tap="addHelp">
+      <image src="../../static/lostFound/plus.png" />
     </view>
   </view>
 </view>

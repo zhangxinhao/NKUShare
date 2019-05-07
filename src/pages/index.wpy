@@ -52,7 +52,7 @@
 
   export default class Index extends wepy.page {
     config = {
-      navigationBarTitleText: 'test'
+      navigationBarTitleText: 'NKUShare!'
     }
     components = {
       panel: Helping,
