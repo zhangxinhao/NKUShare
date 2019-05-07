@@ -47,7 +47,7 @@
 import wepy from 'wepy'
 
 export default class Post extends wepy.page {
-    config = {navigationBarTitleText: 'posts'};
+  config = {navigationBarTitleText: 'posts'};
     // components = {};
   data = {
     // ColorList: app.globalData.ColorList,
@@ -57,12 +57,12 @@ export default class Post extends wepy.page {
       'https://ossweb-img.qq.com/images/lol/web201310/skin/big25002.jpg',
       'https://ossweb-img.qq.com/images/lol/web201310/skin/big91012.jpg'
     ],
-    title:'带一份元和西饼',
-    detail_content:'带一份元和西饼！有偿！两个肉松小贝，两个甜甜圈',
-    people:'Joe',
-    address:'津南校区到八里台',
-    time:'15：00之前',
-    date:'2019-05-05'
+    title: '带一份元和西饼',
+    detail_content: '带一份元和西饼！有偿！两个肉松小贝，两个甜甜圈',
+    people: 'Joe',
+    address: '津南校区到八里台',
+    time: '15：00之前',
+    date: '2019-05-05'
   }
   methods= {
   }

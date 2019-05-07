@@ -2,9 +2,7 @@
 import wepy from 'wepy'
 
 export default class Helping extends wepy.component {
-     config = {navigationBarTitleText: 'helping'};
-    // components = {};
-
+  config = {navigationBarTitleText: 'helping'};
   data = {
     // ColorList: app.globalData.ColorList,
     avatar: [
@@ -20,7 +18,7 @@ export default class Helping extends wepy.component {
         url: '../pages/helping/addHelp'
       })
     },
-    showDetail(){
+    showDetail() {
       wepy.navigateTo({
         url: '../pages/helping/post'
       })
