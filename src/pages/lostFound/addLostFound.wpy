@@ -1,19 +1,27 @@
 <template>
   <view>
-    <form>
+    <form @submit="formSubmit">
       <view class="cu-form-group margin-top">
+				<view class="title">选择类型</view>
+				<picker @change="PickerChange" value="{{index}}" range="{{picker}}">
+					<view class="picker">
+						{{index>-1?picker[index]:'失物招领或者寻物启事'}}
+					</view>
+				</picker>
+			</view>
+      <view class="cu-form-group">
         <view class="title">名称</view>
-        <input placeholder="请输入名称" name="input"/>
+        <input placeholder="请输入名称" @input="titleInput" value="{{lostFoundTitle}}"/>
       </view>
       <view class="cu-form-group">
         <view class="title">地点</view>
-        <input placeholder="请输入地点" name="input"/>
+        <input placeholder="请输入地点" @input="locationInput" value="{{lostFoundLocation}}"/>
       </view>
       <view class="cu-form-group">
         <view class="title">日期选择</view>
         <picker
           mode="date"
-          value="date"
+          value="{{date}}"
           start="2015-09-01"
           end="2020-09-01"
           @change="DateChange"
@@ -23,9 +31,35 @@
       </view>
       <view class="cu-form-group">
         <view class="title">时间选择</view>
-        <picker mode="time" value="time" start="06:00" end="24:00" @change="timeChange">
-            <view class="picker">{{time}}</view>
+        <picker mode="time" 
+          value="{{time}}" 
+          start="06:00"
+          end="24:00" 
+          @change="timeChange"
+         >
+          <view class="picker">{{time}}</view>
         </picker>
+      </view>
+      <view class="cu-bar bg-white margin-top">
+        <view class="action">
+          图片上传(可选)
+        </view>
+        <view class="action">
+          {{imgList.length}}/1
+        </view>
+      </view>
+      <view class="cu-form-group">
+        <view class="grid col-4 grid-square flex-sub">
+          <view class="bg-img" wx:for="{{imgList}}" wx:key="index" bindtap="ViewImage" data-url="{{imgList[index]}}">
+            <image src='{{imgList[index]}}' mode='aspectFill' />
+            <view class="cu-tag bg-red" catchtap="DelImg" data-index="{{index}}">
+              <text class="cuIcon-close"></text>
+            </view>
+          </view>
+          <view class="solids" bindtap="ChooseImage" wx:if="{{imgList.length<1}}">
+            <text class="cuIcon-cameraadd"></text>
+          </view>
+        </view>
       </view>
       <view class="cu-form-group align-start">
         <view class="title">详细描述</view>
@@ -33,13 +67,13 @@
           maxlength="-1"
           disabled="{{modalName!==null}}"
           @input="textareaInput"
-          placeholder="多行文本输入框"
+          placeholder="请输入详细描述（可选）"
         ></textarea>
       </view>
+      <view class="padding flex flex-direction">
+        <button class="cu-btn bg-grey lg" form-type="submit">确认添加</button>
+      </view>
     </form>
-    <view class="padding flex flex-direction">
-      <button class="cu-btn bg-grey lg" @tap="launchConfirm">确认添加</button>
-    </view>
   </view>
 </template>
 <script>
@@ -47,7 +81,9 @@ import wepy from 'wepy'
 export default class addLostFound extends wepy.page {
   data = {
     index: -1,
-    picker: ['喵喵喵', '汪汪汪', '哼唧哼唧'],
+    picker: ['失物招领', '寻物启事'],
+    lostFoundTitle: '',
+    lostFoundLocation: '',
     time: '12:01',
     date: '2018-12-26',
     modalName: null,
@@ -55,9 +91,11 @@ export default class addLostFound extends wepy.page {
     textAreaValue: ''
   }
   methods = {
-    launchConfirm(e) {
-      wx.navigateBack()
-      // 提示发起成功或者失败
+    titleInput(e) {
+      this.lostFoundTitle = e.detail.value
+    },
+    locationInput(e) {
+      this.lostFoundLocation = e.detail.value
     },
     PickerChange(e) {
       this.index = e.detail.value
@@ -69,7 +107,25 @@ export default class addLostFound extends wepy.page {
       this.date = e.detail.value
     },
     textareaInput(e) {
-      this.textareaValue = e.detail.value
+      this.textAreaValue = e.detail.value
+    },
+    ChooseImage() {
+      wx.chooseImage({
+        count: 1, // 默认9
+        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: ['album', 'camera'], // 从相册选择
+        success: (res) => {
+          if (this.data.imgList.length !== 0) {
+            this.setData({
+              imgList: this.data.imgList.concat(res.tempFilePaths)
+            })
+            this.$apply()
+          } else {
+            this.imgList = res.tempFilePaths
+            this.$apply()
+          }
+        }
+      })
     },
     ViewImage(e) {
       wx.previewImage({
@@ -86,23 +142,34 @@ export default class addLostFound extends wepy.page {
         success: res => {
           if (res.confirm) {
             this.imgList.splice(e.currentTarget.dataset.index, 1)
+            this.$apply()
           }
         }
       })
     },
-    ChooseImage() {
-      wx.chooseImage({
-        count: 4, // 默认9
-        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: ['album'], // 从相册选择
-        success: res => {
-          if (this.imgList.length !== 0) {
-            this.imgList = this.imgList.concat(res.tempFilePaths)
-          } else {
-            this.imgList = res.tempFilePaths
-          }
-        }
+    formSubmit(e) {
+      const database = wx.cloud.database({
+        env: 'nkushare-kynis'
       })
+      const test = database.collection('test')
+      test.add({
+        data: {
+          index: this.index,
+          lostFoundTitle: this.lostFoundTitle,
+          lostFoundLocation: this.lostFoundLocation,
+          date: this.date,
+          time: this.time,
+          imgList: this.imgList,
+          textAreaValue: this.textAreaValue
+        }
+      }).then(res => {
+        wepy.showToast({
+          title: `新增数据ID为 ${res._id}`,
+          icon: 'none'
+        })
+      })
+      console.log('form发生了submit事件，携带数据为：', e.detail.value)
+      console.log(this.data)
     }
   }
 }
