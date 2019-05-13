@@ -100,7 +100,6 @@ export default class Helping extends wepy.component {
     ],
     date: '2019-05-13',
     multiIndex: [0, 1],
-    region: ['从泰达到津南'],
     multiArray: [
       ['八里台', '津南', '泰达'],
       ['八里台', '津南', '泰达']

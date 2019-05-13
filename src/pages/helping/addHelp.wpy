@@ -2,12 +2,16 @@
     <view>
         <form>
             <view class="cu-form-group margin-top">
-                <view class="title">标题</view>
-                <input placeholder="请输入帮助主题" name="input"/>
+                <view class="title">{{title}}</view>
+                <input placeholder="请输入帮助主题" name="title"/>
             </view>
             <view class="cu-form-group">
                 <view class="title">地点</view>
-                <input placeholder="请输入活动地点" name="input"/>
+                <picker mode="multiSelector" @change="MultiChange" value="{{multiIndex}}" range="{{multiArray}}">
+                  <view class="picker">
+                    从{{multiArray[0][multiIndex[0]]}}到{{multiArray[1][multiIndex[1]]}}
+                  </view>
+                </picker>
             </view>
             <view class="cu-form-group">
                 <view class="title">日期选择</view>
@@ -22,30 +26,23 @@
             </view>
             <view class="cu-form-group">
                 <view class="title">开始时间选择</view>
-                <picker mode="time" value="time" start="09:01" end="21:01" @change="TimeChange">
-                    <view class="picker">{{time}}</view>
+                <picker mode="time" value="start_time" start="09:01" end="21:01" @change="TimeChange">
+                    <view class="picker">{{start_time}}</view>
                 </picker>
             </view>
             <view class="cu-form-group">
                 <view class="title">结束时间选择</view>
-                <picker mode="time" value="time" start="09:01" end="21:01" @change="TimeChange">
-                    <view class="picker">{{time}}</view>
-                </picker>
-            </view>
-            <view class="cu-form-group">
-                <view class="title">报名截止时间选择</view>
-                <picker mode="time" value="time" start="09:01" end="21:01" @change="TimeChange">
-                    <view class="picker">{{time}}</view>
+                <picker mode="time" value="end_time" start="09:01" end="21:01" @change="TimeChange">
+                    <view class="picker">{{end_time}}</view>
                 </picker>
             </view>
             <view class="cu-form-group align-start">
-                <view class="title">详细描述</view>
-                <textarea
-                    maxlength="-1"
-                    disabled="modalName!=null"
-                    @input="textareaBInput"
-                    placeholder="多行文本输入框"
-                ></textarea>
+              <view class="title">{{description}}</view>
+              <textarea
+                  maxlength="-1"
+                  disabled="modalName!=null"
+                  @input="textareaBInput"
+                  placeholder="description"></textarea>
             </view>
             <view class="cu-bar bg-white margin-top">
                 <view class="action">图片上传(可选）</view>
@@ -65,12 +62,9 @@
                     </view>
                 </view>
             </view>
-
             <view class="cu-form-group">
-            <view class="title">地点</view>
-            <picker @change="PickerChange" value="index" range="picker">
-                <view class="picker">{{index>-1?picker[index]:'禁止换行，超出容器部分会以 ... 方式截断'}}</view>
-            </picker>
+              <view class="bonus">{{bonus}}</view>
+              <input placeholder="奖励金数目" name="bonus"/>
             </view>
         </form>
         <view class="padding flex flex-direction">
@@ -84,16 +78,52 @@ export default class launchActivity extends wepy.page {
   config = {navigationBarTitleText: '添加帮助'};
   data = {
     index: -1,
-    picker: ['喵喵喵', '汪汪汪', '哼唧哼唧'],
-    time: '12:01',
+    start_time: '12:01',
+    end_time: '13:01',
     date: '2018-12-25',
     modalName: null,
-    imgList: []
+    imgList: [],
+    multiIndex: [0, 1],
+    multiArray: [
+      ['八里台', '津南', '泰达'],
+      ['八里台', '津南', '泰达']
+    ],
+    description: '',
+    bonus: '',
+    db: null
   }
+  onLoad() {}
   methods = {
+    MultiChange(e) {
+      this.multiIndex = e.detail.value
+    },
     launchConfirm(e) {
-      wx.navigateBack()
-      // 提示发起成功或者失败
+      const database = wx.cloud.database({})
+      const test = database.collection('help')
+      test.add({
+        data: {
+          bonus: this.bonus,
+          description: this.description,
+          helped: '',
+          helper: '',
+          picture: '',
+          start_time: this.start_time,
+          state: 0,
+          title: this.title,
+          date: this.date,
+          start_loc: this.multiIndex[0],
+          end_loc: this.multiIndex[1]
+        }
+      })
+      .then(res => {
+        console.log(res)
+        wepy.showToast({
+          title: `新增数据ID为 ${res._id}`,
+          icon: 'none'
+        })
+      })
+      console.log('form发生了submit事件，携带数据为：', e.detail.value)
+      console.log(this.data)
     },
     PickerChange(e) {
       this.index = e.detail.value

@@ -3,8 +3,11 @@
 	"setting": {
 		"urlCheck": true,
 		"es6": false,
-		"postcss": false,
-		"minified": false
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"autoAudits": false,
+		"checkInvalidKey": true
 	},
 	"compileType": "miniprogram",
 	"appid": "wxf48ca9dda53199be",
