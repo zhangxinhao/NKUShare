@@ -1,4 +1,5 @@
 <style lang="less">
+
 </style>
 <template>
   <view class="container">
@@ -7,6 +8,12 @@
     <panel3 wx:if="{{PageCur == 'activity'}}"></panel3>
     <Campus wx:if="{{PageCur == 'plugin'}}"></Campus>
     <view class="cu-bar tabbar bg-white shadow foot">
+			<view class="action" @tap="NavChange" data-cur="basics">
+				<view class='cuIcon-cu-image'>
+					<image src="{{'../static/tabbar/basics' + [PageCur=='basics'?'_cur':''] + '.png'}}"></image>
+				</view>
+				<view class="PageCur=='basics'?'text-green':'text-gray'">首页</view>
+			</view>
 			<view class="action" @tap="NavChange" data-cur="basics">
 				<view class='cuIcon-cu-image'>
 					<image src="{{'../static/tabbar/basics' + [PageCur=='basics'?'_cur':''] + '.png'}}"></image>
@@ -61,7 +68,7 @@
       Campus: Campus
     }
     data = {
-      PageCur: 'basics'
+      PageCur: 'plugin'
     }
     methods = {
       NavChange: function(e) {

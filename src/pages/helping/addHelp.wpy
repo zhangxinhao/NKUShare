@@ -81,6 +81,7 @@
 <script>
 import wepy from 'wepy'
 export default class launchActivity extends wepy.page {
+  config = {navigationBarTitleText: '添加帮助'};
   data = {
     index: -1,
     picker: ['喵喵喵', '汪汪汪', '哼唧哼唧'],
