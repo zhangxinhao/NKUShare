@@ -60,7 +60,7 @@ export default class activityCard extends wepy.component {
   methods = {
     showDetails: function(e) {
       wepy.navigateTo({
-        url: '../pages/detailsOfActivity?id=1'
+        url: '../pages/activity/detailsOfActivity'
       })
     }
   }

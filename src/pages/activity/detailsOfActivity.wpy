@@ -74,7 +74,7 @@
 </template>
 <script>
 import wepy from 'wepy'
-import commentArea from '../components/activity/commentArea'
+import commentArea from '../../components/activity/commentArea'
 // import launch from '../components/activity/addButton'
 
 export default class detailsOfActivity extends wepy.page {
