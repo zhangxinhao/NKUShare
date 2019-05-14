@@ -10,8 +10,8 @@ export default class extends wepy.app {
   config = {
     pages: [
       'pages/index',
-      'pages/launchActivity',
-      'pages/detailsOfActivity',
+      'pages/activity/launchActivity',
+      'pages/activity/detailsOfActivity',
       'pages/helping/addHelp',
       'pages/helping/post',
       'pages/order/orderList',

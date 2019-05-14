@@ -15,7 +15,7 @@ export default class addButton extends wepy.component {
   methods = {
     launchActivity: function(e) {
       wepy.navigateTo({
-        url: '../pages/launchActivity'
+        url: '../pages/activity/launchActivity'
       })
     }
   }
