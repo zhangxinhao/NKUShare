@@ -10,7 +10,7 @@
       <view class="margin-top margin-bottom">
         <button class="cu-btn round bg-red lg" role="button" aria-label="" aria-disabled="false">
           <navigator
-            url="/pages/order/orderList"
+            url="/pages/order/orderList?campus={{balitai}}"
             hover-class="navigator-hover">
             南开大学八里台校区
           </navigator>
@@ -19,7 +19,7 @@
       <view class="margin-bottom">
         <button class="cu-btn round bg-yellow lg" role="button" aria-label="" aria-disabled="false">
           <navigator
-            url="/pages/order/orderList"
+            url="/pages/order/orderList?campus={{jinnan}}"
             hover-class="navigator-hover">
             南开大学津南校区
           </navigator>
@@ -28,7 +28,7 @@
       <view class="margin-bottom">
         <button class="cu-btn round bg-blue lg" role="button" aria-label="" aria-disabled="false">
           <navigator
-            url="/pages/order/orderList"
+            url="/pages/order/orderList?campus={{teda}}"
             hover-class="navigator-hover">
             南开大学泰达校区
           </navigator>
@@ -43,6 +43,9 @@ import wepy from 'wepy'
 
 export default class Campus extends wepy.component {
   data = {
+    teda: 'TD',
+    balitai: 'BLT',
+    jinnan: 'JN'
   }
 
   method = {

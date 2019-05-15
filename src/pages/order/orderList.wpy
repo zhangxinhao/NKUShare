@@ -85,10 +85,24 @@ export default class OrderList extends wepy.page {
     load: true
   }
 
-  onLoad() {
+  onLoad(options) {
     wx.showLoading({
       title: '加载中...',
       mask: true
+    })
+
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+
+    const order = database.collection('order')
+
+    order.where({
+      location_label: options.campus
+    }).get({
+      success(res) {
+        console.log(res.data)
+      }
     })
   }
 
