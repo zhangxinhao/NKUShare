@@ -24,34 +24,31 @@
         <button class="cu-btn bg-blue shadow-blur round" bindtap='goAddOrder'>新建订单</button>
       </view>
     </view>
-    <view class="VerticalBox">
-      <scroll-view class="VerticalNav nav" scroll-y scroll-with-animation scroll-top="{{VerticalNavTop}}" style="height:calc(100vh - 375rpx)">
-        <view wx:for="{{list}}" class="cu-item {{index==TabCur?'text-green cur':''}}" wx:key bindtap='tabSelect' data-id="{{index}}">
-          {{ item.name }}
+    
+    <view wx:for="{{list}}" wx:key>
+      <view class="cu-bar bg-white solid-bottom margin-top">
+        <view class="action">
+          <text class="cuIcon-title text-orange "></text> {{ item.name }}
         </view>
-      </scroll-view>
-      <scroll-view class="VerticalMain" scroll-y scroll-with-animation style="height:calc(100vh - 375rpx)" scroll-into-view="main-{{MainCur}}" bindscroll="VerticalMain">
-        <view wx:for="{{list}}" class="padding-top padding-lr" wx:key id="main-{{index}}">
-          <view class='cu-bar solid-bottom bg-white'>
-            <view class='action'>
-              <text class='cuIcon-title text-green'></text> {{ item.name }} </view>
+      </view>
+      <view class="cu-list menu {{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}">
+        <view wx:for="{{item.orders}}" wx:key class="cu-item">
+          <view class="content padding-tb-sm">
+            <view>
+              <text class="cuIcon-clothesfill text-blue margin-right-xs"></text>{{item.title}}</view>
+            <view class="text-gray text-sm">
+              <text class="cuIcon-infofill margin-right-xs"></text> 人数限制为: {{ item.num_min }}-{{ item.num_max }}人</view>
+            <view class="text-gray text-sm">
+              <text class="cuIcon-infofill margin-right-xs"></text> 创建时间为: {{ item.start }}</view>
+            <view class="text-gray text-sm">
+              <text class="cuIcon-infofill margin-right-xs"></text> 截止时间为: {{ item.end }}</view>
           </view>
-          <view class="cu-list menu-avatar">
-            <view class="cu-item cur" style="min-height:100px" bindtap='goOrderDetail'>
-              <!-- <view class="cu-avatar radius lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big81020.jpg);">
-                <view class="cu-tag badge"></view>
-              </view> -->
-              <view class="content">
-                <view class="text">Coco奶茶,满减优惠</view>
-              </view>
-              <view class="action">
-                <view class="cu-tag round bg-orange sm">4/6人</view>
-                <view class="text-grey text-xs">22:20</view>
-              </view>
-            </view>
+          <view class="action">
+            <!-- <switch class="switch-sex sm" bindchange="switchSex"></switch> -->
+            <button class="cu-btn bg-red shadow-blur round" bindtap='goOrderDetail' data-id="{{ item._id }}">点击加入</button>
           </view>
         </view>
-      </scroll-view>
+      </view>
     </view>
   </view>
 </template>
@@ -71,18 +68,22 @@ export default class OrderList extends wepy.page {
     list: [
       {
         name: '奶茶',
-        id: 0
+        id: 0,
+        orders: []
       },
       {
         name: '麻辣烫',
-        id: 1
+        id: 1,
+        orders: []
       },
       {
         name: '其他',
-        id: 2
+        id: 2,
+        orders: []
       }
     ],
-    load: true
+    load: true,
+    campus: ''
   }
 
   onLoad(options) {
@@ -91,17 +92,49 @@ export default class OrderList extends wepy.page {
       mask: true
     })
 
+    this.campus = options.campus
+
     const database = wx.cloud.database({
       env: 'nkushare-kynis'
     })
 
     const order = database.collection('order')
 
+    let that = this
+
     order.where({
-      location_label: options.campus
+      location_label: this.campus,
+      good_label: 'NC'
     }).get({
       success(res) {
-        console.log(res.data)
+        that.list[0].orders = res.data
+        that.setData({
+          list: that.list
+        })
+      }
+    })
+
+    order.where({
+      location_label: this.campus,
+      good_label: 'MLT'
+    }).get({
+      success(res) {
+        that.list[1].orders = res.data
+        that.setData({
+          list: that.list
+        })
+      }
+    })
+
+    order.where({
+      location_label: this.campus,
+      good_label: 'other'
+    }).get({
+      success(res) {
+        that.list[2].orders = res.data
+        that.setData({
+          list: that.list
+        })
       }
     })
   }
@@ -112,7 +145,7 @@ export default class OrderList extends wepy.page {
 
   goOrderDetail(e) {
     this.$navigate({
-      url: './orderDetail'
+      url: './orderDetail?id=' + e.target.dataset.id
     })
   }
 
@@ -141,16 +174,24 @@ export default class OrderList extends wepy.page {
           list[i].top = tabHeight
           tabHeight = tabHeight + data.height
           list[i].bottom = tabHeight
+          console.log(list[i].id)
+          console.log(list[i].top)
+          console.log(list[i].bottom)
         }).exec()
       }
-      that.load = false
-      that.list = list
+      that.setData({
+        load: false,
+        list: list
+      })
     }
     let scrollTop = e.detail.scrollTop + 20
+    console.log(scrollTop)
     for (let i = 0; i < list.length; i++) {
       if (scrollTop > list[i].top && scrollTop < list[i].bottom) {
-        that.VerticalNavTop = (list[i].id - 1) * 50
-        that.TabCur = list[i].id
+        that.setData({
+          VerticalNavTop: (list[i].id - 1) * 50,
+          TabCur: list[i].id
+        })
         return false
       }
     }
