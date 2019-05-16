@@ -2,7 +2,7 @@
   <view class="padding-sm">
     <view class="bg-white radius shadow-blur grid col-1 margin-bottom">
       <view class="text-xl padding" role="" aria-label="">
-        <text class="text-black text-bold">单号:123456</text>
+        <text class="text-black text-bold">{{ orderDetail.title }}</text>
       </view>
       <view class="cu-list menu {{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}">
         <view class="cu-item {{menuArrow?'arrow':''}}">
@@ -12,18 +12,24 @@
           </view>
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
-          <button class="cu-btn content" open-type="contact">
+          <view class="content">
             <text class="cuIcon-btn text-olive"></text>
-            <text class="text-grey">创建时间:</text>
-          </button>
+            <text class="text-grey">创建时间</text>
+          </view>
+          <view class="action">
+            <text class="text-grey text-sm"> {{ orderDetail.end }}</text>
+          </view>
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
-          <button class="cu-btn content" open-type="contact">
-            <text class="cuIcon-btn text-olive"></text>
-            <text class="text-grey">截止时间:</text>
-          </button>
+          <view class="content">
+            <text class="cuIcon-btn text-green"></text>
+            <text class="text-grey">截止时间</text>
+          </view>
+          <view class="action">
+            <text class="text-grey text-sm"> {{ orderDetail.end }}</text>
+          </view>
         </view>
-        <view class="cu-item {{menuArrow?'arrow':''}}">
+        <!-- <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
             <text class="cuIcon-warn text-green"></text>
             <text class="text-grey">订单描述</text>
@@ -31,7 +37,7 @@
           <view class="action">
             <text class="text-grey text-sm">小目标还没有实现！</text>
           </view>
-        </view>
+        </view> -->
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
             <text class="cuIcon-emojiflashfill text-pink"></text>
@@ -53,9 +59,9 @@
             <text class="text-grey">标签</text>
           </view>
           <view class="action">
-            <view class="cu-tag round bg-orange light">音乐</view>
-            <view class="cu-tag round bg-olive light">电影</view>
-            <view class="cu-tag round bg-blue light">旅行</view>
+            <view wx:if="{{ label == 'NC' }}" class="cu-tag round bg-orange light">奶茶</view>
+            <view wx:if="{{ label == 'MLT' }}" class="cu-tag round bg-olive light">麻辣烫</view>
+            <view wx:if="{{ label == 'other' }}" class="cu-tag round bg-blue light">其它</view>
           </view>
         </view>
         <view class="cu-item">
@@ -63,7 +69,7 @@
             <view>
               <text class="cuIcon-clothesfill text-blue margin-right-xs"></text>详细描述</view>
             <view class="text-gray text-sm">
-              <text class="cuIcon-infofill margin-right-xs"></text>小目标还没有实现！萨达所所大多撒大多所富商大贾的时光萨达所所大多撒大多所富商大贾的时光萨达所所大多撒大多所富商大贾的时光</view>
+              <text class="cuIcon-infofill margin-right-xs"></text> {{ orderDetail.description }} </view>
           </view>
         </view>
       </view>
@@ -137,7 +143,10 @@ export default class OrderDetail extends wepy.page {
     hasJoin: false,
     modalName: null,
     index: null,
-    picker: ['1', '2', '3', '4', '5']
+    picker: ['1', '2', '3', '4', '5'],
+    orderID: '',
+    orderDetail: {},
+    label: ''
   }
 
   PickerChange(e) {
@@ -160,8 +169,30 @@ export default class OrderDetail extends wepy.page {
     this.modalName = null
   }
 
-  onLoad() {
-    console.log('Onload')
+  onLoad(options) {
+    this.orderID = options.id
+
+    let that = this
+
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+
+    const order = database.collection('order')
+
+    order.where({
+      _id: this.orderID
+    }).get({
+      success(res) {
+        let detail = res.data
+        that.orderDetail = detail[0]
+        that.label = that.orderDetail.good_label
+        that.setData({
+          orderDetail: that.orderDetail,
+          label: that.label
+        })
+      }
+    })
   }
 }
 </script>
