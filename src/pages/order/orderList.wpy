@@ -94,6 +94,18 @@ export default class OrderList extends wepy.page {
 
     this.campus = options.campus
 
+    this.getOrderList()
+  }
+
+  onReady() {
+    wx.hideLoading()
+  }
+
+  onShow() {
+    this.getOrderList()
+  }
+
+  getOrderList() {
     const database = wx.cloud.database({
       env: 'nkushare-kynis'
     })
@@ -137,10 +149,6 @@ export default class OrderList extends wepy.page {
         })
       }
     })
-  }
-
-  onReady() {
-    wx.hideLoading()
   }
 
   goOrderDetail(e) {

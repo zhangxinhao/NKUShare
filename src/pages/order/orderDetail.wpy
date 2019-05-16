@@ -10,6 +10,9 @@
             <text class="cuIcon-circlefill text-grey"></text>
             <text class="text-grey">创建者:</text>
           </view>
+          <view class="action">
+            <text class="text-grey text-sm"> {{ creatorName }}</text>
+          </view>
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
@@ -146,7 +149,9 @@ export default class OrderDetail extends wepy.page {
     picker: ['1', '2', '3', '4', '5'],
     orderID: '',
     orderDetail: {},
-    label: ''
+    label: '',
+    creatorID: '',
+    creatorName: ''
   }
 
   PickerChange(e) {
@@ -179,6 +184,8 @@ export default class OrderDetail extends wepy.page {
     })
 
     const order = database.collection('order')
+    const takeorder = database.collection('take_order')
+    const user = database.collection('user')
 
     order.where({
       _id: this.orderID
@@ -190,6 +197,27 @@ export default class OrderDetail extends wepy.page {
         that.setData({
           orderDetail: that.orderDetail,
           label: that.label
+        })
+      }
+    })
+
+    takeorder.where({
+      orderID: this.orderID
+    }).get({
+      success(res) {
+        that.creatorID = res.data[0].userID
+        that.setData({
+          creatorID: that.creatorID
+        })
+        user.where({
+          _id: that.creatorID
+        }).get({
+          success(res) {
+            that.creatorName = res.data[0].name
+            that.setData({
+              creatorName: that.creatorName
+            })
+          }
         })
       }
     })
