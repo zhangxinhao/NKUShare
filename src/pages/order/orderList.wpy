@@ -44,7 +44,7 @@
               <text class="cuIcon-infofill margin-right-xs"></text> 截止时间为: {{ item.end }}</view>
           </view>
           <view class="action">
-            <view wx:if="{{ isDisabled(item) }}">
+            <view wx:if="{{ !item.outOfDate }}">
               <button class="cu-btn bg-red shadow-blur round" bindtap='goOrderDetail' data-id="{{ item._id }}">点击查看</button>
             </view>
             <view wx:else>
@@ -106,10 +106,6 @@ export default class OrderList extends wepy.page {
     this.getOrderList()
   }
 
-  isDisabled(item) {
-    return item.end.getTime() < new Date().getTime()
-  }
-
   getOrderList() {
     const database = wx.cloud.database({
       env: 'nkushare-kynis'
@@ -125,6 +121,15 @@ export default class OrderList extends wepy.page {
     }).get({
       success(res) {
         that.list[0].orders = res.data
+        let orders = that.list[0].orders
+        for (let j = 0; j < orders.length; j++) {
+          if (orders[j].end.getTime() < new Date().getTime()) {
+            orders[j].outOfDate = true
+          } else {
+            orders[j].outOfDate = false
+          }
+        }
+        that.list[0].orders = orders
         that.setData({
           list: that.list
         })
@@ -137,6 +142,15 @@ export default class OrderList extends wepy.page {
     }).get({
       success(res) {
         that.list[1].orders = res.data
+        let orders = that.list[1].orders
+        for (let j = 0; j < orders.length; j++) {
+          if (orders[j].end.getTime() < new Date().getTime()) {
+            orders[j].outOfDate = true
+          } else {
+            orders[j].outOfDate = false
+          }
+        }
+        that.list[1].orders = orders
         that.setData({
           list: that.list
         })
@@ -149,6 +163,15 @@ export default class OrderList extends wepy.page {
     }).get({
       success(res) {
         that.list[2].orders = res.data
+        let orders = that.list[2].orders
+        for (let j = 0; j < orders.length; j++) {
+          if (orders[j].end.getTime() < new Date().getTime()) {
+            orders[j].outOfDate = true
+          } else {
+            orders[j].outOfDate = false
+          }
+        }
+        that.list[2].orders = orders
         that.setData({
           list: that.list
         })
