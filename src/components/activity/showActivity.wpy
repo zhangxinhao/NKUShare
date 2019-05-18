@@ -42,13 +42,18 @@
       :activityThemeUrl="activityThemeUrl"
       :attendees="attendees"
     ></panel>
-    <launch/>
+    <view class="float-container">
+      <view class="float-action" @tap="addActivity">
+        <image src="../../static/lostFound/plus.png" />
+      </view>
+    </view>
+    <bottom/>
   </view>
 </template>
 <script>
 import wepy from 'wepy'
 import activityCard from '@/components/activity/activityCard'
-import launch from '@/components/activity/addButton'
+import bottom from '@/components/activity/bottom'
 export default class showActivity extends wepy.component {
   data = {
     theme: '篮球',
@@ -64,7 +69,14 @@ export default class showActivity extends wepy.component {
   }
   components = {
     panel: activityCard,
-    launch: launch
+    bottom: bottom
+  }
+  methods = {
+    addActivity: function(e) {
+      wepy.navigateTo({
+        url: '../pages/activity/launchActivity'
+      })
+    }
   }
   computed = {
     theme() {
