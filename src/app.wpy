@@ -17,7 +17,8 @@ export default class extends wepy.app {
       'pages/order/orderList',
       'pages/order/orderDetail',
       'pages/order/newOrder',
-      'pages/lostFound/addLostFound'
+      'pages/lostFound/addLostFound',
+      'pages/lostFound/lostFoundDetail'
     ],
     window: {
       backgroundTextStyle: 'light',

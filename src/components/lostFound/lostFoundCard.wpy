@@ -39,7 +39,10 @@ export default class lostFoundCard extends wepy.component {
   data = {}
   methods = {
     showDetails: function(e) {
-      console.log('detile')
+      wepy.navigateTo({
+        url: '../pages/lostFound/lostFoundDetail?id=988c1b1b5cd6814e0fef609c5a0c5444'
+        //  + e.target.dataset.id
+      })
     }
   }
   computed = {

@@ -1,0 +1,124 @@
+<template>
+  <view class="padding-sm">
+    <view cu-card>
+      <view class="cu-bar bg-white solid-bottom margin-top">
+        <view class="action">
+          <text class="cuIcon-title text-orange "></text> {{lostFoundTitle}}
+        </view>
+      </view>
+      <view class="cu-list menu {{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}">
+        <view class="cu-item {{menuArrow?'arrow':''}}">
+          <button class="cu-btn content" open-type="contact">
+            <text class="cuIcon-btn text-olive"></text>
+            <text class="text-grey">发布者:</text>
+          </button>
+          <view class="action">
+            <text class="text-grey text-sm"> {{ "张鑫豪" }}</text>
+          </view>
+        </view>
+        <view class="cu-item {{menuArrow?'arrow':''}}">
+          <view class="content">
+            <text class="cuIcon-circlefill text-grey"></text>
+            <text class="text-grey">日期:</text>
+          </view>
+          <view class="action">
+            <text class="text-grey text-sm"> {{ date }}</text>
+          </view>
+        </view>
+        <view class="cu-item {{menuArrow?'arrow':''}}">
+          <view class="content">
+            <text class="cuIcon-circlefill text-grey"></text>
+            <text class="text-grey">时间:</text>
+          </view>
+          <view class="action">
+            <text class="text-grey text-sm"> {{ time }}</text>
+          </view>
+        </view>
+        <view class="cu-item {{menuArrow?'arrow':''}}">
+          <view class="content">
+            <text class="cuIcon-tagfill text-red"></text>
+            <text class="text-grey">地点:</text>
+          </view>
+          <view class="action">
+            <text class="text-grey text-sm"> {{ lostFoundLocation }}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="cu-card dynamic {{isCard?'no-card':''}}">
+      <view class="cu-item shadow">
+        <view class="text-gray text-sm text-right padding">
+        </view>
+        <view class="text-content">
+          {{textAreaValue}}
+        </view>
+        <view class="grid flex-sub padding-lr {{isCard?'col-3 grid-square':'col-1'}}">
+          <view class="bg-img {{isCard?'':'only-img'}}" style="background-image:url({{imgList}});" wx:for="{{isCard?9:1}}" wx:key="{{index}}">
+          </view>
+        </view>
+        <view class="text-gray text-sm text-right padding"></view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import commentArea from '../../components/activity/commentArea'
+
+export default class LostFoundDetail extends wepy.page {
+  config = {
+    navigationBarTitleText: '详情'
+  }
+
+  components = {
+    comments: commentArea
+  }
+
+  data = {
+    index: -1,
+    picker: ['失物招领', '寻物启事'],
+    lostFoundTitle: '',
+    lostFoundLocation: '',
+    time: '12:01',
+    date: '2018-12-25',
+    modalName: null,
+    imgList: [],
+    textAreaValue: '',
+    lostFoundID: ''
+  }
+
+  methods = {
+  }
+
+  onLoad(options) {
+    this.lostFoundID = options.id
+
+    let that = this
+
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+    const lostFound = database.collection('test')
+
+    lostFound.where({
+      _id: this.lostFoundID
+    }).get({
+      success(res) {
+        let detail = res.data[0]
+        that.index = detail.index
+        that.lostFoundTitle = detail.lostFoundTitle
+        that.lostFoundLocation = detail.lostFoundLocation
+        that.date = detail.date
+        that.time = detail.time
+        that.imgList = detail.imgList
+        that.textAreaValue = detail.textAreaValue
+        that.$apply()
+      }
+    })
+  }
+}
+</script>
+
+<style>
+</style>
