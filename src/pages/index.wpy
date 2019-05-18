@@ -39,7 +39,7 @@
 				</view>
 				<view class="PageCur=='activity'?'text-green':'text-gray'">活动</view>
 			</view>
-    
+
       <view class="action" bindtap="NavChange" data-cur="about">
         <view class='cuIcon-cu-image'>
           <image src="{{'../static/tabbar/about' + [PageCur=='about'?'_cur':''] + '.png'}}"></image>
@@ -68,7 +68,7 @@
       Campus: Campus
     }
     data = {
-      PageCur: 'plugin'
+      PageCur: 'lostFound'
     }
     methods = {
       NavChange: function(e) {
