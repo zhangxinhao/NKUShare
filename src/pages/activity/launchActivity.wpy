@@ -1,114 +1,186 @@
 <template>
-    <view>
-        <!-- <cu-custom bgcolor="bg-gradual-pink" isBack="true">
+  <view>
+    <!-- <cu-custom bgcolor="bg-gradual-pink" isBack="true">
             <block slot="backText">返回</block>
             <block slot="content">发起活动</block>
-        </cu-custom>-->
-        <form>
-            <view class="cu-form-group margin-top">
-                <view class="title">主题</view>
-                <input placeholder="请输入活动主题" name="input"/>
+    </cu-custom>-->
+    <form>
+      <view class="cu-form-group margin-top">
+        <view class="title">主题</view>
+        <input placeholder="请输入活动主题" name="input" bindchange="titleChange"/>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">地点</view>
+        <input placeholder="请输入活动地点" name="input" bindchange="locationChange"/>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">人数上限</view>
+        <input placeholder="请输入最高参加活动人数" name="input" bindchange="numMaxChange"/>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">人数下限</view>
+        <input placeholder="请输入最低参加活动人数下限" name="input" bindchange="numMinChange"/>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">日期选择</view>
+        <picker mode="date" value="date" start="2015-09-01" end="2020-09-01" @change="DateChange">
+          <view class="picker">{{date}}</view>
+        </picker>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">开始时间选择</view>
+        <picker mode="time" value="startTime" start="06:00" end="24:00" @change="StartTimeChange">
+          <view class="picker">{{startTime}}</view>
+        </picker>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">结束时间选择</view>
+        <picker mode="time" value="endTime" start="06:00" end="24:00" @change="EndTimeChange">
+          <view class="picker">{{endTime}}</view>
+        </picker>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">报名截止时间选择</view>
+        <picker mode="time" value="ddlTime" start="06:00" end="24:00" @change="DdlTimeChange">
+          <view class="picker">{{ddlTime}}</view>
+        </picker>
+      </view>
+      <view class="cu-bar bg-white margin-top">
+        <view class="action">图片上传</view>
+        <view class="action">{{imgList.length}}/4</view>
+      </view>
+      <view class="cu-form-group">
+        <view class="grid col-4 grid-square flex-sub">
+          <view
+            class="bg-img"
+            wx:for="{{imgList}}"
+            wx:key="{{index}}"
+            bindtap="ViewImage"
+            data-url="{{imgList[index]}}"
+          >
+            <image src="{{imgList[index]}}" mode="aspectFill" />
+            <view class="cu-tag bg-red" catchtap="DelImg" data-index="{{index}}">
+              <text class="cuIcon-close"></text>
             </view>
-            <view class="cu-form-group">
-                <view class="title">地点</view>
-                <input placeholder="请输入活动地点" name="input"/>
-            </view>
-            <view class="cu-form-group">
-                <view class="title">人数上限</view>
-                <input placeholder="请输入最高参加活动人数" name="input"/>
-            </view>
-            <view class="cu-form-group">
-                <view class="title">人数下限</view>
-                <input placeholder="请输入最低参加活动人数下限" name="input"/>
-            </view>
-            <view class="cu-form-group">
-                <view class="title">日期选择</view>
-                <picker
-                    mode="date000"
-                    value="date000"
-                    start="2015-09-01"
-                    end="2020-09-01"
-                    @change="DateChange"
-                >
-                    <view class="picker">{{date000}}</view>
-                </picker>
-            </view>
-            <view class="cu-form-group">
-                <view class="title">开始时间选择</view>
-                <picker mode="time" value="startTime" start="06:00" end="24:00" @change="StartTimeChange">
-                    <view class="picker">{{startTime}}</view>
-                </picker>
-            </view>
-            <view class="cu-form-group">
-                <view class="title">结束时间选择</view>
-                <picker mode="time" value="endTime" start="06:00" end="24:00" @change="EndTimeChange">
-                    <view class="picker">{{endTime}}</view>
-                </picker>
-            </view>
-            <view class="cu-form-group">
-                <view class="title">报名截止时间选择</view>
-                <picker mode="time" value="ddlTime" start="06:00" end="24:00" @change="DdlTimeChange">
-                    <view class="picker">{{ddlTime}}</view>
-                </picker>
-            </view>
-            <view class="cu-form-group align-start">
-                <view class="title">详细描述</view>
-                <textarea
-                    maxlength="-1"
-                    disabled="{{modalName!==null}}"
-                    @input="textareaInput"
-                    placeholder="多行文本输入框"
-                ></textarea>
-            </view>
-            <!-- <view class="cu-bar bg-white margin-top">
-                <view class="action">图片上传(可选）</view>
-                <view class="action">{{imgList.length}}/4</view>
-            </view>
-            <view class="cu-form-group">
-                <view class="grid col-4 grid-square flex-sub">
-                    <view class="bg-img">
-                        <repeat for="{{imgList}}" key="index" index="index" item="item" @tap="ViewImage" data-url="imgList[index]"/>
-                        <image src="imgList[index]" mode="aspectFill"/>
-                        <view class="cu-tag bg-red" @tap.stop="DelImg" data-index="index">
-                            <text class="cuIcon-close"></text>
-                        </view>
-                    </view>
-                    <view class="solids" @tap="ChooseImage" v-if="imgList.length<4">
-                        <text class="cuIcon-cameraadd"></text>
-                    </view>
-                </view>
-            </view>-->
-
-            <!-- <view class="cu-form-group">
-            <view class="title">地点</view>
-            <picker @change="PickerChange" value="index" range="picker">
-                <view class="picker">{{index>-1?picker[index]:'禁止换行，超出容器部分会以 ... 方式截断'}}</view>
-            </picker>
-            </view>-->
-        </form>
-        <view class="padding flex flex-direction">
-            <button class="cu-btn bg-grey lg" @tap="launchConfirm">确认发起</button>
+          </view>
+          <view class="solids" bindtap="ChooseImage" wx:if="{{imgList.length<4}}">
+            <text class="cuIcon-cameraadd"></text>
+          </view>
         </view>
+      </view>
+      <view class="cu-form-group align-start">
+        <view class="title">详细描述</view>
+        <textarea
+          maxlength="-1"
+          disabled="{{modalName!==null}}"
+          @input="textareaInput"
+          placeholder="多行文本输入框"
+        ></textarea>
+      </view>
+    </form>
+    <view class="padding flex flex-direction">
+      <button class="cu-btn bg-grey lg" @tap="launchConfirm">确认发起</button>
     </view>
+  </view>
 </template>
 <script>
 import wepy from 'wepy'
 export default class launchActivity extends wepy.page {
+  config = {
+    navigationBarTitleText: '发起活动'
+  }
   data = {
-    index: -1,
-    picker: ['喵喵喵', '汪汪汪', '哼唧哼唧'],
+    useID: '',
+    title: '',
+    location: '',
+    numMax: Number,
+    numMin: Number,
     startTime: '12:01',
     endTime: '12:01',
     ddlTime: '12:01',
-    date000: '2018-12-26',
+    date: '2018-12-26',
     modalName: null,
     imgList: [],
     textAreaValue: ''
   }
+
+  onload() {
+    wx.cloud.callFunction({
+      name: 'getOpenID',
+      complete: res => {
+        this.userID = res.result.openid
+      }
+    })
+  }
+
   methods = {
     launchConfirm(e) {
-      wx.navigateBack()
+      // wx.navigateBack()
       // 提示发起成功或者失败
+      let that = this
+
+      const database = wx.cloud.database({
+        env: 'nkushare-kynis'
+      })
+
+      const activity = database.collection('activity')
+      const takeActivity = database.collection('take_activity')
+
+      activity.add({
+        // data 字段表示需新增的 JSON 数据
+        data: {
+          // _id: 'todo-identifiant-aleatoire', // 可选自定义 _id，在此处场景下用数据库自动分配的就可以了
+          description: that.textareaValue,
+          title: that.title,
+          register_end: that.ddlTime,
+          begin: that.startTime,
+          end: that.endTime,
+          location: that.location,
+          num_min: that.numMin,
+          num_max: that.numMax,
+          bonus: 10,
+          picture: that.imgList,
+          state: '待生效'
+        },
+        success(res) {
+          // res 是一个对象，其中有 _id 字段标记刚创建的记录的 id
+          let activityID = res._id
+
+          takeActivity.add({
+            data: {
+              act_id: activityID,
+              type: 'C',
+              userID: that.userID
+            },
+            success(res) {
+              wx.showModal({
+                title: '亲爱的用户',
+                content: '您已创建成功',
+                showCancel: false,
+                // cancelText: '取消',
+                confirmText: '确认',
+                success: res => {
+                  if (res.confirm) {
+                    wx.navigateBack()
+                  }
+                }
+              })
+            }
+          })
+        }
+      })
+    },
+    titleChange(e) {
+      this.title = e.detail.value
+    },
+    locationChange(e) {
+      this.location = e.detail.value
+    },
+    numMaxChange(e) {
+      this.numMax = e.detail.value
+    },
+    numMinChange(e) {
+      this.numMin = e.detail.value
     },
     PickerChange(e) {
       this.index = e.detail.value
@@ -123,7 +195,7 @@ export default class launchActivity extends wepy.page {
       this.ddlTime = e.detail.value
     },
     DateChange(e) {
-      this.date000 = e.detail.value
+      this.date = e.detail.value
     },
     textareaInput(e) {
       this.textareaValue = e.detail.value
@@ -138,8 +210,8 @@ export default class launchActivity extends wepy.page {
       wx.showModal({
         title: '亲爱的用户',
         content: '确定要删除这张照片吗？',
-        cancelText: '再看看',
-        confirmText: '再见',
+        cancelText: '取消',
+        confirmText: '确认',
         success: res => {
           if (res.confirm) {
             this.imgList.splice(e.currentTarget.dataset.index, 1)

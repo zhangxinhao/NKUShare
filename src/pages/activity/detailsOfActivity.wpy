@@ -78,6 +78,9 @@ import commentArea from '../../components/activity/commentArea'
 // import launch from '../components/activity/addButton'
 
 export default class detailsOfActivity extends wepy.page {
+  config = {
+    navigationBarTitleText: '活动详情'
+  }
   components = {
     comments: commentArea
   }

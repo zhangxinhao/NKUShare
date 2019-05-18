@@ -2,7 +2,7 @@
 </style>
 <template>
 	<view class="padding flex flex-direction">
-		<button class="cu-btn bg-grey lg" @tap="launchActivity">发起活动</button>
+		<!-- <button class="cu-btn bg-grey lg" @tap="launchActivity">发起活动</button> -->
 		<!-- 在最下方放置一个白色的按钮，使导航栏遮挡这个无效按钮 -->
 		<button class="cu-btn bg-white margin-tb-sm lg"></button>
 	</view>
@@ -10,14 +10,14 @@
 <script>
 import wepy from 'wepy'
 
-export default class addButton extends wepy.component {
+export default class bottom extends wepy.component {
   data = {}
   methods = {
-    launchActivity: function(e) {
-      wepy.navigateTo({
-        url: '../pages/activity/launchActivity'
-      })
-    }
+    // launchActivity: function(e) {
+    //   wepy.navigateTo({
+    //     url: '../pages/activity/launchActivity'
+    //   })
+    // }
   }
 }
 </script>
