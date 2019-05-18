@@ -27,20 +27,15 @@
 </style>
 <template>
   <view class="container">
-    <card
-      :name="name"
-      :lostFoundTime="lostFoundTime"
-      :lostFoundLocation="lostFoundLocation"
-      :lostFoungNameUrl="lostFoungNameUrl"
-      :lostFoundType="type"
-    ></card>
-    <card2
-      :name="name"
-      :lostFoundTime="lostFoundTime"
-      :lostFoundLocation="lostFoundLocation"
-      :lostFoungNameUrl="lostFoungNameUrl"
-      :lostFoundType="type2"
-    ></card2>
+    <repeat for="{{list}}" key="index" index="index" item="item">
+      <card
+        :name="item.lostFoundTitle"
+        :lostFoundTime="item.date"
+        :lostFoundLocation="item.lostFoundLocation"
+        :lostFoungNameUrl="item.imgList"
+        :lostFoundType="item.index"
+      ></card>
+    </repeat>
     <view class="float-container">
       <view class="float-action" @tap="addCard">
         <image src="../../static/lostFound/plus.png" />
@@ -66,16 +61,8 @@ export default class showLostFound extends wepy.component {
     selectbackgroundColor: '#FFB233',
     color: '#FFB233',
     selectcolor: '#228B22',
-    addlistdata: [
-      {
-        title: '第一个',
-        src: '/static/logo.png'
-      },
-      {
-        title: '第二个',
-        src: '/static/log.png'
-      }
-    ]
+    list: [],
+    lostFoundID: '6cd397ca5cdfe5b700e3009b7fe40fbf'
   }
   methods = {
     addlisttap (index) { /* 第一个序列为0,第二个为1,以此类推;当值为-1代表点击的是遮慕层 */
@@ -89,6 +76,20 @@ export default class showLostFound extends wepy.component {
         url: '../pages/lostFound/addLostFound'
       })
     }
+  }
+  onLoad() {
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+    const lostFound = database.collection('test')
+    let that = this
+    lostFound.get({
+      success(res) {
+        that.list = res.data
+        that.$apply()
+        console.log(res.data)
+      }
+    })
   }
   components = {
     card: lostFoundCard,

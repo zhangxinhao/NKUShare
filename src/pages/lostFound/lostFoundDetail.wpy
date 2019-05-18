@@ -93,16 +93,15 @@ export default class LostFoundDetail extends wepy.page {
 
   onLoad(options) {
     this.lostFoundID = options.id
-
     let that = this
-
     const database = wx.cloud.database({
       env: 'nkushare-kynis'
     })
     const lostFound = database.collection('test')
 
     lostFound.where({
-      _id: this.lostFoundID
+      // _id: this.lostFoundID
+      _id: '6cd397ca5cdfe5b700e3009b7fe40fbf'
     }).get({
       success(res) {
         let detail = res.data[0]
@@ -114,6 +113,7 @@ export default class LostFoundDetail extends wepy.page {
         that.imgList = detail.imgList
         that.textAreaValue = detail.textAreaValue
         that.$apply()
+        console.log(res)
       }
     })
   }

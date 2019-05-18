@@ -1,0 +1,51 @@
+<style scoped>
+</style>
+
+<template>
+  <view>
+    <view class="action">
+      <button class="cu-btn bg-red shadow-blur round" open-type="getUserInfo" @tap="test">登录</button>
+    </view>
+    <view class="action">
+      <button class="cu-btn bg-red shadow-blur round"  @tap="testt">xinxi</button>
+    </view>
+  </view>
+</template>
+
+
+
+<script>
+import wepy from 'wepy'
+
+export default class about extends wepy.component {
+  props = {
+    lostFoundType: String,
+    name: String,
+    lostFoundTime: String,
+    lostFoundLocation: String,
+    lostFoungNameUrl: String
+  }
+  data = {}
+  methods = {
+    test() {
+      wx.login({
+        success: function (data) {
+          // wx.getUserInfo({
+          //   success: function (userinfo) {
+          //     self.setData({userInfo: userinfo})
+          //   }
+          // })
+          console.log(data)
+        }
+      })
+    },
+    testt() {
+      wx.cloud.callFunction({
+        name: 'getOpenID'
+      }).then(res => {
+        console.log(res.result)
+      })
+    }
+  }
+}
+</script>
