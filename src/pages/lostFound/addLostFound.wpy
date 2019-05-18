@@ -88,7 +88,9 @@ export default class addLostFound extends wepy.page {
     date: '2018-12-26',
     modalName: null,
     imgList: [],
-    textAreaValue: ''
+    textAreaValue: '',
+    fileID: '',
+    itemID: ''
   }
   methods = {
     titleInput(e) {
@@ -148,6 +150,7 @@ export default class addLostFound extends wepy.page {
       })
     },
     formSubmit(e) {
+      let that = this
       const database = wx.cloud.database({
         env: 'nkushare-kynis'
       })
@@ -163,13 +166,34 @@ export default class addLostFound extends wepy.page {
           textAreaValue: this.textAreaValue
         }
       }).then(res => {
-        wepy.showToast({
-          title: `新增数据ID为 ${res._id}`,
-          icon: 'none'
-        })
+        that.itemID = res._id
+      })
+      wx.cloud.uploadFile({
+        cloudPath: that.lostFoundTitle + Date.parse(new Date()),
+        filePath: that.imgList[0],
+        success: res => {
+          that.fileID = res.fileID
+          that.$apply()
+          console.log('上传成功', res)
+          wx.cloud.callFunction({
+            name: 'changeImagePath',
+            data: {
+              fileID: that.fileID,
+              itemID: that.itemID
+            }
+          }).then(res => {
+            wepy.showToast({
+              title: `成功`,
+              icon: 'none'
+            })
+            console.log(res.result)
+          })
+        },
+        fail: (error) => {
+          console.log(error)
+        }
       })
       console.log('form发生了submit事件，携带数据为：', e.detail.value)
-      console.log(this.data)
     }
   }
 }

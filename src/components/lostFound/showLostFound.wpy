@@ -32,7 +32,7 @@
         :name="item.lostFoundTitle"
         :lostFoundTime="item.date"
         :lostFoundLocation="item.lostFoundLocation"
-        :lostFoungNameUrl="item.imgList"
+        :lostFoungNameUrl="item.imgList[0]"
         :lostFoundType="item.index"
       ></card>
     </repeat>
@@ -87,7 +87,6 @@ export default class showLostFound extends wepy.component {
       success(res) {
         that.list = res.data
         that.$apply()
-        console.log(res.data)
       }
     })
   }
