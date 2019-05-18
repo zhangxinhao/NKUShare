@@ -43,19 +43,33 @@ export default class lostFoundCard extends wepy.component {
         url: '../pages/lostFound/lostFoundDetail?id=6cd397ca5cdfe5b700e3009b7fe40fbf'
         //  + e.target.dataset.id
       })
+    },
+    onLoad() {
+      console.log('zujian')
     }
   }
   computed = {
     typeName() {
+      // console.log(this.lostFoundType)
       if (this.lostFoundType === '1') {
         return '失物招领'
       } else {
         return '寻物启事'
       }
+    },
+    showLostFoungNameUrl() {
+      // let that = this
+      // wx.cloud.downloadFile({
+      //   fileID: this.lostFoungNameUrl,
+      //   success: res => {
+      //     that.lostFoungNameUrl = res.tempFilePath
+      //     that.$apply()
+      //   },
+      //   fail: console.error
+      // })
+      // console.log(this.lostFoungNameUrl)
+      return this.lostFoungNameUrl
     }
-  }
-  onload() {
-    console.log('onLoad')
   }
 }
 </script>

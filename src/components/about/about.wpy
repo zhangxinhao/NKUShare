@@ -41,7 +41,9 @@ export default class about extends wepy.component {
     },
     testt() {
       wx.cloud.callFunction({
-        name: 'getOpenID'
+        name: 'getOpenID',
+        data: {
+        }
       }).then(res => {
         console.log(res.result)
       })
