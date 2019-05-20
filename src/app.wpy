@@ -50,5 +50,22 @@ export default class extends wepy.app {
       })
     }
   }
+
+  data = {
+    userID: ''
+  }
+
+  onLoad() {
+    wx.cloud.callFunction({
+      name: 'getOpenID',
+      complete: res => {
+        this.userID = res.result.openid
+      }
+    })
+  }
+
+  globalData = {
+    userID: this.userID
+  }
 }
 </script>
