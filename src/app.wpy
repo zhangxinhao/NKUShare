@@ -49,6 +49,37 @@ export default class extends wepy.app {
         traceUser: true
       })
     }
+
+    wx.cloud.callFunction({
+      name: 'getOpenID',
+      complete: res => {
+        this.globalData.userID = res.result.openid
+        const database = wx.cloud.database({
+          env: 'nkushare-kynis'
+        })
+
+        const user = database.collection('user')
+        let that = this
+        user.where({
+          _openid: this.globalData.userID
+        }).get({
+          success(res) {
+            that.globalData.userName = res.data[0].name
+          }
+        })
+      }
+    })
+
+    // console.log(this.globalData.userName)
+  }
+
+  data = {
+    userID: ''
+  }
+
+  globalData = {
+    userID: '',
+    userName: ''
   }
 }
 </script>

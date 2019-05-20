@@ -44,8 +44,12 @@
               <text class="cuIcon-infofill margin-right-xs"></text> 截止时间为: {{ item.end }}</view>
           </view>
           <view class="action">
-            <!-- <switch class="switch-sex sm" bindchange="switchSex"></switch> -->
-            <button class="cu-btn bg-red shadow-blur round" bindtap='goOrderDetail' data-id="{{ item._id }}">点击加入</button>
+            <view wx:if="{{ !item.outOfDate }}">
+              <button class="cu-btn bg-red shadow-blur round" bindtap='goOrderDetail' data-id="{{ item._id }}">点击查看</button>
+            </view>
+            <view wx:else>
+              <button class="cu-btn bg-red shadow-blur round" disabled>已过期</button>
+            </view>
           </view>
         </view>
       </view>
@@ -62,9 +66,6 @@ export default class OrderList extends wepy.page {
   }
 
   data = {
-    TabCur: 0,
-    MainCur: 0,
-    VerticalNavTop: 0,
     list: [
       {
         name: '奶茶',
@@ -120,6 +121,15 @@ export default class OrderList extends wepy.page {
     }).get({
       success(res) {
         that.list[0].orders = res.data
+        let orders = that.list[0].orders
+        for (let j = 0; j < orders.length; j++) {
+          if (orders[j].end.getTime() < new Date().getTime()) {
+            orders[j].outOfDate = true
+          } else {
+            orders[j].outOfDate = false
+          }
+        }
+        that.list[0].orders = orders
         that.setData({
           list: that.list
         })
@@ -132,6 +142,15 @@ export default class OrderList extends wepy.page {
     }).get({
       success(res) {
         that.list[1].orders = res.data
+        let orders = that.list[1].orders
+        for (let j = 0; j < orders.length; j++) {
+          if (orders[j].end.getTime() < new Date().getTime()) {
+            orders[j].outOfDate = true
+          } else {
+            orders[j].outOfDate = false
+          }
+        }
+        that.list[1].orders = orders
         that.setData({
           list: that.list
         })
@@ -144,6 +163,15 @@ export default class OrderList extends wepy.page {
     }).get({
       success(res) {
         that.list[2].orders = res.data
+        let orders = that.list[2].orders
+        for (let j = 0; j < orders.length; j++) {
+          if (orders[j].end.getTime() < new Date().getTime()) {
+            orders[j].outOfDate = true
+          } else {
+            orders[j].outOfDate = false
+          }
+        }
+        that.list[2].orders = orders
         that.setData({
           list: that.list
         })
@@ -162,86 +190,8 @@ export default class OrderList extends wepy.page {
       url: './newOrder'
     })
   }
-
-  tabSelect(e) {
-    this.TabCur = e.currentTarget.dataset.id
-    this.MainCur = e.currentTarget.dataset.id
-    this.VerticalNavTop = (e.currentTarget.dataset.id - 1) * 50
-  }
-
-  VerticalMain(e) {
-    let that = this
-    let list = this.data.list
-    let tabHeight = 0
-    if (this.data.load) {
-      for (let i = 0; i < list.length; i++) {
-        let view = wx.createSelectorQuery().select('#main-' + list[i].id)
-        view.fields({
-          size: true
-        }, data => {
-          list[i].top = tabHeight
-          tabHeight = tabHeight + data.height
-          list[i].bottom = tabHeight
-          console.log(list[i].id)
-          console.log(list[i].top)
-          console.log(list[i].bottom)
-        }).exec()
-      }
-      that.setData({
-        load: false,
-        list: list
-      })
-    }
-    let scrollTop = e.detail.scrollTop + 20
-    console.log(scrollTop)
-    for (let i = 0; i < list.length; i++) {
-      if (scrollTop > list[i].top && scrollTop < list[i].bottom) {
-        that.setData({
-          VerticalNavTop: (list[i].id - 1) * 50,
-          TabCur: list[i].id
-        })
-        return false
-      }
-    }
-  }
 }
 </script>
 
 <style>
-.VerticalNav.nav {
-  width: 200rpx;
-  white-space: initial;
-}
-
-.VerticalNav.nav .cu-item {
-  width: 100%;
-  text-align: center;
-  background-color: #fff;
-  margin: 0;
-  border: none;
-  height: 50px;
-  position: relative;
-}
-
-.VerticalNav.nav .cu-item.cur {
-  background-color: #f1f1f1;
-}
-.VerticalNav.nav .cu-item.cur::after {
-  content: "";
-  width: 8rpx;
-  height: 30rpx;
-  border-radius: 10rpx 0 0 10rpx;
-  position: absolute;
-  background-color: currentColor;
-  top: 0;
-  right: 0rpx;
-  bottom: 0;
-  margin: auto;
-}
-.VerticalBox{
-  display: flex;
-}
-.VerticalMain{
-  background-color: #f1f1f1;
-}
 </style>

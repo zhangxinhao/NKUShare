@@ -93,7 +93,40 @@
           </button>
         </view>
       </view>
-      <comments wx:if="{{hasJoin==true}}"/>
+
+      <view wx:if="{{hasJoin==true}}">
+        <view class="cu-bar bg-white solid-bottom margin-top">
+          <view class="action">
+            <text class="cuIcon-title text-orange"></text>消息列表
+          </view>
+        </view>
+        <repeat for="{{commentArray}}" key="index" index="index" item="item">
+          <view class="cu-list menu-avatar">
+            <view class="cu-item">
+              <view
+                  class="cu-avatar round lg"
+                  style="background-image:url({{item.avatarUrl}});">
+              </view>
+              <view class="content">
+                <view class="text-grey">{{item.name}}</view>
+                <view class="text-gray text-sm flex">
+                  <text class="text-cut">
+                    {{item.comment}}
+                  </text>
+                </view>
+              </view>
+              <view class="action">
+                <view class="text-grey text-xs">{{item.date}}</view>
+                <view class="cu-tag round bg-grey sm">{{item.time}}</view>
+              </view>
+            </view>
+          </view>
+        </repeat>
+        <view class="cu-bar input">
+          <input placeholder="输入消息..." maxlength="200" value="{{message}}" bindchange='messageChange' />
+          <button class="cu-btn bg-green shadow" bindtap='submitMessage'>发送</button>
+        </view>
+      </view>
 
       <view class="cu-modal {{modalName=='DialogModal1'?'show':''}}">
         <view class="cu-dialog">
@@ -131,15 +164,10 @@
 
 <script>
 import wepy from 'wepy'
-import commentArea from '../../components/activity/commentArea'
 
 export default class OrderDetail extends wepy.page {
   config = {
     navigationBarTitleText: '订单详情'
-  }
-
-  components = {
-    comments: commentArea
   }
 
   data = {
@@ -151,7 +179,35 @@ export default class OrderDetail extends wepy.page {
     orderDetail: {},
     label: '',
     creatorID: '',
-    creatorName: ''
+    creatorName: '',
+    InputBottom: 0,
+    commentArray: [
+      {
+        avatarUrl:
+          'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
+        name: '王康',
+        content:
+          '我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。',
+        date: '5-1',
+        time: '19：54'
+      },
+      {
+        avatarUrl:
+          'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
+        name: '王康',
+        content:
+          '我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。',
+        date: '5-1',
+        time: '19：54'
+      }
+    ],
+    userID: '',
+    userName: '',
+    message: ''
+  }
+
+  messageChange(e) {
+    this.message = e.detail.value
   }
 
   PickerChange(e) {
@@ -174,9 +230,51 @@ export default class OrderDetail extends wepy.page {
     this.modalName = null
   }
 
-  onLoad(options) {
-    this.orderID = options.id
+  submitMessage(e) {
+    let that = this
 
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+
+    const comment = database.collection('comment')
+
+    comment.add({
+      // data 字段表示需新增的 JSON 数据
+      data: {
+        // _id: 'todo-identifiant-aleatoire', // 可选自定义 _id，在此处场景下用数据库自动分配的就可以了
+        comment: that.message,
+        event_id: that.orderID,
+        name: that.userName,
+        time: new Date(),
+        type: 'order',
+        user_id: that.userID
+      },
+      success(res) {
+        that.message = ''
+
+        comment.where({
+          event_id: this.orderID
+        }).get({
+          success(res) {
+            that.commentArray = res.data
+            that.setData({
+              commentArray: that.commentArray
+            })
+          }
+        })
+      }
+    })
+  }
+
+  onLoad(options) {
+    this.userID = this.$parent.globalData.userID
+    this.userName = this.$parent.globalData.userName
+    this.orderID = options.id
+    this.getDetail()
+  }
+
+  getDetail() {
     let that = this
 
     const database = wx.cloud.database({
@@ -186,6 +284,7 @@ export default class OrderDetail extends wepy.page {
     const order = database.collection('order')
     const takeorder = database.collection('take_order')
     const user = database.collection('user')
+    const comment = database.collection('comment')
 
     order.where({
       _id: this.orderID
@@ -202,7 +301,8 @@ export default class OrderDetail extends wepy.page {
     })
 
     takeorder.where({
-      orderID: this.orderID
+      orderID: this.orderID,
+      type: 'C'
     }).get({
       success(res) {
         that.creatorID = res.data[0].userID
@@ -210,7 +310,7 @@ export default class OrderDetail extends wepy.page {
           creatorID: that.creatorID
         })
         user.where({
-          _id: that.creatorID
+          _openid: that.creatorID
         }).get({
           success(res) {
             that.creatorName = res.data[0].name
@@ -218,6 +318,30 @@ export default class OrderDetail extends wepy.page {
               creatorName: that.creatorName
             })
           }
+        })
+      }
+    })
+
+    takeorder.where({
+      userID: this.userID
+    }).get({
+      success(res) {
+        if (res.data.length !== 0) {
+          that.hasJoin = true
+          that.setData({
+            hasJoin: that.hasJoin
+          })
+        }
+      }
+    })
+
+    comment.where({
+      event_id: this.orderID
+    }).get({
+      success(res) {
+        that.commentArray = res.data
+        that.setData({
+          commentArray: that.commentArray
         })
       }
     })
