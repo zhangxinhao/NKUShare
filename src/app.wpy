@@ -49,23 +49,21 @@ export default class extends wepy.app {
         traceUser: true
       })
     }
+
+    wx.cloud.callFunction({
+      name: 'getOpenID',
+      complete: res => {
+        this.globalData.userID = res.result.openid
+      }
+    })
   }
 
   data = {
     userID: ''
   }
 
-  onLoad() {
-    wx.cloud.callFunction({
-      name: 'getOpenID',
-      complete: res => {
-        this.userID = res.result.openid
-      }
-    })
-  }
-
   globalData = {
-    userID: this.userID
+    userID: ''
   }
 }
 </script>
