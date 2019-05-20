@@ -108,7 +108,7 @@
                   style="background-image:url({{item.avatarUrl}});">
               </view>
               <view class="content">
-                <view class="text-grey">{{item.userID}}</view>
+                <view class="text-grey">{{item.name}}</view>
                 <view class="text-gray text-sm flex">
                   <text class="text-cut">
                     {{item.comment}}
@@ -202,6 +202,7 @@ export default class OrderDetail extends wepy.page {
       }
     ],
     userID: '',
+    userName: '',
     message: ''
   }
 
@@ -244,18 +245,31 @@ export default class OrderDetail extends wepy.page {
         // _id: 'todo-identifiant-aleatoire', // 可选自定义 _id，在此处场景下用数据库自动分配的就可以了
         comment: that.message,
         event_id: that.orderID,
+        name: that.userName,
         time: new Date(),
         type: 'order',
         user_id: that.userID
       },
       success(res) {
-        console.log(res)
+        that.message = ''
+
+        comment.where({
+          event_id: this.orderID
+        }).get({
+          success(res) {
+            that.commentArray = res.data
+            that.setData({
+              commentArray: that.commentArray
+            })
+          }
+        })
       }
     })
   }
 
   onLoad(options) {
     this.userID = this.$parent.globalData.userID
+    this.userName = this.$parent.globalData.userName
     this.orderID = options.id
     this.getDetail()
   }
@@ -287,7 +301,8 @@ export default class OrderDetail extends wepy.page {
     })
 
     takeorder.where({
-      orderID: this.orderID
+      orderID: this.orderID,
+      type: 'C'
     }).get({
       success(res) {
         that.creatorID = res.data[0].userID
@@ -295,7 +310,7 @@ export default class OrderDetail extends wepy.page {
           creatorID: that.creatorID
         })
         user.where({
-          _id: that.creatorID
+          _openid: that.creatorID
         }).get({
           success(res) {
             that.creatorName = res.data[0].name
