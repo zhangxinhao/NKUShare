@@ -49,14 +49,14 @@
           </view>
         </picker>
       </view>
-      <view class="cu-form-group">
+      <!-- <view class="cu-form-group">
         <view class="title">时间选择</view>
         <picker mode="time" value="{{time}}" start="09:01" end="21:01" bindchange="TimeChange">
           <view class="picker">
             {{time}}
           </view>
         </picker>
-      </view>
+      </view> -->
       <!-- <view class="cu-form-group">
         <view class="title">日期选择</view>
         <picker mode="date" value="{{date}}" start="2015-09-01" end="2020-09-01" bindchange="DateChange">
@@ -224,6 +224,55 @@ export default class NewOrder extends wepy.page {
     this.textareaValue = e.detail.value
   }
 
+  validateInfo() {
+    if (this.minNumIndex === null || this.maxNumIndex === null || this.minNumPicker[this.minNumIndex] > this.maxNumPicker[this.maxNumIndex]) {
+      wx.showToast({
+        title: '创建失败!请调整人数符合规范!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+
+    if (this.title === '') {
+      wx.showToast({
+        title: '创建失败!标题不能为空!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+
+    if (this.textareaValue === '') {
+      wx.showToast({
+        title: '创建失败!描述不能为空!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+
+    if (this.typeIndex === null) {
+      wx.showToast({
+        title: '创建失败!商品类型不能为空!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+
+    if (this.locationIndex === null) {
+      wx.showToast({
+        title: '创建失败!地址信息不能为空!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+
+    return true
+  }
+
   submitOrder(e) {
     let that = this
 
@@ -256,38 +305,40 @@ export default class NewOrder extends wepy.page {
       good = 'other'
     }
 
-    order.add({
-      // data 字段表示需新增的 JSON 数据
-      data: {
-        // _id: 'todo-identifiant-aleatoire', // 可选自定义 _id，在此处场景下用数据库自动分配的就可以了
-        description: that.textareaValue,
-        title: that.title,
-        start: startTime,
-        end: endTime,
-        location_label: location,
-        good_label: good,
-        num_min: that.minNumPicker[that.minNumIndex],
-        num_max: that.maxNumPicker[that.maxNumIndex],
-        state: '拼单中'
-      },
-      success(res) {
-        // res 是一个对象，其中有 _id 字段标记刚创建的记录的 id
-        let orderID = res._id
+    if (this.validateInfo()) {
+      order.add({
+        // data 字段表示需新增的 JSON 数据
+        data: {
+          // _id: 'todo-identifiant-aleatoire', // 可选自定义 _id，在此处场景下用数据库自动分配的就可以了
+          description: that.textareaValue,
+          title: that.title,
+          start: startTime,
+          end: endTime,
+          location_label: location,
+          good_label: good,
+          num_min: that.minNumPicker[that.minNumIndex],
+          num_max: that.maxNumPicker[that.maxNumIndex],
+          state: '拼单中'
+        },
+        success(res) {
+          // res 是一个对象，其中有 _id 字段标记刚创建的记录的 id
+          let orderID = res._id
 
-        takeorder.add({
-          data: {
-            orderID: orderID,
-            type: 'C',
-            userID: that.userID
-          },
-          success(res) {
-            wx.navigateBack({
-              url: './orderList'
-            })
-          }
-        })
-      }
-    })
+          takeorder.add({
+            data: {
+              orderID: orderID,
+              type: 'C',
+              userID: that.userID
+            },
+            success(res) {
+              wx.navigateBack({
+                url: './orderList'
+              })
+            }
+          })
+        }
+      })
+    }
   }
 }
 </script>
