@@ -5,26 +5,26 @@
         <view class="solids-bottom padding-xs flex align-center">
             <view class="flex-sub text-lgeft">
                 <view class="solid-bottom text-xl padding">
-                    <text class="text-black text-bold">活动主题:{{theme}}</text>
+                    <text class="text-black text-bold">活动主题:{{actDetails.title}}</text>
                 </view>
                 <view class="content flex-sub">
                     <view class="padding text-lg flex justify-between">时间
                         <view class="text-lg">
-                            <text class="margin-lr-xs">{{time}}</text>
+                            <text class="margin-lr-xs">{{actDetails.begin}}</text>
                         </view>
                     </view>
                 </view>
                 <view class="content flex-sub">
                     <view class="padding text-lg flex justify-between">地点
                         <view class="text-lg">
-                            <text class="margin-lr-xs">{{location}}</text>
+                            <text class="margin-lr-xs">{{actDetails.location}}</text>
                         </view>
                     </view>
                 </view>
                 <view class="content flex-sub">
                     <view class="padding text-lg flex justify-between">人数
                         <view class="text-lg">
-                            <text class="margin-lr-xs">{{currentNum}}/{{sumNum}}</text>
+                            <text class="margin-lr-xs">{{actDetails.num_min}}~{{actDetails.num_max}}</text>
                         </view>
                     </view>
                 </view>
@@ -85,12 +85,14 @@ export default class detailsOfActivity extends wepy.page {
     comments: commentArea
   }
   data = {
-    id: Number,
-    theme: '软件篮球训练',
-    time: '2019.05.01 18:00-22:00',
-    location: '津南理科篮球场',
-    currentNum: 5,
-    sumNum: 10,
+    actID: String,
+    actDetails: {},
+    // id: Number,
+    // theme: '软件篮球训练',
+    // time: '2019.05.01 18:00-22:00',
+    // location: '津南理科篮球场',
+    // currentNum: 5,
+    // sumNum: 10,
     sponsorName: '王康',
     sponsorCollege: '软件学院',
     attendeesAvatar: [
@@ -115,8 +117,32 @@ export default class detailsOfActivity extends wepy.page {
     }
   }
   onLoad(options) {
-    this.id = options.id
+    this.actID = options.id
     console.log(options)
+    console.log(this.actID)
+    this.getDetails()
+    console.log(this.actDetails)
+  }
+  getDetails() {
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+    const activity = database.collection('activity')
+    let that = this
+    activity
+      .where({
+        _id: that.actID
+      })
+      .get({
+        success(res) {
+          let details = res.data
+          console.log(details)
+          that.actDetails = details[0]
+          that.setData({
+            actDetails: that.actDetails
+          })
+        }
+      })
   }
 }
 </script>

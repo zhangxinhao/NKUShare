@@ -1,43 +1,74 @@
 <style scoped>
+.top_button{
+  position: relative;
+	border: 0rpx;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	padding: 10rpx;
+	font-size: 30rpx;
+	height: 50rpx;
+	line-height: 1;
+	text-align: center;
+	text-decoration: none;
+	overflow: visible;
+	margin-left: initial;
+	transform: translate(0rpx, 0rpx);
+	margin-right: initial;
+}
 </style>
 
 <template>
-    <view class="cu-card case {{isCard?'no-card':''}}" @tap="showDetails">
-        <view class="cu-item shadow">
-            <view class="cu-list menu-avatar">
-                <view class="cu-item">
-                    <view
-                        class="cu-avatar round lg"
-                        style="background-image:url({{activityThemeUrl}});"
-                    ></view>
-                    <view class="content flex-sub">
-                        <view class="text-grey">活动主题:{{theme}}</view>
-                        <view class="text-gray text-sm flex justify-between">时间:{{activityTime}}</view>
-                        <view class="text-gray text-sm flex justify-between">
-                            地点:{{activityLocation}}
-                            <text class="margin-lr-xs">人数：{{currentNum}}/{{sumNum}}</text>
-                        </view>
-                    </view>
-                </view>
-                <view class="bg-grey padding-sm radius margin-top-sm text-sm">
-                    <view class="flex">
-                        <view>参与成员:</view>
-                        <view class="action">
-                            <view class="cu-avatar-group">
-                                <repeat for="{{attendees}}" key="index" index="index" item="item">
-                                    <view
-                                        class="cu-avatar round sm"
-                                        style="background-image:url({{item}});"
-                                    ></view>
-                                </repeat>
-                            </view>
-                            <text class="text-grey text-sm">4 人</text>
-                        </view>
-                    </view>
-                </view>
+  <repeat for="{{list}}" key="index" index="index" item="item">
+    <view class="cu-card case {{isCard?'no-card':''}}">
+      <view class="cu-item shadow">
+        <view class="cu-list menu-avatar padding-tb-sm">
+          <view class="cu-item">
+            <view
+              class="cu-avatar round lg"
+              style="background-image:url({{[item.picture.length == 0?defaultActivityThemeUrl:item.picture[0]]}});"
+            ></view>
+            <view class="content flex-sub">
+              <view class="text-grey text-xl">活动主题:{{item.title}}</view>
+              <view class="text-gray text-df flex justify-between">时间:{{item.begin}}</view>
+              <view class="text-gray text-df flex justify-between">
+                地点:{{item.location}}
+                <text class="margin-lr-xs">人数：{{item.num_min}}~{{item.num_max}}</text>
+              </view>
             </view>
+            <view class="action">
+              <!-- <view wx:if="{{ !item.outOfDate }}"> -->
+
+              <button
+                class="top_button bg-blue shadow-blur round"
+                bindtap="showDetails"
+                data-id="{{ item._id }}"
+              >查看</button>
+              <!-- </view> -->
+              <!-- <view wx:else>
+              <button class="cu-btn bg-red shadow-blur round" disabled>已过期</button>
+              </view>-->
+              <!-- <button class="cu-btn bg-red shadow-blur round" disabled>已过期</button> -->
+            </view>
+          </view>
+          <view class="bg-grey padding-sm radius margin-top-sm text-sm">
+            <!-- <view class="flex">
+              <view>参与成员:</view>
+              <view class="action">
+                <view class="cu-avatar-group">
+                  <repeat for="{{attendees}}" key="index" index="index" item="item">
+                    <view class="cu-avatar round sm" style="background-image:url({{item}});"></view>
+                  </repeat>
+                </view>
+                <text class="text-grey text-sm">4 人</text>
+              </view>
+            </view>-->
+          </view>
         </view>
+      </view>
     </view>
+  </repeat>
 </template>
 
 
@@ -49,30 +80,102 @@ export default class activityCard extends wepy.component {
   // config = {navigationBarTitleText: 'posts'};
   // components = {};
   props = {
-    theme: String,
-    activityTime: String,
-    activityLocation: String,
-    sumNum: Number,
-    activityThemeUrl: String,
-    attendees: Array
+    actID: {
+      type: String,
+      default: 'null'
+    }
   }
-  data = {}
+  data = {
+    // theme: String,
+    // activityTime: String,
+    // activityLocation: String,
+    // sumNum: Number,
+    // activityThemeUrl: String,
+    // attendees: Array,
+    list: [], // 获取所有订单信息
+    act_id: [], // 获取所有订单id
+    defaultActivityThemeUrl: '../../static/tabbar/activity.png'
+  }
+
   methods = {
     showDetails: function(e) {
       wepy.navigateTo({
-        url: '../pages/activity/detailsOfActivity'
+        url: '../pages/activity/detailsOfActivity?id=' + e.target.dataset.id
       })
     }
   }
-  onload() {
-    console.log('onLoad')
-  }
-
   computed = {
-    currentNum() {
-      return this.attendees.length
+    theme() {
+      if (this.list.length !== 0) {
+        return this.list[0].title
+      } else {
+        return ''
+      }
     }
+    // activityTime() {
+    //   return this.list[0].begin
+    // },
+    // activityLocation() {
+    //   return this.list[0].location
+    // },
+    // sunNum() {
+    //   return this.list[0].sunNum
+    // },
+    // activityThemeUrl() {
+    // if (this.list.picture.length !== 0) {
+    //   return this.list.picture[0]
+    // } else {
+    //   return this.defaultActivityThemeUrl
+    // }
+    //   return this.defaultActivityThemeUrl
+    // }
+    // currentNum() {
+    //   return this.attendees.length
+    // }
+    // actID () {
+    //   return this.actID
+    // }
   }
+  onLoad() {
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+    const activity = database.collection('activity')
+    let that = this
+    activity.get({
+      success(res) {
+        that.list = res.data
+        that.$apply()
+        for (var i = 0; i < that.list.length; i++) {
+          that.act_id.push(that.list[i]._id)
+        }
+        that.$apply()
+      }
+    })
+  }
+  // events = {
+  //   showActId: $event => {
+  //     console.log(this.actID)
+  //     const database = wx.cloud.database({
+  //       env: 'nkushare-kynis'
+  //     })
+  //     const activity = database.collection('activity')
+  //     let that = this
+  //     activity
+  //       .where({
+  //         _id: that.actID
+  //       })
+  //       .get({
+  //         success(res) {
+  //           that.list = res.data
+  //           that.$apply()
+  //           console.log(that.list)
+  //           // that.theme = that.list[0].title
+  //           // console.log(that.theme)
+  //         }
+  //       })
+  //   }
+  // }
 }
 </script>
  

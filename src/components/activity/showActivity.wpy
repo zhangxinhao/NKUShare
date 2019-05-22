@@ -2,49 +2,10 @@
 </style>
 <template>
   <view class="container">
-    <panel
-      :theme="theme"
-      :activityTime="activityTime"
-      :activityLocation="activityLoaction"
-      :sumNum="sumNum"
-      :activityThemeUrl="activityThemeUrl"
-      :attendees="attendees"
-    ></panel>
-    <panel
-      :theme="theme"
-      :activityTime="activityTime"
-      :activityLocation="activityLoaction"
-      :sumNum="sumNum"
-      :activityThemeUrl="activityThemeUrl"
-      :attendees="attendees"
-    ></panel>
-    <panel
-      :theme="theme"
-      :activityTime="activityTime"
-      :activityLocation="activityLoaction"
-      :sumNum="sumNum"
-      :activityThemeUrl="activityThemeUrl"
-      :attendees="attendees"
-    ></panel>
-    <panel
-      :theme="theme"
-      :activityTime="activityTime"
-      :activityLocation="activityLoaction"
-      :sumNum="sumNum"
-      :activityThemeUrl="activityThemeUrl"
-      :attendees="attendees"
-    ></panel>
-    <panel
-      :theme="theme"
-      :activityTime="activityTime"
-      :activityLocation="activityLoaction"
-      :sumNum="sumNum"
-      :activityThemeUrl="activityThemeUrl"
-      :attendees="attendees"
-    ></panel>
+      <panel/>
     <view class="float-container">
       <view class="float-action" @tap="addActivity">
-        <image src="../../static/lostFound/plus.png" />
+        <image src="../../static/lostFound/plus.png"></image>
       </view>
     </view>
     <bottom/>
@@ -56,16 +17,8 @@ import activityCard from '@/components/activity/activityCard'
 import bottom from '@/components/activity/bottom'
 export default class showActivity extends wepy.component {
   data = {
-    theme: '篮球',
-    activityTime: '2019.05.01',
-    activityLoaction: '津南理科篮球场',
-    sumNum: 10,
-    activityThemeUrl: '../../static/tabbar/activity.png',
-    // 参与人员头像列表
-    attendees: [
-      'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
-      'https://ossweb-img.qq.com/images/lol/web201310/skin/big81005.jpg'
-    ]
+    act_id: [],
+    list: []
   }
   components = {
     panel: activityCard,
@@ -79,24 +32,45 @@ export default class showActivity extends wepy.component {
     }
   }
   computed = {
-    theme() {
-      return this.theme
-    },
-    activityTime() {
-      return this.activityTime
-    },
-    activityLoaction() {
-      return this.activityLoaction
-    },
-    sumNum() {
-      return this.sumNum
-    },
-    activityThemeUrl() {
-      return this.activityThemeUrl
-    },
-    attendees() {
-      return this.attendees
-    }
+    // theme() {
+    //   return this.theme
+    // },
+    // activityTime() {
+    //   return this.activityTime
+    // },
+    // activityLoaction() {
+    //   return this.activityLoaction
+    // },
+    // sumNum() {
+    //   return this.sumNum
+    // },
+    // activityThemeUrl() {
+    //   return this.activityThemeUrl
+    // },
+    // attendees() {
+    //   return this.attendees
+    // }
+  }
+
+  onLoad() {
+    // console.log('parent')
+    // const database = wx.cloud.database({
+    //   env: 'nkushare-kynis'
+    // })
+    // const activity = database.collection('activity')
+    // let that = this
+    // activity.get({
+    //   success(res) {
+    //     that.list = res.data
+    //     that.$apply()
+    //     for (var i = 0; i < that.list.length; i++) {
+    //       that.act_id.push(that.list[i]._id)
+    //     }
+    //     that.$apply()
+    //     console.log(that.act_id)
+    //     that.$broadcast('showActId')
+    //   }
+    // })
   }
 }
 </script>
