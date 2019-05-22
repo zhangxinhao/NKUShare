@@ -150,6 +150,7 @@ export default class detailsOfActivity extends wepy.page {
   }
   onLoad(options) {
     this.actID = options.id
+    this.$broadcast('getActID', this.actID)
     wx.cloud.callFunction({
       name: 'getOpenID',
       complete: res => {
