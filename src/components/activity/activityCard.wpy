@@ -92,8 +92,8 @@ export default class activityCard extends wepy.component {
     // sumNum: Number,
     // activityThemeUrl: String,
     // attendees: Array,
-    list: [], // 获取所有订单信息
-    act_id: [], // 获取所有订单id
+    list: [], // 获取所有活动信息
+    act_id: [], // 获取所有活动id
     defaultActivityThemeUrl: '../../static/tabbar/activity.png'
   }
 
