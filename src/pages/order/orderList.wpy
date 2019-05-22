@@ -39,9 +39,9 @@
             <view class="text-gray text-sm">
               <text class="cuIcon-infofill margin-right-xs"></text> 人数限制为: {{ item.num_min }}-{{ item.num_max }}人</view>
             <view class="text-gray text-sm">
-              <text class="cuIcon-infofill margin-right-xs"></text> 创建时间为: {{ item.start }}</view>
+              <text class="cuIcon-infofill margin-right-xs"></text> 创建时间为: {{ dateFormat.dateFormat(item.start) }}</view>
             <view class="text-gray text-sm">
-              <text class="cuIcon-infofill margin-right-xs"></text> 截止时间为: {{ item.end }}</view>
+              <text class="cuIcon-infofill margin-right-xs"></text> 截止时间为: {{ dateFormat.dateFormat(item.end) }}</view>
           </view>
           <view class="action">
             <view wx:if="{{ !item.outOfDate }}">
@@ -59,10 +59,15 @@
 
 <script>
 import wepy from 'wepy'
+import dateFormat from './dateFormat.wxs'
 
 export default class OrderList extends wepy.page {
   config = {
     navigationBarTitleText: '订单列表'
+  }
+
+  wxs = {
+    dateFormat: dateFormat
   }
 
   data = {
@@ -84,7 +89,8 @@ export default class OrderList extends wepy.page {
       }
     ],
     load: true,
-    campus: ''
+    campus: '',
+    array: [1, 2, 3, 4, 5, 1, 2, 3, 4]
   }
 
   onLoad(options) {

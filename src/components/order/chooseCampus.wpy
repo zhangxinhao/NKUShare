@@ -1,7 +1,7 @@
 <template>
   <view class="padding-sm">
-    <view class="bg-white radius shadow-blur grid col-1 margin-bottom text-center">
-      <view>
+    <view class="bg-white radius shadow-blur grid col-1 margin-top margin-bottom text-center">
+      <view class="margin-top">
         <image src="http://188.131.238.75/orderLogo.png" />
       </view>
       <view class="solid-bottom text-xl padding" role="" aria-label="">
