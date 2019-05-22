@@ -25,7 +25,7 @@
       </view>
     </repeat>
     <view class="cu-bar input">
-      <input placeholder="输入消息..." maxlength="200" name="input" bindchange="addComment">
+      <input placeholder="输入消息..." maxlength="200" name="input" bindchange="addComment"/>
       <button class="cu-btn bg-green shadow">发送</button>
     </view>
   </view>
@@ -62,9 +62,8 @@ export default class commentArea extends wepy.component {
     // ]
   }
   events = {
-    getActID: (value) => {
+    getActID: value => {
       this.actID = value
-      console.log(this.actID)
     }
   }
   methods = {
@@ -76,7 +75,8 @@ export default class commentArea extends wepy.component {
       })
       const comment = database.collection('comment')
       var myDate = new Date()
-      var date = myDate.toLocaleDateString()
+      var mouth = myDate.getMonth() + 1
+      var date = mouth + '-' + myDate.getDate()
       var time = myDate.getHours() + '-' + myDate.getMinutes()
       let that = this
       comment.add({
@@ -95,8 +95,6 @@ export default class commentArea extends wepy.component {
     }
   }
   onLoad() {
-    console.log('load commentArea')
-    console.log(this.actID)
     wx.cloud.callFunction({
       name: 'getOpenID',
       complete: res => {
@@ -112,7 +110,6 @@ export default class commentArea extends wepy.component {
     })
     const commentTable = database.collection('comment')
     let that = this
-    console.log(that.actID)
     commentTable
       .where({
         event_id: that.actID
@@ -121,7 +118,6 @@ export default class commentArea extends wepy.component {
         success(res) {
           that.commentList = res.data
           that.$apply()
-          console.log(that.commentList)
           that.setData({
             commentList: that.commentList
           })

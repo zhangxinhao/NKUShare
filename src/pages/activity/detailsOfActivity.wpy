@@ -69,7 +69,50 @@
         <view wx:if="{{hasJoin==false}}" class="padding flex flex-direction">
             <button class="cu-btn bg-grey lg" @tap="attend">报名参加</button>
         </view>
-        <comments wx:if="{{hasJoin==true}}"/>
+        <view wx:if="{{hasJoin==true}}" class="padding flex flex-direction">
+            <button
+                class="cu-btn round bg-blue lg"
+                role="button"
+                aria-label=""
+                aria-disabled="false"
+                bindtap="showModal"
+                data-target="DialogModal1"
+            >活动反馈评价</button>
+            <view wx:if="{{isCreator==false}}" class="padding flex flex-direction">
+                <button
+                    class="cu-btn round bg-red lg"
+                    role="button"
+                    aria-label=""
+                    aria-disabled="false"
+                    bindtap="quit"
+                >退出活动</button>
+            </view>
+            <comments/>
+        </view>
+        <view class="cu-modal {{modalName=='DialogModal1'?'show':''}}">
+            <view class="cu-dialog">
+                <view class="cu-bar bg-white justify-end">
+                    <view class="content">评价</view>
+                    <view class="action" bindtap="hideModal">
+                        <text class="cuIcon-close text-red"></text>
+                    </view>
+                </view>
+                <view class="padding-xl">
+                    <view class="cu-form-group margin-top">
+                        <view class="title">评分星级</view>
+                        <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+                            <view class="picker">{{index?picker[index]:'请选择其中一种'}}</view>
+                        </picker>
+                    </view>
+                </view>
+                <view class="cu-bar bg-white justify-end">
+                    <view class="action">
+                        <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
+                        <button class="cu-btn bg-green margin-left" bindtap="hideModal">确认评价</button>
+                    </view>
+                </view>
+            </view>
+        </view>
     </view>
 </template>
 <script>
@@ -114,7 +157,9 @@ export default class detailsOfActivity extends wepy.page {
     // 当前用户是否是创建者，创建者无法退出活动
     isCreator: false,
     // 当前用户是否已加入活动，创建者和参与者此值均为true
-    hasJoin: false
+    hasJoin: false,
+    modalName: null,
+    picker: ['1', '2', '3', '4', '5']
   }
   computed = {}
   methods = {
@@ -138,14 +183,59 @@ export default class detailsOfActivity extends wepy.page {
             // cancelText: '取消',
             confirmText: '确认',
             success: res => {
-            //   if (res.confirm) {
-            //     wx.navigateBack()
-            //   }
+              //   if (res.confirm) {
+              //     wx.navigateBack()
+              //   }
             }
           })
         },
         fail(res) {}
       })
+      takes
+        .where({
+          act_id: that.actID
+        })
+        .get({
+          success(res) {
+            that.actTakes = res.data
+            that.setData({
+              actTakes: that.actTakes
+            })
+            that.$apply()
+            that.judgeHasJoin()
+          }
+        })
+    },
+    // remove() 会调用失败，权限问题？
+    quit: function(e) {
+      let that = this
+      const database = wx.cloud.database({
+        env: 'nkushare-kynis'
+      })
+      const takes = database.collection('take_activity')
+      takes
+        .where({
+          act_id: that.actID,
+          type: 'A',
+          _openid: that.userID
+        })
+        .remove({
+          success(res) {
+            that.hasJoin = false
+            that.setData({
+              hasJoin: that.hasJoin
+            })
+          }
+        })
+    },
+    showModal(e) {
+      this.modalName = e.currentTarget.dataset.target
+    },
+    hideModal(e) {
+      this.modalName = null
+    },
+    PickerChange(e) {
+      this.index = e.detail.value
     }
   }
   onLoad(options) {
