@@ -20,7 +20,7 @@
             <text class="text-grey">创建时间</text>
           </view>
           <view class="action">
-            <text class="text-grey text-sm"> {{ orderDetail.end }}</text>
+            <text class="text-grey text-sm"> {{ dateFormat.dateFormat(orderDetail.start) }}</text>
           </view>
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
@@ -29,7 +29,7 @@
             <text class="text-grey">截止时间</text>
           </view>
           <view class="action">
-            <text class="text-grey text-sm"> {{ orderDetail.end }}</text>
+            <text class="text-grey text-sm"> {{ dateFormat.dateFormat(orderDetail.end) }}</text>
           </view>
         </view>
         <!-- <view class="cu-item {{menuArrow?'arrow':''}}">
@@ -116,8 +116,8 @@
                 </view>
               </view>
               <view class="action">
-                <view class="text-grey text-xs">{{item.date}}</view>
-                <view class="cu-tag round bg-grey sm">{{item.time}}</view>
+                <view class="text-grey text-xs">{{dayFormat.dayFormat(item.time)}}</view>
+                <view class="text-grey text-xs">{{timeFormat.timeFormat(item.time)}}</view>
               </view>
             </view>
           </view>
@@ -160,10 +160,19 @@
 
 <script>
 import wepy from 'wepy'
+import dateFormat from './dateFormat.wxs'
+import dayFormat from './dayFormat.wxs'
+import timeFormat from './timeFormat.wxs'
 
 export default class OrderDetail extends wepy.page {
   config = {
     navigationBarTitleText: '订单详情'
+  }
+
+  wxs = {
+    dateFormat: dateFormat,
+    dayFormat: dayFormat,
+    timeFormat: timeFormat
   }
 
   data = {
