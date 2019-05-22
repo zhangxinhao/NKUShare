@@ -20,7 +20,7 @@
             <text class="text-grey">创建时间</text>
           </view>
           <view class="action">
-            <text class="text-grey text-sm"> {{ orderDetail.end }}</text>
+            <text class="text-grey text-sm"> {{ dateFormat.dateFormat(orderDetail.start) }}</text>
           </view>
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
@@ -29,7 +29,7 @@
             <text class="text-grey">截止时间</text>
           </view>
           <view class="action">
-            <text class="text-grey text-sm"> {{ orderDetail.end }}</text>
+            <text class="text-grey text-sm"> {{ dateFormat.dateFormat(orderDetail.end) }}</text>
           </view>
         </view>
         <!-- <view class="cu-item {{menuArrow?'arrow':''}}">
@@ -116,14 +116,14 @@
                 </view>
               </view>
               <view class="action">
-                <view class="text-grey text-xs">{{item.date}}</view>
-                <view class="cu-tag round bg-grey sm">{{item.time}}</view>
+                <view class="text-grey text-xs">{{dayFormat.dayFormat(item.time)}}</view>
+                <view class="text-grey text-xs">{{timeFormat.timeFormat(item.time)}}</view>
               </view>
             </view>
           </view>
         </repeat>
-        <view class="cu-bar input">
-          <input placeholder="输入消息..." maxlength="200" value="{{message}}" bindchange='messageChange' />
+        <view class="cu-bar input margin-bottom">
+          <input placeholder="输入消息..." maxlength="200" bindinput='messageChange' />
           <button class="cu-btn bg-green shadow" bindtap='submitMessage'>发送</button>
         </view>
       </view>
@@ -145,10 +145,6 @@
                 </view>
               </picker>
             </view>
-            <view class="cu-form-group align-start">
-              <view class="title">具体评价</view>
-              <textarea maxlength="-1" disabled="{{modalName!=null}}" bindinput="textareaBInput" placeholder="请尽量详细描述商品和有关条件"></textarea>
-            </view>
           </view>
           <view class="cu-bar bg-white justify-end">
             <view class="action">
@@ -164,10 +160,19 @@
 
 <script>
 import wepy from 'wepy'
+import dateFormat from './dateFormat.wxs'
+import dayFormat from './dayFormat.wxs'
+import timeFormat from './timeFormat.wxs'
 
 export default class OrderDetail extends wepy.page {
   config = {
     navigationBarTitleText: '订单详情'
+  }
+
+  wxs = {
+    dateFormat: dateFormat,
+    dayFormat: dayFormat,
+    timeFormat: timeFormat
   }
 
   data = {
@@ -185,7 +190,8 @@ export default class OrderDetail extends wepy.page {
     userID: '',
     userName: '',
     message: '',
-    hasCreated: false
+    hasCreated: false,
+    textareaInput: ''
   }
 
   messageChange(e) {
