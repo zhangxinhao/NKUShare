@@ -15,7 +15,7 @@
 import wepy from 'wepy'
 import activityCard from '@/components/activity/activityCard'
 import bottom from '@/components/activity/bottom'
-export default class showActivity extends wepy.component {
+export default class showActivity extends wepy.page {
   data = {
     act_id: [],
     list: []

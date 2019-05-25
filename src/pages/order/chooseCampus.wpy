@@ -41,7 +41,7 @@
 <script>
 import wepy from 'wepy'
 
-export default class Campus extends wepy.component {
+export default class Campus extends wepy.page {
   data = {
     teda: 'TD',
     balitai: 'BLT',

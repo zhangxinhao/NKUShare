@@ -1,8 +1,8 @@
 <style lang = "less">
   .float-container {
     position: fixed;
-    bottom: 140rpx;
-    right: 60rpx;
+    bottom: 40rpx;
+    right: 40rpx;
     overflow: hidden;
   }
   .float-action {
@@ -27,7 +27,7 @@
 </style>
 <template>
   <view class="container">
-    <repeat for="{{list}}" key="index" index="index" item="item">
+    <repeat for="{{list}}" index="index" item="item">
       <card
         :name="item.lostFoundTitle"
         :lostFoundTime="item.date"
@@ -41,15 +41,13 @@
         <image src="../../static/lostFound/plus.png" />
       </view>
     </view>
-    <!-- <fixedadd :backgroundColor="backgroundColor" :selectbackgroundColor="selectbackgroundColor" :color="color" :selectcolor="selectcolor" :addlistdata="addlistdata" @addlisttap="addlisttap"></fixedadd> -->
   </view>
 </template>
 <script>
 import wepy from 'wepy'
 import lostFoundCard from '@/components/lostFound/lostFoundCard'
-import FixedAdd from '@/components/lostFound/fixedadd'
 
-export default class showLostFound extends wepy.component {
+export default class showLostFound extends wepy.page {
   data = {
     lostFoundType: '1',
     lostFoundType2: '2',
@@ -73,7 +71,7 @@ export default class showLostFound extends wepy.component {
     },
     addCard () {
       wepy.navigateTo({
-        url: '../pages/lostFound/addLostFound'
+        url: './addLostFound'
       })
     }
   }
@@ -87,13 +85,13 @@ export default class showLostFound extends wepy.component {
       success(res) {
         that.list = res.data
         that.$apply()
+        // console.log(that.list)
       }
     })
+    console.log(that.list)
   }
   components = {
-    card: lostFoundCard,
-    card2: lostFoundCard,
-    fixedadd: FixedAdd
+    card: lostFoundCard
   }
   computed = {
     name() {

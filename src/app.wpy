@@ -12,32 +12,62 @@ export default class extends wepy.app {
       'pages/index',
       'pages/activity/launchActivity',
       'pages/activity/detailsOfActivity',
+      'pages/activity/showActivity',
       'pages/helping/addHelp',
       'pages/helping/post',
       'pages/order/orderList',
       'pages/order/orderDetail',
       'pages/order/newOrder',
+      'pages/order/chooseCampus',
       'pages/lostFound/addLostFound',
-      'pages/lostFound/lostFoundDetail'
+      'pages/lostFound/lostFoundDetail',
+      'pages/lostFound/showLostFound',
+      'pages/about/about'
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black'
+    },
+    tabBar: {
+      color: '#7A7E83',
+      selectedColor: '#3cc51f',
+      borderStyle: 'black',
+      backgroundColor: '#ffffff',
+      list: [
+        {
+          pagePath: 'pages/index',
+          iconPath: 'static/tabbar/basics.png',
+          selectedIconPath: 'static/tabbar/basics_cur.png',
+          text: '帮帮'
+        },
+        {
+          pagePath: 'pages/lostFound/showLostFound',
+          iconPath: 'static/tabbar/lostFound.png',
+          selectedIconPath: 'static/tabbar/lostFound_cur.png',
+          text: '失物招领'
+        },
+        {
+          pagePath: 'pages/order/chooseCampus',
+          iconPath: 'static/tabbar/plugin.png',
+          selectedIconPath: 'static/tabbar/plugin_cur.png',
+          text: '拼单'
+        },
+        {
+          pagePath: 'pages/activity/showActivity',
+          iconPath: 'static/tabbar/activity.png',
+          selectedIconPath: 'static/tabbar/activity_cur.png',
+          text: '活动'
+        },
+        {
+          pagePath: 'pages/about/about',
+          iconPath: 'static/tabbar/about.png',
+          selectedIconPath: 'static/tabbar/about_cur.png',
+          text: '关于'
+        }
+      ]
     }
-    // tabBar: {
-    //   list: [
-    //     {
-    //       pagePath: 'pages/index',
-    //       text: '首页'
-    //     },
-    //     {
-    //       pagePath: 'pages/index',
-    //       text: '首页'
-    //     }
-    //   ]
-    // }
   }
   comp
   onLaunch() {
@@ -69,8 +99,6 @@ export default class extends wepy.app {
         })
       }
     })
-
-    // console.log(this.globalData.userName)
   }
 
   data = {
