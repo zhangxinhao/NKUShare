@@ -90,7 +90,8 @@ export default class addLostFound extends wepy.page {
     imgList: [],
     textAreaValue: '',
     fileID: '',
-    itemID: ''
+    itemID: '',
+    lostFoundType: ''
   }
   methods = {
     titleInput(e) {
@@ -101,6 +102,11 @@ export default class addLostFound extends wepy.page {
     },
     PickerChange(e) {
       this.index = e.detail.value
+      if (e.detail.value === '1') {
+        this.lostFoundType = '失物招领'
+      } else {
+        this.lostFoundType = '寻物启事'
+      }
     },
     timeChange(e) {
       this.time = e.detail.value
@@ -154,10 +160,10 @@ export default class addLostFound extends wepy.page {
       const database = wx.cloud.database({
         env: 'nkushare-kynis'
       })
-      const test = database.collection('test')
+      const test = database.collection('lost_found')
       test.add({
         data: {
-          index: this.index,
+          lostFoundType: this.lostFoundType,
           lostFoundTitle: this.lostFoundTitle,
           lostFoundLocation: this.lostFoundLocation,
           date: this.date,
@@ -182,9 +188,16 @@ export default class addLostFound extends wepy.page {
               itemID: that.itemID
             }
           }).then(res => {
-            wepy.showToast({
-              title: `成功`,
-              icon: 'none'
+            wx.showModal({
+              title: '亲爱的用户',
+              content: '您已创建成功',
+              showCancel: false,
+              confirmText: '确认',
+              success: res => {
+                if (res.confirm) {
+                  wx.navigateBack()
+                }
+              }
             })
             console.log(res.result)
           })

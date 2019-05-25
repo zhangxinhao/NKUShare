@@ -59,20 +59,56 @@
         <view class="text-gray text-sm text-right padding"></view>
       </view>
     </view>
+
+    <view>
+      <view class="cu-bar bg-white solid-bottom margin-top">
+        <view class="action">
+          <text class="cuIcon-title text-orange"></text>评论区
+        </view>
+      </view>
+      <view class="cu-list menu">
+        <repeat for="{{commentArray}}" key="index" index="index" item="item">
+          <view class="cu-item">
+            <view class="content padding-tb-sm">
+              <view>
+                <text class="cuIcon-myfill text-blue margin-right-xs"></text>张鑫豪</view>
+              <view class="text-gray text-sm">
+                <text class=" margin-right-xs"></text>{{item.comment}}</view>
+            </view>
+            <view class="action">
+              <view class="text-grey text-xs">{{dayFormat.dayFormat(item.time)}}</view>
+              <view class="text-grey text-xs">{{timeFormat.timeFormat(item.time)}}</view>
+            </view>
+          </view>
+        </repeat>
+      </view>
+      </repeat>
+      <view class="cu-bar input margin-top">
+        <input placeholder="输入..." maxlength="200" bindinput='messageChange' value="{{message}}" />
+        <button class="cu-btn bg-green shadow" bindtap='submitMessage'>发送</button>
+      </view>
+    </view>
   </view>
 </template>
 
 <script>
 import wepy from 'wepy'
-import commentArea from '../../components/activity/commentArea'
+import dateFormat from '../order/dateFormat.wxs'
+import dayFormat from '../order/dayFormat.wxs'
+import timeFormat from '../order/timeFormat.wxs'
 
 export default class LostFoundDetail extends wepy.page {
   config = {
     navigationBarTitleText: '详情'
   }
 
+  wxs = {
+    dateFormat: dateFormat,
+    dayFormat: dayFormat,
+    timeFormat: timeFormat
+  }
   components = {
-    comments: commentArea
+    // comments: commentArea
   }
 
   data = {
@@ -85,14 +121,54 @@ export default class LostFoundDetail extends wepy.page {
     modalName: null,
     imgList: [],
     textAreaValue: '',
-    lostFoundID: ''
+    lostFoundID: '6cd397ca5cdfe5b700e3009b7fe40fbf',
+    commentArray: [],
+    message: '',
+    userID: '',
+    userName: ''
   }
 
   methods = {
+    submitMessage(e) {
+      let that = this
+
+      const database = wx.cloud.database({
+        env: 'nkushare-kynis'
+      })
+
+      const comment = database.collection('lost_found_comment')
+
+      comment.add({
+        data: {
+          comment: that.message,
+          event_id: that.lostFoundID,
+          name: that.userName,
+          time: new Date(),
+          user_id: that.userID
+        },
+        success(res) {
+          that.message = ''
+          that.$apply()
+          comment.where({
+            event_id: that.lostFoundID
+          }).get({
+            success(res) {
+              that.commentArray = res.data
+              that.setData({
+                commentArray: that.commentArray
+              })
+              that.$apply()
+            }
+          })
+        }
+      })
+    },
+    messageChange(e) {
+      this.message = e.detail.value
+    }
   }
 
-  onLoad(options) {
-    this.lostFoundID = options.id
+  getDetail() {
     let that = this
     const database = wx.cloud.database({
       env: 'nkushare-kynis'
@@ -122,6 +198,25 @@ export default class LostFoundDetail extends wepy.page {
         that.$apply()
       }
     })
+
+    const comment = database.collection('lost_found_comment')
+    comment.where({
+      event_id: this.lostFoundID
+    }).get({
+      success(res) {
+        that.commentArray = res.data
+        that.setData({
+          commentArray: that.commentArray
+        })
+      }
+    })
+  }
+
+  onLoad(options) {
+    this.userID = this.$parent.globalData.userID
+    this.userName = this.$parent.globalData.userName
+    this.lostFoundID = options.id
+    this.getDetail()
   }
 }
 </script>
