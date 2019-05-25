@@ -33,7 +33,7 @@
         :lostFoundTime="item.date"
         :lostFoundLocation="item.lostFoundLocation"
         :lostFoungNameUrl="item.imgList[0]"
-        :lostFoundType="item.index"
+        :lostFoundType="item.lostFoundType"
       ></card>
     </repeat>
     <view class="float-container">
@@ -49,37 +49,21 @@ import lostFoundCard from '@/components/lostFound/lostFoundCard'
 
 export default class showLostFound extends wepy.page {
   data = {
-    lostFoundType: '1',
-    lostFoundType2: '2',
-    name: '学生证',
-    lostFoundTime: '2019.05.01',
-    lostFoundLocation: '津南理科篮食堂',
-    lostFoungNameUrl: '../../static/lostFound/card.jpg',
-    backgroundColor: '#228B22',
-    selectbackgroundColor: '#FFB233',
-    color: '#FFB233',
-    selectcolor: '#228B22',
     list: [],
     lostFoundID: '6cd397ca5cdfe5b700e3009b7fe40fbf'
   }
   methods = {
-    addlisttap (index) { /* 第一个序列为0,第二个为1,以此类推;当值为-1代表点击的是遮慕层 */
-      wx.showToast({
-        title: '点击的序列为' + index,
-        duration: 1000
-      })
-    },
     addCard () {
       wepy.navigateTo({
         url: './addLostFound'
       })
     }
   }
-  onLoad() {
+  onShow() {
     const database = wx.cloud.database({
       env: 'nkushare-kynis'
     })
-    const lostFound = database.collection('test')
+    const lostFound = database.collection('lost_found')
     let that = this
     lostFound.get({
       success(res) {
@@ -92,26 +76,6 @@ export default class showLostFound extends wepy.page {
   }
   components = {
     card: lostFoundCard
-  }
-  computed = {
-    name() {
-      return this.name
-    },
-    lostFoundTime() {
-      return this.lostFoundTime
-    },
-    lostFoundLocation() {
-      return this.lostFoundLocation
-    },
-    lostFoungNameUrl() {
-      return this.lostFoungNameUrl
-    },
-    type() {
-      return this.lostFoundType
-    },
-    type2() {
-      return this.lostFoundType2
-    }
   }
 }
 </script>

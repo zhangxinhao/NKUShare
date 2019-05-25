@@ -3,15 +3,11 @@
 
 <template>
   <view class="cu-card case {{isCard?'no-card':''}}" @tap="showDetails">
-    <view class="cu-item shadow">
-      <view class="cu-list menu-avatar">
-        <view class="cu-item">
-          <view
-            class="cu-avatar round lg"
-            style="background-image:url({{lostFoungNameUrl}});"
-          ></view>
+    <view class="cu-item shadow solid-bottom margin-top">
+      <view class="cu-list menu">
+        <view class="cu-item margin-top">
           <view class="content flex-sub">
-            <view class="text-grey">{{typeName}}: {{name}}</view>
+            <view class="text-black">{{lostFoundType}}: {{name}}</view>
             <view class="text-gray text-sm flex justify-between">时间: {{lostFoundTime}}</view>
             <view class="text-gray text-sm flex justify-between">
               地点: {{lostFoundLocation}}
@@ -22,8 +18,6 @@
     </view>
   </view>
 </template>
-
-
 
 <script>
 import wepy from 'wepy'
@@ -43,32 +37,16 @@ export default class lostFoundCard extends wepy.component {
         url: '../../pages/lostFound/lostFoundDetail?id=988c1b1b5cd6814e0fef609c5a0c5444'
         //  + e.target.dataset.id
       })
-    },
-    onLoad() {
-      console.log('zujian')
     }
   }
   computed = {
     typeName() {
-      // console.log(this.lostFoundType)
+      console.log(this.lostFoundType)
       if (this.lostFoundType === '1') {
         return '失物招领'
       } else {
         return '寻物启事'
       }
-    },
-    showLostFoungNameUrl() {
-      // let that = this
-      // wx.cloud.downloadFile({
-      //   fileID: this.lostFoungNameUrl,
-      //   success: res => {
-      //     that.lostFoungNameUrl = res.tempFilePath
-      //     that.$apply()
-      //   },
-      //   fail: console.error
-      // })
-      // console.log(this.lostFoungNameUrl)
-      return this.lostFoungNameUrl
     }
   }
 }
