@@ -101,7 +101,7 @@ export default class LostFoundDetail extends wepy.page {
 
     lostFound.where({
       // _id: this.lostFoundID
-      _id: '57896b495ce0097f010385e336eb9a68'
+      _id: '6cd397ca5cdfe5b700e3009b7fe40fbf'
     }).get({
       success(res) {
         let detail = res.data[0]
