@@ -1,76 +1,75 @@
 <template>
-    <view>
-        <form>
-            <view class="cu-form-group margin-top">
-                <view class="title">{{title}}</view>
-                <input placeholder="请输入帮助主题" name="title"/>
+  <view>
+    <form>
+      <view class="cu-form-group margin-top">
+        <view class="title">主题</view>
+        <input placeholder="请输入帮帮主题" name="input" bindchange="titleChange"/>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">地点</view>
+        <picker mode="multiSelector" @change="MultiChange" value="{{multiIndex}}" range="{{multiArray}}">
+          <view class="picker">
+            从{{multiArray[0][multiIndex[0]]}}到{{multiArray[1][multiIndex[1]]}}
+          </view>
+        </picker>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">日期选择</view>
+        <picker
+            mode="date"
+            value="date"
+            start="2015-09-01"
+            end="2020-09-01"
+            @change="DateChange">
+            <view class="picker">{{date}}</view>
+        </picker>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">开始时间选择</view>
+        <picker mode="time" value="start_time" start="09:01" end="21:01" @change="StartTimeChange">
+            <view class="picker">{{start_time}}</view>
+        </picker>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">结束时间选择</view>
+        <picker mode="time" value="end_time" start="09:01" end="21:01" @change="EndTimeChange">
+            <view class="picker">{{end_time}}</view>
+        </picker>
+      </view>
+      <view class="cu-form-group align-start">
+        <view class="title">详细描述</view>
+        <input
+          maxlength="200"
+          @input="textareaInput"
+          placeholder="输入描述"/>
+      </view>
+      <view class="cu-bar bg-white margin-top">
+        <view class="action">图片上传(可选）</view>
+        <view class="action">{{imgList.length}}/4</view>
+      </view>
+      <view class="cu-form-group">
+        <view class="grid col-4 grid-square flex-sub">
+          <view class="bg-img">
+            <repeat for="{{imgList}}" key="index" index="index" item="item" @tap="ViewImage" data-url="imgList[index]"/>
+            <image src="imgList[index]" mode="aspectFill"/>
+            <view class="cu-tag bg-red" @tap.stop="DelImg" data-index="index">
+              <text class="cuIcon-close"></text>
             </view>
-            <view class="cu-form-group">
-                <view class="title">地点</view>
-                <picker mode="multiSelector" @change="MultiChange" value="{{multiIndex}}" range="{{multiArray}}">
-                  <view class="picker">
-                    从{{multiArray[0][multiIndex[0]]}}到{{multiArray[1][multiIndex[1]]}}
-                  </view>
-                </picker>
-            </view>
-            <view class="cu-form-group">
-                <view class="title">日期选择</view>
-                <picker
-                    mode="date"
-                    value="date"
-                    start="2015-09-01"
-                    end="2020-09-01"
-                    @change="DateChange">
-                    <view class="picker">{{date}}</view>
-                </picker>
-            </view>
-            <view class="cu-form-group">
-                <view class="title">开始时间选择</view>
-                <picker mode="time" value="start_time" start="09:01" end="21:01" @change="TimeChange">
-                    <view class="picker">{{start_time}}</view>
-                </picker>
-            </view>
-            <view class="cu-form-group">
-                <view class="title">结束时间选择</view>
-                <picker mode="time" value="end_time" start="09:01" end="21:01" @change="TimeChange">
-                    <view class="picker">{{end_time}}</view>
-                </picker>
-            </view>
-            <view class="cu-form-group align-start">
-              <view class="title">{{description}}</view>
-              <textarea
-                  maxlength="-1"
-                  disabled="modalName!=null"
-                  @input="textareaBInput"
-                  placeholder="description"></textarea>
-            </view>
-            <view class="cu-bar bg-white margin-top">
-                <view class="action">图片上传(可选）</view>
-                <view class="action">{{imgList.length}}/4</view>
-            </view>
-            <view class="cu-form-group">
-                <view class="grid col-4 grid-square flex-sub">
-                    <view class="bg-img">
-                        <repeat for="{{imgList}}" key="index" index="index" item="item" @tap="ViewImage" data-url="imgList[index]"/>
-                        <image src="imgList[index]" mode="aspectFill"/>
-                        <view class="cu-tag bg-red" @tap.stop="DelImg" data-index="index">
-                            <text class="cuIcon-close"></text>
-                        </view>
-                    </view>
-                    <view class="solids" @tap="ChooseImage" v-if="imgList.length<4">
-                        <text class="cuIcon-cameraadd"></text>
-                    </view>
-                </view>
-            </view>
-            <view class="cu-form-group">
-              <view class="bonus">{{bonus}}</view>
-              <input placeholder="奖励金数目" name="bonus"/>
-            </view>
-        </form>
-        <view class="padding flex flex-direction">
-            <button class="cu-btn bg-grey lg" @tap="launchConfirm">确认请求帮助</button>
+          </view>
+          <view class="solids" @tap="ChooseImage" v-if="imgList.length<4">
+            <text class="cuIcon-cameraadd"></text>
+          </view>
         </view>
+      </view>
+      <view class="cu-form-group">
+        <view class="bonus">奖励金</view>
+        <input placeholder="奖励金数目" name="input" bindchange="bonusChange"/>
+      </view>
+    </form>
+    <view class="padding flex flex-direction">
+      <button class="cu-btn bg-grey lg" @tap="launchConfirm">确认请求帮助</button>
     </view>
+  </view>
 </template>
 <script>
 import wepy from 'wepy'
@@ -78,25 +77,26 @@ export default class launchActivity extends wepy.page {
   config = {navigationBarTitleText: '添加帮助'};
   data = {
     index: -1,
+    title: '',
     start_time: '12:01',
     end_time: '13:01',
     date: '2018-12-25',
     modalName: null,
     imgList: [],
+    description: '',
+    bonus: 0,
+    db: null,
+    helped: '',
     multiIndex: [0, 1],
     multiArray: [
       ['八里台', '津南', '泰达'],
       ['八里台', '津南', '泰达']
-    ],
-    description: '',
-    bonus: '',
-    db: null
+    ]
   }
-  onLoad() {}
+  onLoad() {
+    this.helped = this.$parent.globalData.userName
+  }
   methods = {
-    MultiChange(e) {
-      this.multiIndex = e.detail.value
-    },
     launchConfirm(e) {
       const database = wx.cloud.database({})
       const test = database.collection('help')
@@ -104,38 +104,50 @@ export default class launchActivity extends wepy.page {
         data: {
           bonus: this.bonus,
           description: this.description,
-          helped: '',
+          helped: this.helped,
           helper: '',
-          picture: '',
+          picture: this.imgList,
           start_time: this.start_time,
+          end_time: this.end_time,
           state: 0,
           title: this.title,
           date: this.date,
-          start_loc: this.multiIndex[0],
-          end_loc: this.multiIndex[1]
+          start_loc: this.multiArray[0][this.multiIndex[0]],
+          end_loc: this.multiArray[1][this.multiIndex[1]],
+          finished: false
         }
       })
       .then(res => {
         console.log(res)
         wepy.showToast({
-          title: `新增数据ID为 ${res._id}`,
+          title: `成功添加！`,
           icon: 'none'
         })
       })
-      console.log('form发生了submit事件，携带数据为：', e.detail.value)
-      console.log(this.data)
+    },
+    MultiChange(e) {
+      this.multiIndex = e.detail.value
     },
     PickerChange(e) {
       this.index = e.detail.value
     },
-    TimeChange(e) {
-      this.time = e.detail.value
+    StartTimeChange(e) {
+      this.start_time = e.detail.value
+    },
+    EndTimeChange(e) {
+      this.end_time = e.detail.value
     },
     DateChange(e) {
       this.date = e.detail.value
     },
     textareaBInput(e) {
-      this.textareaBValue = e.detail.value
+      this.description = e.detail.value
+    },
+    titleChange(e) {
+      this.title = e.detail.value
+    },
+    bonusChange(e) {
+      this.bonus = e.detail.value
     },
     ViewImage(e) {
       wx.previewImage({
