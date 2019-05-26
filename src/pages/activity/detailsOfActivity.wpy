@@ -1,124 +1,133 @@
 <style>
 </style>
 <template>
-    <view>
-        <view class="solids-bottom padding-xs flex align-center">
-            <view class="flex-sub text-lgeft">
-                <view class="solid-bottom text-xl padding">
-                    <text class="text-black text-bold">活动主题:{{actDetails.title}}</text>
-                </view>
-                <view class="content flex-sub">
-                    <view class="padding text-lg flex justify-between">时间
-                        <view class="text-lg">
-                            <text class="margin-lr-xs">{{actDetails.begin}}</text>
-                        </view>
-                    </view>
-                </view>
-                <view class="content flex-sub">
-                    <view class="padding text-lg flex justify-between">地点
-                        <view class="text-lg">
-                            <text class="margin-lr-xs">{{actDetails.location}}</text>
-                        </view>
-                    </view>
-                </view>
-                <view class="content flex-sub">
-                    <view class="padding text-lg flex justify-between">人数
-                        <view class="text-lg">
-                            <text class="margin-lr-xs">{{actDetails.num_min}}~{{actDetails.num_max}}</text>
-                        </view>
-                    </view>
-                </view>
-                <view class="content flex-sub">
-                    <view class="padding text-lg flex justify-between">发起人
-                        <view class="text-lg">
-                            <text class="margin-lr-xs">{{sponsorName}} {{sponsorCollege}}</text>
-                        </view>
-                    </view>
-                </view>
-            </view>
-        </view>
-        <!-- <view class="cu-bar bg-white margin-top solid-bottom">
-        <view class="action">
-            <text class="cuIcon-title text-blue"></text>
-            <text class="text-lgg">活动主题:{{theme}}</text>
-        </view>
-        </view>-->
-        <view class="bg-white">
-            <view class="bg-grey padding-sm radius margin-top-sm text-sm">
-                <view class="flex">
-                    <view>参与成员:</view>
-                    <view class="action">
-                        <view class="cu-avatar-group">
-                            <repeat for="{{attendeesAvatar}}" key="index" index="index" item="item">
-                                <view
-                                    class="cu-avatar round sm"
-                                    style="background-image:url({{item}});"
-                                ></view>
-                            </repeat>
-                        </view>
-                    </view>
-                </view>
-            </view>
-            <repeat for="{{attendees}}" key="index" index="index" item="item">
-                <view class="flex solid-bottom padding justify-between">
-                    <view class="bg-grey padding-sm margin-xs radius">{{item.name}}</view>
-                    <view class="bg-grey padding-sm margin-xs radius">{{item.college}}</view>
-                </view>
-            </repeat>
-        </view>
-        <view wx:if="{{hasJoin==false}}" class="padding flex flex-direction">
-            <button class="cu-btn bg-grey lg" @tap="attend">报名参加</button>
-        </view>
-        <view wx:if="{{hasJoin==true}}" class="padding flex flex-direction">
-            <button
-                class="cu-btn round bg-blue lg"
-                role="button"
-                aria-label=""
-                aria-disabled="false"
-                bindtap="showModal"
-                data-target="DialogModal1"
-            >活动反馈评价</button>
-            <view wx:if="{{isCreator==false}}" class="padding flex flex-direction">
-                <button
-                    class="cu-btn round bg-red lg"
-                    role="button"
-                    aria-label=""
-                    aria-disabled="false"
-                    bindtap="quit"
-                >退出活动</button>
-            </view>
-            <comments/>
-        </view>
-        <view class="cu-modal {{modalName=='DialogModal1'?'show':''}}">
-            <view class="cu-dialog">
-                <view class="cu-bar bg-white justify-end">
-                    <view class="content">评价</view>
-                    <view class="action" bindtap="hideModal">
-                        <text class="cuIcon-close text-red"></text>
-                    </view>
-                </view>
-                <view class="padding-xl">
-                    <view class="cu-form-group margin-top">
-                        <view class="title">评分星级</view>
-                        <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
-                            <view class="picker">{{index?picker[index]:'请选择其中一种'}}</view>
-                        </picker>
-                    </view>
-                </view>
-                <view class="cu-bar bg-white justify-end">
-                    <view class="action">
-                        <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
-                        <button class="cu-btn bg-green margin-left" bindtap="hideModal">确认评价</button>
-                    </view>
-                </view>
-            </view>
-        </view>
+  <view>
+    <view class="text-xl padding" role="" aria-label="">
+      <text class="text-black text-bold">活动主题:{{ actDetails.title }}</text>
     </view>
+    <view class="cu-list menu {{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}">
+      <view class="cu-item {{menuArrow?'arrow':''}}">
+        <view class="content">
+          <text class="cuIcon-circlefill text-grey"></text>
+          <text class="text-grey">发起者:</text>
+        </view>
+        <view class="action">
+          <text class="text-grey text-sm">{{sponsorName}} {{sponsorCollege}}</text>
+        </view>
+      </view>
+      <view class="cu-item {{menuArrow?'arrow':''}}">
+        <view class="content">
+          <text class="cuIcon-btn text-olive"></text>
+          <text class="text-grey">活动开始时间</text>
+        </view>
+        <view class="action">
+          <text class="text-grey text-sm">{{actDetails.date}}~{{actDetails.begin}}</text>
+        </view>
+      </view>
+      <view class="cu-item {{menuArrow?'arrow':''}}">
+        <view class="content">
+          <text class="cuIcon-btn text-green"></text>
+          <text class="text-grey">报名截止时间</text>
+        </view>
+        <view class="action">
+          <text class="text-grey text-sm">{{actDetails.date}}~{{actDetails.register_end}}</text>
+        </view>
+      </view>
+      <view class="cu-item {{menuArrow?'arrow':''}}">
+        <view class="content">
+          <text class="cuIcon-btn text-green"></text>
+          <text class="text-grey">活动地点</text>
+        </view>
+        <view class="action">
+          <text class="text-grey text-sm">{{actDetails.location}}</text>
+        </view>
+      </view>
+      <view class="cu-item {{menuArrow?'arrow':''}}">
+        <view class="content">
+          <text class="cuIcon-btn text-green"></text>
+          <text class="text-grey">活动人数</text>
+        </view>
+        <view class="action">
+          <text class="text-grey text-sm">{{actDetails.num_min}}~{{actDetails.num_max}}</text>
+        </view>
+      </view>
+      <view class="cu-item {{menuArrow?'arrow':''}}">
+        <view class="content">
+          <text class="cuIcon-emojiflashfill text-pink"></text>
+          <text class="text-grey">参与成员</text>
+        </view>
+        <view class="action">
+          <view class="cu-avatar-group">
+            <repeat for="{{attendeesAvatar}}" key="index" index="index" item="item">
+              <view class="cu-avatar round sm" style="background-image:url({{item}});"></view>
+            </repeat>
+          </view>
+        </view>
+      </view>
+      <view class="cu-item">
+        <view class="content padding-tb-sm">
+          <view>
+            <text class="cuIcon-clothesfill text-blue margin-right-xs"></text>详细描述
+          </view>
+          <view class="text-gray text-sm">
+            <text class="cuIcon-infofill margin-right-xs"></text>
+            {{ actDetails.description }}
+          </view>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{hasJoin==false}}" class="padding flex flex-direction">
+      <button class="cu-btn bg-grey lg" @tap="attend">报名参加</button>
+    </view>
+    <view wx:if="{{hasJoin==true}}" class="padding flex flex-direction">
+      <button
+        class="cu-btn round bg-blue lg"
+        role="button"
+        aria-label=""
+        aria-disabled="false"
+        bindtap="showModal"
+        data-target="DialogModal1"
+      >活动反馈评价</button>
+      <view wx:if="{{isCreator==false}}" class="padding flex flex-direction">
+        <button
+          class="cu-btn round bg-red lg"
+          role="button"
+          aria-label=""
+          aria-disabled="false"
+          bindtap="quit"
+        >退出活动</button>
+      </view>
+      <comments/>
+    </view>
+    <view class="cu-modal {{modalName=='DialogModal1'?'show':''}}">
+      <view class="cu-dialog">
+        <view class="cu-bar bg-white justify-end">
+          <view class="content">评价</view>
+          <view class="action" bindtap="hideModal">
+            <text class="cuIcon-close text-red"></text>
+          </view>
+        </view>
+        <view class="padding-xl">
+          <view class="cu-form-group margin-top">
+            <view class="title">评分星级</view>
+            <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+              <view class="picker">{{index?picker[index]:'请选择其中一种'}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="cu-bar bg-white justify-end">
+          <view class="action">
+            <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
+            <button class="cu-btn bg-green margin-left" bindtap="hideModal">确认评价</button>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
 </template>
 <script>
 import wepy from 'wepy'
 import commentArea from '../../components/activity/commentArea'
-// import launch from '../components/activity/addButton'
 
 export default class detailsOfActivity extends wepy.page {
   config = {
@@ -132,28 +141,10 @@ export default class detailsOfActivity extends wepy.page {
     actID: String,
     actDetails: {}, // 活动详情字典
     actTakes: [], // 活动参与者列表
-    // id: Number,
-    // theme: '软件篮球训练',
-    // time: '2019.05.01 18:00-22:00',
-    // location: '津南理科篮球场',
-    // currentNum: 5,
-    // sumNum: 10,
-    sponsorName: '王康',
-    sponsorCollege: '软件学院',
-    attendeesAvatar: [
-      'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
-      'https://ossweb-img.qq.com/images/lol/web201310/skin/big81005.jpg'
-    ],
-    attendees: [
-      {
-        name: '王康',
-        college: '软件学院'
-      },
-      {
-        name: '王康',
-        college: '软件学院'
-      }
-    ],
+    sponsorID: '',
+    sponsorName: '',
+    sponsorCollege: '',
+    attendeesAvatar: [],
     // 当前用户是否是创建者，创建者无法退出活动
     isCreator: false,
     // 当前用户是否已加入活动，创建者和参与者此值均为true
@@ -169,28 +160,39 @@ export default class detailsOfActivity extends wepy.page {
         env: 'nkushare-kynis'
       })
       const takes = database.collection('take_activity')
-      takes.add({
-        data: {
-          userID: that.userID,
-          act_id: that.actID,
-          type: 'A'
-        },
-        success(res) {
-          wx.showModal({
-            title: '亲爱的用户',
-            content: '您已报名成功',
-            showCancel: false,
-            // cancelText: '取消',
-            confirmText: '确认',
-            success: res => {
-              //   if (res.confirm) {
-              //     wx.navigateBack()
-              //   }
+      takes
+        .where({
+          _openid: that.userID
+        })
+        .get({
+          success(res) {
+            if (res.data.length === 0) {
+              takes.add({
+                data: {
+                  userID: that.userID,
+                  act_id: that.actID,
+                  type: 'A'
+                },
+                success(res) {
+                  wx.showModal({
+                    title: '亲爱的用户',
+                    content: '您已报名成功',
+                    showCancel: false,
+                    // cancelText: '取消',
+                    confirmText: '确认',
+                    success: res => {
+                      //   if (res.confirm) {
+                      //     wx.navigateBack()
+                      //   }
+                    }
+                  })
+                }
+              })
+            } else {
+              console.log('该用户已报名')
             }
-          })
-        },
-        fail(res) {}
-      })
+          }
+        })
       takes
         .where({
           act_id: that.actID
@@ -201,7 +203,13 @@ export default class detailsOfActivity extends wepy.page {
             that.setData({
               actTakes: that.actTakes
             })
+            for (var i = 0; i < that.actTakes.length; i++) {
+              that.attendeesAvatar.push(
+                this.getUserAvator(that.actTakes[i]._openid)
+              )
+            }
             that.$apply()
+            console.log(that.attendeesAvatar)
             that.judgeHasJoin()
           }
         })
@@ -240,14 +248,10 @@ export default class detailsOfActivity extends wepy.page {
   }
   onLoad(options) {
     this.actID = options.id
-    this.$broadcast('getActID', this.actID)
-    wx.cloud.callFunction({
-      name: 'getOpenID',
-      complete: res => {
-        this.userID = res.result.openid
-        this.getDetails()
-      }
-    })
+    this.userID = this.$parent.globalData.userID
+    this.$broadcast('getActID', this.actID, this.userID)
+    console.log(this.userID)
+    this.getDetails()
   }
   getDetails() {
     const database = wx.cloud.database({
@@ -279,8 +283,34 @@ export default class detailsOfActivity extends wepy.page {
           that.setData({
             actTakes: that.actTakes
           })
-          that.$apply()
+          console.log(that.attendeesAvatar)
+          console.log(that.actTakes)
           that.judgeHasJoin()
+          for (var i = 0; i < that.actTakes.length; i++) {
+            that.getUserAvator(that.actTakes[i]._openid)
+          }
+          that.$apply()
+          console.log(that.attendeesAvatar)
+          // 获取发起者信息
+          const database = wx.cloud.database({
+            env: 'nkushare-kynis'
+          })
+          const User = database.collection('user')
+          console.log(this.sponsorID)
+          User.where({
+            _openid: that.sponsorID
+          }).get({
+            success(res) {
+              let UserInfo = res.data
+              console.log(UserInfo)
+              that.sponsorName = UserInfo[0].name
+              that.sponsorCollege = UserInfo[0].college
+              that.setData({
+                sponsorName: that.sponsorName,
+                sponsorCollege: that.sponsorCollege
+              })
+            }
+          })
         }
       })
   }
@@ -289,14 +319,38 @@ export default class detailsOfActivity extends wepy.page {
       if (this.userID === this.actTakes[i]._openid) {
         if (this.actTakes[i].type === 'C') {
           this.isCreator = true
+          this.sponsorID = this.actTakes[i]._openid
         }
         this.hasJoin = true
         this.setData({
           hasJoin: this.hasJoin,
-          isCreator: this.isCreator
+          isCreator: this.isCreator,
+          sponsorID: this.sponsorID
         })
+        console.log(this.hasJoin)
+        console.log(this.isCreator)
       }
     }
+  }
+  getUserAvator(e) {
+    console.log(e)
+    let that = this
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+    const userTable = database.collection('user')
+    userTable
+      .where({
+        _openid: e
+      })
+      .get({
+        success(res) {
+          console.log(res.data[0].avatarUrl)
+          let temp = res.data[0].avatarUrl
+          that.attendeesAvatar.push(temp)
+          that.$apply()
+        }
+      })
   }
 }
 </script>
