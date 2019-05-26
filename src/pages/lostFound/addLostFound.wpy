@@ -22,8 +22,8 @@
         <picker
           mode="date"
           value="{{date}}"
-          start="2015-09-01"
-          end="2020-09-01"
+          start="2018-09-01"
+          end="2022-09-01"
           @change="DateChange"
         >
           <view class="picker">{{date}}</view>
@@ -42,7 +42,7 @@
       </view>
       <view class="cu-bar bg-white margin-top">
         <view class="action">
-          图片上传(可选)
+          图片上传
         </view>
         <view class="action">
           {{imgList.length}}/1
@@ -67,11 +67,11 @@
           maxlength="-1"
           disabled="{{modalName!==null}}"
           @input="textareaInput"
-          placeholder="请输入详细描述（可选）"
+          placeholder="请输入详细描述"
         ></textarea>
       </view>
       <view class="padding flex flex-direction">
-        <button class="cu-btn bg-grey lg" form-type="submit">确认添加</button>
+        <button class="cu-btn bg-grey lg" form-type="submit" disabled="{{disabled}}">确认添加</button>
       </view>
     </form>
   </view>
@@ -91,7 +91,8 @@ export default class addLostFound extends wepy.page {
     textAreaValue: '',
     fileID: '',
     itemID: '',
-    lostFoundType: ''
+    lostFoundType: '',
+    disabled: false
   }
   methods = {
     titleInput(e) {
@@ -103,9 +104,9 @@ export default class addLostFound extends wepy.page {
     PickerChange(e) {
       this.index = e.detail.value
       if (e.detail.value === '1') {
-        this.lostFoundType = '失物招领'
-      } else {
         this.lostFoundType = '寻物启事'
+      } else {
+        this.lostFoundType = '失物招领'
       }
     },
     timeChange(e) {
@@ -156,6 +157,8 @@ export default class addLostFound extends wepy.page {
       })
     },
     formSubmit(e) {
+      this.disabled = true
+      this.$apply()
       let that = this
       const database = wx.cloud.database({
         env: 'nkushare-kynis'
@@ -169,7 +172,8 @@ export default class addLostFound extends wepy.page {
           date: this.date,
           time: this.time,
           imgList: this.imgList,
-          textAreaValue: this.textAreaValue
+          textAreaValue: this.textAreaValue,
+          name: this.$parent.globalData.userName
         }
       }).then(res => {
         that.itemID = res._id

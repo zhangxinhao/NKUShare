@@ -22,7 +22,8 @@ export default class extends wepy.app {
       'pages/lostFound/addLostFound',
       'pages/lostFound/lostFoundDetail',
       'pages/lostFound/showLostFound',
-      'pages/about/about'
+      'pages/about/about',
+      'pages/about/userInfo'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -87,15 +88,31 @@ export default class extends wepy.app {
         const database = wx.cloud.database({
           env: 'nkushare-kynis'
         })
-
         const user = database.collection('user')
         let that = this
         user.where({
-          _openid: this.globalData.userID
-        }).get({
-          success(res) {
+          _openid: that.globalData.userID
+        }).get()
+        .then(res => {
+          if (res.data.length !== 0) {
             that.globalData.userName = res.data[0].name
+          } else {
+            user.add({
+              data: {
+                name: '请在个人信息界面修改',
+                stuID: '请在个人信息界面修改',
+                college: '请在个人信息界面修改',
+                grade: '请在个人信息界面修改'
+              }
+            })
+            .then(res => {
+              console.log(res)
+            })
+            .catch(console.error)
           }
+        })
+        .catch(err => {
+          console.error(err)
         })
       }
     })

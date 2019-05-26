@@ -13,7 +13,7 @@
             <text class="text-grey">发布者:</text>
           </button>
           <view class="action">
-            <text class="text-grey text-sm"> {{ "张鑫豪" }}</text>
+            <text class="text-grey text-sm"> {{name}}</text>
           </view>
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
@@ -53,7 +53,12 @@
           {{textAreaValue}}
         </view>
         <view class="grid flex-sub padding-lr {{isCard?'col-3 grid-square':'col-1'}}">
-          <view class="bg-img {{isCard?'':'only-img'}}" style="background-image:url({{imgList}});" wx:for="{{isCard?9:1}}" wx:key="{{index}}">
+          <view class="bg-img {{isCard?'':'only-img'}}" 
+            style="background-image:url({{imgList}});" 
+            wx:for="{{isCard?9:1}}" 
+            wx:key="{{index}}" 
+            @tap="ViewImage"
+            data-url="{{imgList}}">
           </view>
         </view>
         <view class="text-gray text-sm text-right padding"></view>
@@ -71,7 +76,7 @@
           <view class="cu-item">
             <view class="content padding-tb-sm">
               <view>
-                <text class="cuIcon-myfill text-blue margin-right-xs"></text>张鑫豪</view>
+                <text class="cuIcon-myfill text-blue margin-right-xs"></text>{{item.name}}</view>
               <view class="text-gray text-sm">
                 <text class=" margin-right-xs"></text>{{item.comment}}</view>
             </view>
@@ -107,9 +112,6 @@ export default class LostFoundDetail extends wepy.page {
     dayFormat: dayFormat,
     timeFormat: timeFormat
   }
-  components = {
-    // comments: commentArea
-  }
 
   data = {
     index: -1,
@@ -118,6 +120,7 @@ export default class LostFoundDetail extends wepy.page {
     lostFoundLocation: '',
     time: '12:01',
     date: '2018-12-25',
+    name: '',
     modalName: null,
     imgList: [],
     textAreaValue: '',
@@ -125,7 +128,8 @@ export default class LostFoundDetail extends wepy.page {
     commentArray: [],
     message: '',
     userID: '',
-    userName: ''
+    userName: '',
+    test: []
   }
 
   methods = {
@@ -165,6 +169,12 @@ export default class LostFoundDetail extends wepy.page {
     },
     messageChange(e) {
       this.message = e.detail.value
+    },
+    ViewImage(e) {
+      wx.previewImage({
+        urls: this.test,
+        current: e.currentTarget.dataset.url
+      })
     }
   }
 
@@ -173,11 +183,10 @@ export default class LostFoundDetail extends wepy.page {
     const database = wx.cloud.database({
       env: 'nkushare-kynis'
     })
-    const lostFound = database.collection('test')
+    const lostFound = database.collection('lost_found')
 
     lostFound.where({
-      // _id: this.lostFoundID
-      _id: '6cd397ca5cdfe5b700e3009b7fe40fbf'
+      _id: this.lostFoundID
     }).get({
       success(res) {
         let detail = res.data[0]
@@ -186,10 +195,12 @@ export default class LostFoundDetail extends wepy.page {
         that.lostFoundLocation = detail.lostFoundLocation
         that.date = detail.date
         that.time = detail.time
+        that.name = detail.name
         that.textAreaValue = detail.textAreaValue
         wx.cloud.downloadFile({
-          fileID: detail.imgList[0],
+          fileID: detail.imgList,
           success: res => {
+            that.test.push(res.tempFilePath)
             that.imgList = res.tempFilePath
             that.$apply()
           },

@@ -2,7 +2,7 @@
 </style>
 
 <template>
-  <view class="cu-card case {{isCard?'no-card':''}}" @tap="showDetails">
+  <view class="cu-card case {{isCard?'no-card':''}}" @tap="showDetails({{id}})">
     <view class="cu-item shadow solid-bottom margin-top">
       <view class="cu-list menu">
         <view class="cu-item margin-top">
@@ -28,25 +28,15 @@ export default class lostFoundCard extends wepy.component {
     name: String,
     lostFoundTime: String,
     lostFoundLocation: String,
-    lostFoungNameUrl: String
+    lostFoungNameUrl: String,
+    id: String
   }
   data = {}
   methods = {
     showDetails: function(e) {
       wepy.navigateTo({
-        url: '../../pages/lostFound/lostFoundDetail?id=988c1b1b5cd6814e0fef609c5a0c5444'
-        //  + e.target.dataset.id
+        url: '../../pages/lostFound/lostFoundDetail?id=' + e
       })
-    }
-  }
-  computed = {
-    typeName() {
-      console.log(this.lostFoundType)
-      if (this.lostFoundType === '1') {
-        return '失物招领'
-      } else {
-        return '寻物启事'
-      }
     }
   }
 }
