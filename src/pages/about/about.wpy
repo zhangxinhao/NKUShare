@@ -79,7 +79,7 @@ map,.mapBox{
       </view>
       <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg radius">
         <view class="cu-item arrow">
-          <button class="cu-btn content">
+          <button class="cu-btn content" @tap="userInfo">
             <text class="cuIcon-myfill text-cyan"></text>
             <text class="text-grey">个人信息</text>
           </button>
@@ -115,6 +115,7 @@ import wepy from 'wepy'
 
 export default class about extends wepy.page {
   data = {
+    canIUse: wx.canIUse('button.open-type.getUserInfo')
   }
   methods = {
     myLogin() {
@@ -130,6 +131,11 @@ export default class about extends wepy.page {
             }
           })
         }
+      })
+    },
+    userInfo() {
+      wepy.navigateTo({
+        url: './userInfo'
       })
     }
   }

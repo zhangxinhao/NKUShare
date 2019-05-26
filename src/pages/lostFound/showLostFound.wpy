@@ -34,6 +34,7 @@
         :lostFoundLocation="item.lostFoundLocation"
         :lostFoungNameUrl="item.imgList[0]"
         :lostFoundType="item.lostFoundType"
+        :id="item._id"
       ></card>
     </repeat>
     <view class="float-container">
@@ -49,8 +50,7 @@ import lostFoundCard from '@/components/lostFound/lostFoundCard'
 
 export default class showLostFound extends wepy.page {
   data = {
-    list: [],
-    lostFoundID: '6cd397ca5cdfe5b700e3009b7fe40fbf'
+    list: []
   }
   methods = {
     addCard () {
@@ -69,10 +69,8 @@ export default class showLostFound extends wepy.page {
       success(res) {
         that.list = res.data
         that.$apply()
-        // console.log(that.list)
       }
     })
-    console.log(that.list)
   }
   components = {
     card: lostFoundCard
