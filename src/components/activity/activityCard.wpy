@@ -38,32 +38,14 @@
               </view>
             </view>
             <view class="action">
-              <!-- <view wx:if="{{ !item.outOfDate }}"> -->
-
               <button
                 class="top_button bg-blue shadow-blur round"
                 bindtap="showDetails"
                 data-id="{{ item._id }}"
               >查看</button>
-              <!-- </view> -->
-              <!-- <view wx:else>
-              <button class="cu-btn bg-red shadow-blur round" disabled>已过期</button>
-              </view>-->
-              <!-- <button class="cu-btn bg-red shadow-blur round" disabled>已过期</button> -->
             </view>
           </view>
           <view class="bg-grey padding-sm radius margin-top-sm text-sm">
-            <!-- <view class="flex">
-              <view>参与成员:</view>
-              <view class="action">
-                <view class="cu-avatar-group">
-                  <repeat for="{{attendees}}" key="index" index="index" item="item">
-                    <view class="cu-avatar round sm" style="background-image:url({{item}});"></view>
-                  </repeat>
-                </view>
-                <text class="text-grey text-sm">4 人</text>
-              </view>
-            </view>-->
           </view>
         </view>
       </view>
@@ -77,8 +59,7 @@
 import wepy from 'wepy'
 
 export default class activityCard extends wepy.component {
-  // config = {navigationBarTitleText: 'posts'};
-  // components = {};
+
   props = {
     actID: {
       type: String,
@@ -86,12 +67,6 @@ export default class activityCard extends wepy.component {
     }
   }
   data = {
-    // theme: String,
-    // activityTime: String,
-    // activityLocation: String,
-    // sumNum: Number,
-    // activityThemeUrl: String,
-    // attendees: Array,
     list: [], // 获取所有活动信息
     act_id: [], // 获取所有活动id
     defaultActivityThemeUrl: '../../static/tabbar/activity.png'
@@ -112,29 +87,6 @@ export default class activityCard extends wepy.component {
         return ''
       }
     }
-    // activityTime() {
-    //   return this.list[0].begin
-    // },
-    // activityLocation() {
-    //   return this.list[0].location
-    // },
-    // sunNum() {
-    //   return this.list[0].sunNum
-    // },
-    // activityThemeUrl() {
-    // if (this.list.picture.length !== 0) {
-    //   return this.list.picture[0]
-    // } else {
-    //   return this.defaultActivityThemeUrl
-    // }
-    //   return this.defaultActivityThemeUrl
-    // }
-    // currentNum() {
-    //   return this.attendees.length
-    // }
-    // actID () {
-    //   return this.actID
-    // }
   }
   onLoad() {
     const database = wx.cloud.database({
@@ -152,29 +104,6 @@ export default class activityCard extends wepy.component {
       }
     })
   }
-  // events = {
-  //   showActId: $event => {
-  //     console.log(this.actID)
-  //     const database = wx.cloud.database({
-  //       env: 'nkushare-kynis'
-  //     })
-  //     const activity = database.collection('activity')
-  //     let that = this
-  //     activity
-  //       .where({
-  //         _id: that.actID
-  //       })
-  //       .get({
-  //         success(res) {
-  //           that.list = res.data
-  //           that.$apply()
-  //           console.log(that.list)
-  //           // that.theme = that.list[0].title
-  //           // console.log(that.theme)
-  //         }
-  //       })
-  //   }
-  // }
 }
 </script>
  

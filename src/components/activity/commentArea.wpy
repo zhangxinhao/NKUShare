@@ -79,7 +79,6 @@ export default class commentArea extends wepy.component {
     this.getCommentArea()
   }
   getCommentArea() {
-    console.log(this.actID)
     const database = wx.cloud.database({
       env: 'nkushare-kynis'
     })
@@ -105,14 +104,12 @@ export default class commentArea extends wepy.component {
       env: 'nkushare-kynis'
     })
     const User = database.collection('user')
-    console.log(this.userID)
     let that = this
     User.where({
       _openid: that.userID
     }).get({
       success(res) {
         let UserInfo = res.data
-        console.log(UserInfo)
         that.name = UserInfo[0].name
         that.avatarUrl = UserInfo[0].avatarUrl
         that.setData({

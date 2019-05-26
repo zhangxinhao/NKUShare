@@ -28,7 +28,6 @@
 </style>
 <template>
   <view class="container">
-    <!-- <panel/> -->
     <view class="cu-list menu {{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}">
       <view wx:for="{{list}}" wx:key class="cu-item">
         <view class="content padding-tb-sm">
@@ -72,14 +71,12 @@
 </template>
 <script>
 import wepy from 'wepy'
-import activityCard from '@/components/activity/activityCard'
 export default class showActivity extends wepy.page {
   data = {
     act_id: [],
     list: [] // 所有活动信息列表
   }
   components = {
-    panel: activityCard
   }
   methods = {
     addActivity: function(e) {
@@ -94,47 +91,10 @@ export default class showActivity extends wepy.page {
     }
   }
   computed = {
-    // theme() {
-    //   return this.theme
-    // },
-    // activityTime() {
-    //   return this.activityTime
-    // },
-    // activityLoaction() {
-    //   return this.activityLoaction
-    // },
-    // sumNum() {
-    //   return this.sumNum
-    // },
-    // activityThemeUrl() {
-    //   return this.activityThemeUrl
-    // },
-    // attendees() {
-    //   return this.attendees
-    // }
   }
 
   onLoad() {
-    // console.log('parent')
-    // const database = wx.cloud.database({
-    //   env: 'nkushare-kynis'
-    // })
-    // const activity = database.collection('activity')
-    // let that = this
-    // activity.get({
-    //   success(res) {
-    //     that.list = res.data
-    //     that.$apply()
-    //     for (var i = 0; i < that.list.length; i++) {
-    //       that.act_id.push(that.list[i]._id)
-    //     }
-    //     that.$apply()
-    //     console.log(that.act_id)
-    //     that.$broadcast('showActId')
-    //   }
-    // })
     this.getActivityList()
-    console.log(this.list)
   }
   onShow() {
     this.getActivityList()
@@ -148,9 +108,6 @@ export default class showActivity extends wepy.page {
     activity.get({
       success(res) {
         that.list = res.data
-        // for (var i = 0; i < that.list.length; i++) {
-        //   that.act_id.push(that.list[i]._id)
-        // }
         for (let j = 0; j < that.list.length; j++) {
           if (new Date(that.list[j].date + ' ' + that.list[j].register_end).getTime() < new Date().getTime()) {
             that.list[j].outOfDate = true
@@ -159,7 +116,6 @@ export default class showActivity extends wepy.page {
           }
         }
         that.$apply()
-        console.log(that.list)
       }
     })
   }
