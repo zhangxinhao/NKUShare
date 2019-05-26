@@ -174,17 +174,14 @@ export default class detailsOfActivity extends wepy.page {
                   type: 'A'
                 },
                 success(res) {
+                  that.requestNewUser()
                   wx.showModal({
                     title: '亲爱的用户',
                     content: '您已报名成功',
                     showCancel: false,
                     // cancelText: '取消',
                     confirmText: '确认',
-                    success: res => {
-                      //   if (res.confirm) {
-                      //     wx.navigateBack()
-                      //   }
-                    }
+                    success: res => {}
                   })
                 }
               })
@@ -193,48 +190,24 @@ export default class detailsOfActivity extends wepy.page {
             }
           }
         })
-      takes
-        .where({
-          act_id: that.actID
-        })
-        .get({
-          success(res) {
-            that.actTakes = res.data
-            that.setData({
-              actTakes: that.actTakes
-            })
-            for (var i = 0; i < that.actTakes.length; i++) {
-              that.attendeesAvatar.push(
-                this.getUserAvator(that.actTakes[i]._openid)
-              )
-            }
-            that.$apply()
-            console.log(that.attendeesAvatar)
-            that.judgeHasJoin()
-          }
-        })
     },
-    // remove() 会调用失败，权限问题？
     quit: function(e) {
       let that = this
-      const database = wx.cloud.database({
-        env: 'nkushare-kynis'
-      })
-      const takes = database.collection('take_activity')
-      takes
-        .where({
+      wx.cloud.callFunction({
+        name: 'quitActivity',
+        data: {
           act_id: that.actID,
-          type: 'A',
-          _openid: that.userID
-        })
-        .remove({
-          success(res) {
-            that.hasJoin = false
-            that.setData({
-              hasJoin: that.hasJoin
-            })
-          }
-        })
+          userID: that.userID,
+          type: 'A'
+        },
+        complete: res => {
+          that.hasJoin = false
+          that.setData({
+            hasJoin: that.hasJoin
+          })
+          that.requestNewUser()
+        }
+      })
     },
     showModal(e) {
       this.modalName = e.currentTarget.dataset.target
@@ -250,7 +223,6 @@ export default class detailsOfActivity extends wepy.page {
     this.actID = options.id
     this.userID = this.$parent.globalData.userID
     this.$broadcast('getActID', this.actID, this.userID)
-    console.log(this.userID)
     this.getDetails()
   }
   getDetails() {
@@ -283,26 +255,21 @@ export default class detailsOfActivity extends wepy.page {
           that.setData({
             actTakes: that.actTakes
           })
-          console.log(that.attendeesAvatar)
-          console.log(that.actTakes)
           that.judgeHasJoin()
+          that.attendeesAvatar = []
           for (var i = 0; i < that.actTakes.length; i++) {
             that.getUserAvator(that.actTakes[i]._openid)
           }
-          that.$apply()
-          console.log(that.attendeesAvatar)
           // 获取发起者信息
           const database = wx.cloud.database({
             env: 'nkushare-kynis'
           })
           const User = database.collection('user')
-          console.log(this.sponsorID)
           User.where({
             _openid: that.sponsorID
           }).get({
             success(res) {
               let UserInfo = res.data
-              console.log(UserInfo)
               that.sponsorName = UserInfo[0].name
               that.sponsorCollege = UserInfo[0].college
               that.setData({
@@ -311,6 +278,7 @@ export default class detailsOfActivity extends wepy.page {
               })
             }
           })
+          that.$apply()
         }
       })
   }
@@ -319,21 +287,22 @@ export default class detailsOfActivity extends wepy.page {
       if (this.userID === this.actTakes[i]._openid) {
         if (this.actTakes[i].type === 'C') {
           this.isCreator = true
-          this.sponsorID = this.actTakes[i]._openid
         }
         this.hasJoin = true
         this.setData({
           hasJoin: this.hasJoin,
-          isCreator: this.isCreator,
+          isCreator: this.isCreator
+        })
+      }
+      if (this.actTakes[i].type === 'C') {
+        this.sponsorID = this.actTakes[i]._openid
+        this.setData({
           sponsorID: this.sponsorID
         })
-        console.log(this.hasJoin)
-        console.log(this.isCreator)
       }
     }
   }
   getUserAvator(e) {
-    console.log(e)
     let that = this
     const database = wx.cloud.database({
       env: 'nkushare-kynis'
@@ -345,9 +314,35 @@ export default class detailsOfActivity extends wepy.page {
       })
       .get({
         success(res) {
-          console.log(res.data[0].avatarUrl)
           let temp = res.data[0].avatarUrl
           that.attendeesAvatar.push(temp)
+          that.setData({
+            attendeesAvatar: that.attendeesAvatar
+          })
+        }
+      })
+  }
+  requestNewUser() {
+    let that = this
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+    const takes = database.collection('take_activity')
+    takes
+      .where({
+        act_id: that.actID
+      })
+      .get({
+        success(res) {
+          that.actTakes = res.data
+          that.setData({
+            actTakes: that.actTakes
+          })
+          that.judgeHasJoin()
+          that.attendeesAvatar = []
+          for (var i = 0; i < that.actTakes.length; i++) {
+            that.getUserAvator(that.actTakes[i]._openid)
+          }
           that.$apply()
         }
       })
