@@ -145,7 +145,6 @@ export default class activityCard extends wepy.component {
     activity.get({
       success(res) {
         that.list = res.data
-        that.$apply()
         for (var i = 0; i < that.list.length; i++) {
           that.act_id.push(that.list[i]._id)
         }

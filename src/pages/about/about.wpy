@@ -24,44 +24,46 @@
   height: 200rpx;
 }
 
-.UCenter-bg .gif-wave{
+.UCenter-bg .gif-wave {
   position: absolute;
   width: 100%;
   bottom: 0;
   left: 0;
   z-index: 99;
-  mix-blend-mode: screen;  
-  height: 100rpx;   
+  mix-blend-mode: screen;
+  height: 100rpx;
 }
 
-map,.mapBox{
+map,
+.mapBox {
   left: 0;
   z-index: 99;
-  mix-blend-mode: screen;  
-  height: 100rpx;   
+  mix-blend-mode: screen;
+  height: 100rpx;
 }
 
-map,.mapBox{
+map,
+.mapBox {
   width: 750rpx;
   height: 300rpx;
 }
 
 .headView {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 50rpx;
-    height: 300rpx;
-    width: 750rpx;
-    position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50rpx;
+  height: 300rpx;
+  width: 750rpx;
+  position: relative;
 }
 
-#userinfo{
+#userinfo {
   width: 185rpx;
-  height:185rpx;
-  border-radius:50%;
+  height: 185rpx;
+  border-radius: 50%;
   display: flex;
-  overflow:hidden;
+  overflow: hidden;
   text-align: center;
 }
 </style>
@@ -75,7 +77,7 @@ map,.mapBox{
         <view class="text-xl">
           <open-data type="userNickName" lang="zh_CN"></open-data>
         </view>
-        <image src="https://image.weilanwl.com/gif/wave.gif" mode="scaleToFill" class="gif-wave"></image>
+        <image src="https://image.weilanwl.com/gif/wave.gif" mode="scaleToFill" class="gif-wave">
       </view>
       <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg radius">
         <view class="cu-item arrow">
@@ -86,7 +88,7 @@ map,.mapBox{
         </view>
         <view class="cu-item arrow">
           <navigator class="content" url="/pages/about/about/about" hover-class="none">
-            <image src="/static/logo.png" class="png" mode="aspectFit"></image>
+            <image src="/static/logo.png" class="png" mode="aspectFit">
             <text class="text-grey">关于我们</text>
           </navigator>
         </view>
@@ -121,13 +123,43 @@ export default class about extends wepy.page {
     myLogin() {
       let that = this
       wx.login({
-        success: function (data) {
+        success: function(data) {
           wx.getUserInfo({
-            success: function (userinfo) {
+            success: function(userinfo) {
               console.log(userinfo)
               that.avatarUrl = userinfo.userInfo.avatarUrl
-              that.$apply()
               console.log(userinfo.userInfo.avatarUrl)
+              that.storeUserInfo(userinfo.userInfo)
+            }
+          })
+        }
+      })
+    },
+    // 将用户信息存入user表中
+    storeUserInfo: function(e) {
+      e.college = 'unknown'
+      e.grade = 'unknown'
+      e.stuID = 'unknown'
+      e.credit = 100
+      e.realname = 'unknown'
+      let that = this
+
+      const database = wx.cloud.database({
+        env: 'nkushare-kynis'
+      })
+
+      const userTable = database.collection('user')
+      userTable.where({
+        _openid: that.userID
+      }).get({
+        success(res) {
+          console.log('已存在该用户')
+        },
+        fail(res) {
+          userTable.add({
+            data: e,
+            success(res) {
+              console.log('create user successfully!')
             }
           })
         }
@@ -138,6 +170,10 @@ export default class about extends wepy.page {
         url: './userInfo'
       })
     }
+  }
+  onLoad() {
+    this.userID = this.$parent.globalData.userID
+    this.methods.myLogin()
   }
 }
 </script>

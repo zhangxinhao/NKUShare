@@ -132,6 +132,7 @@ export default class launchActivity extends wepy.page {
           // _id: 'todo-identifiant-aleatoire', // 可选自定义 _id，在此处场景下用数据库自动分配的就可以了
           description: that.textareaValue,
           title: that.title,
+          date: that.date,
           register_end: that.ddlTime,
           begin: that.startTime,
           end: that.endTime,

@@ -40,36 +40,16 @@ export default class commentArea extends wepy.component {
     name: '',
     content: '',
     commentList: []
-    // commentArray: [
-    //   {
-    //     avatarUrl:
-    //       'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
-    //     name: '王康',
-    //     content:
-    //       '我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。',
-    //     date: '5-1',
-    //     time: '19：54'
-    //   },
-    //   {
-    //     avatarUrl:
-    //       'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
-    //     name: '王康',
-    //     content:
-    //       '我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。',
-    //     date: '5-1',
-    //     time: '19：54'
-    //   }
-    // ]
   }
   events = {
-    getActID: value => {
-      this.actID = value
+    getActID: (actID, userID, $event) => {
+      this.actID = actID
+      this.userID = userID
     }
   }
   methods = {
     addComment: function(e) {
       this.content = e.detail.value
-      e.detail.value = ''
       const database = wx.cloud.database({
         env: 'nkushare-kynis'
       })
@@ -95,16 +75,11 @@ export default class commentArea extends wepy.component {
     }
   }
   onLoad() {
-    wx.cloud.callFunction({
-      name: 'getOpenID',
-      complete: res => {
-        this.userID = res.result.openid
-        this.getUserInfo()
-      }
-    })
+    this.getUserInfo()
     this.getCommentArea()
   }
   getCommentArea() {
+    console.log(this.actID)
     const database = wx.cloud.database({
       env: 'nkushare-kynis'
     })
@@ -130,12 +105,14 @@ export default class commentArea extends wepy.component {
       env: 'nkushare-kynis'
     })
     const User = database.collection('user')
+    console.log(this.userID)
     let that = this
     User.where({
       _openid: that.userID
     }).get({
       success(res) {
         let UserInfo = res.data
+        console.log(UserInfo)
         that.name = UserInfo[0].name
         that.avatarUrl = UserInfo[0].avatarUrl
         that.setData({
