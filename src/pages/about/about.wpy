@@ -77,7 +77,7 @@ map,
         <view class="text-xl">
           <open-data type="userNickName" lang="zh_CN"></open-data>
         </view>
-        <image src="https://image.weilanwl.com/gif/wave.gif" mode="scaleToFill" class="gif-wave">
+        <image src="https://image.weilanwl.com/gif/wave.gif" mode="scaleToFill" class="gif-wave"/>
       </view>
       <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg radius">
         <view class="cu-item arrow">
@@ -88,7 +88,7 @@ map,
         </view>
         <view class="cu-item arrow">
           <navigator class="content" url="/pages/about/about/about" hover-class="none">
-            <image src="/static/logo.png" class="png" mode="aspectFit">
+            <image src="/static/logo.png" class="png" mode="aspectFit"/>
             <text class="text-grey">关于我们</text>
           </navigator>
         </view>

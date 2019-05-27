@@ -206,6 +206,14 @@ export default class detailsOfActivity extends wepy.page {
             hasJoin: that.hasJoin
           })
           that.requestNewUser()
+          wx.showModal({
+            title: '亲爱的用户',
+            content: '您已成功退出',
+            showCancel: false,
+            // cancelText: '取消',
+            confirmText: '确认',
+            success: res => {}
+          })
         }
       })
     },
