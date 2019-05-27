@@ -10,13 +10,13 @@
     </swiper>
 	  <view class="cu-form-group">
       <view class="title">日期</view>
-      <picker mode="date" value="{{date}}" start="2015-09-01" end="2020-09-01" bindchange="DateChange">
+      <picker mode="date" value="{{date}}" start="2015-09-01" end="2020-09-01" @change="DateChange">
         <view class="picker">{{date}}</view>
       </picker>
       <view class="title">地址</view>
-      <picker mode="multiSelector" bindchange="MultiChange" value="{{multiIndex}}" range="{{multiArray}}">
+      <picker mode="multiSelector" @change="MultiChange" value="{{multiIndex}}" range="{{multiArray}}">
         <view class="picker">
-          {{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}
+          从{{multiArray[0][multiIndex[0]]}}到{{multiArray[1][multiIndex[1]]}}
         </view>
 	    </picker>
     </view>
@@ -28,10 +28,10 @@
               <view class="cu-item">
                 <view class="cu-avatar round lg" src="{{item.avatarUrl}}"></view>
                 <view class="content flex-sub">
-                  <view class="text-grey">{{item.helped}}</view>
-                  <view class="text-gray text-sm flex justify-between">日期：{{item.date}}</view>
-                  <view class="text-gray text-sm flex justify-between">奖励金：{{item.bonus}}</view>
-                  <view class="text-gray text-sm flex justify-between">地点：从{{item.start_loc}}到{{item.end_loc}}</view>
+                  <view class="text-black solid-bottom text-lg padding">{{item.helped}}</view>
+                  <view class="text-gray text-sm flex justify-between padding-left padding-top">日期：{{item.date}}</view>
+                  <view class="text-gray text-sm flex justify-between padding-left">奖励金：{{item.bonus}}</view>
+                  <view class="text-gray text-sm flex justify-between padding-left padding-bottom">地点：从{{item.start_loc}}到{{item.end_loc}}</view>
                 </view>
               </view>
               <view class="bg-grey padding-sm radius margin-top-sm  text-sm flex">
@@ -50,8 +50,11 @@
   </view>
  </template>
  <style scoped>
-.cu-form-group .title {
-  min-width: calc(4em + 30rpx);
+ .cu-form-group picker .picker {
+  text-align: left;
+}
+.cu-card>.cu-item {
+  margin:10rpx;
 }
 .cu-card .cu-item{
   margin-top: 20 rpx;
@@ -60,6 +63,9 @@
 }
 .cu-list.menu-avatar>.cu-item .content {
   line-height: 1.3em;
+}
+.cu-list.menu-avatar>.cu-item {
+  height: 220rpx;
 }
 .float-container {
   position: fixed;
@@ -139,9 +145,7 @@ export default class Index extends wepy.page {
       })
     },
     DateChange(e) {
-      this.setData({
-        date: e.detail.value
-      })
+      this.date = e.detail.value
       const database = wx.cloud.database({
         env: 'nkushare-kynis'
       })
@@ -160,9 +164,7 @@ export default class Index extends wepy.page {
       })
     },
     MultiChange(e) {
-      this.setData({
-        multiIndex: e.detail.value
-      })
+      this.multiIndex = e.detail.value
       const database = wx.cloud.database({
         env: 'nkushare-kynis'
       })

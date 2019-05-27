@@ -7,6 +7,7 @@
       <view class="cu-list menu {{menuCard?'card-menu margin-top':''}}">
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
+            <text class="cuIcon-profilefill text-grey"></text>
             <text class="text-grey">创建者:</text>
           </view>
           <view class="action">
@@ -15,6 +16,7 @@
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
+            <text class="cuIcon-calendar text-grey"></text>
             <text class="text-grey">创建日期</text>
           </view>
           <view class="action">
@@ -23,6 +25,7 @@
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
+            <text class="cuIcon-time text-grey"></text>
             <text class="text-grey">创建时间</text>
           </view>
           <view class="action">
@@ -31,6 +34,7 @@
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
+            <text class="cuIcon-time text-grey"></text>
             <text class="text-grey">截止时间</text>
           </view>
           <view class="action">
@@ -39,6 +43,7 @@
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
+            <text class="cuIcon-location text-grey"></text>
             <text class="text-grey">地址：</text>
           </view>
           <view class="action">
@@ -47,18 +52,29 @@
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
+            <text class="cuIcon-moneybag text-grey"></text>
             <text class="text-grey">奖励金:</text>
           </view>
           <view class="action">
             <text class="text-grey text-sm"> {{ helpDetail.bonus }}</text>
           </view>
         </view>
-        <view class="cu-item">
+        <view class="cu-item {{menuArrow?'arrow':''}}">
+          <view class="content">
+            <text class="cuIcon-comment text-grey"></text>
+            <text class="text-grey">详细描述:</text>
+          </view>
+          <view class="action">
+            <text class="text-grey text-sm"> {{ helpDetail.description }}</text>
+          </view>
+        </view>
+        <!-- <view class="cu-item">
           <view class="content padding-tb-sm">
+            <text class="cuIcon-comment text-grey"></text>
             <view>详细描述</view>
             <view class="text-gray text-sm">{{ helpDetail.description }} </view>
           </view>
-        </view>
+        </view> -->
       </view>
       <view class="text-center">
         <view wx:if="{{hasCreated==false && hasJoin==false}}" class="margin-top margin-bottom">
