@@ -87,6 +87,7 @@ export default class launchActivity extends wepy.page {
     bonus: 0,
     db: null,
     helped: '',
+    aurl: '',
     multiIndex: [0, 1],
     multiArray: [
       ['八里台', '津南', '泰达'],
@@ -95,6 +96,25 @@ export default class launchActivity extends wepy.page {
   }
   onLoad() {
     this.helped = this.$parent.globalData.userName
+    let that = this
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+    const userTable = database.collection('user')
+    userTable
+      .where({
+        _openid: this.$parent.globalData.userID
+      })
+      .get({
+        success(res) {
+          let temp = res.data[0].avatarUrl
+          that.setData({
+            aurl: temp
+          })
+          console.log(this.aurl)
+          console.log(temp)
+        }
+      })
   }
   methods = {
     launchConfirm(e) {
@@ -114,7 +134,8 @@ export default class launchActivity extends wepy.page {
           date: this.date,
           start_loc: this.multiArray[0][this.multiIndex[0]],
           end_loc: this.multiArray[1][this.multiIndex[1]],
-          finished: false
+          finished: false,
+          avatarUrl: this.aurl
         }
       })
       .then(res => {

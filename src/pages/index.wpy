@@ -26,7 +26,7 @@
           <view class="cu-item shadow">
             <view class="cu-list menu-avatar" data-id="{{ item._id }}" @tap="showDetail">
               <view class="cu-item">
-                <view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"></view>
+                <view class="cu-avatar round lg" src="{{item.avatarUrl}}"></view>
                 <view class="content flex-sub">
                   <view class="text-grey">{{item.helped}}</view>
                   <view class="text-gray text-sm flex justify-between">日期：{{item.date}}</view>
@@ -60,6 +60,31 @@
 }
 .cu-list.menu-avatar>.cu-item .content {
   line-height: 1.3em;
+}
+.float-container {
+  position: fixed;
+  bottom: 40rpx;
+  right: 40rpx;
+  overflow: hidden;
+}
+.float-action {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: #E14848;
+  z-index: 100;
+  text-align: center;
+  opacity: .5;
+  margin-left: 40rpx;
+  float: right;
+}
+.float-action:active {
+  opacity: 1
+}
+.float-action image {
+    width: 60rpx;
+    height: 60rpx;
+    margin-top: 20rpx;
 }
  </style>
 <script>

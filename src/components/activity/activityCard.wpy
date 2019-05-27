@@ -59,7 +59,6 @@
 import wepy from 'wepy'
 
 export default class activityCard extends wepy.component {
-
   props = {
     actID: {
       type: String,
