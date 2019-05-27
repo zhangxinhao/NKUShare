@@ -18,17 +18,18 @@
         <input @input="gradeInput" value="{{grade}}"/>
       </view>
       <view class="padding flex flex-direction">
-        <button class="cu-btn bg-grey lg" form-type="submit" disabled="{{disabled}}">提交修改</button>
-      </view>
-    </form>
-    <button @tap="myLogin">{{canIUse}}</button>
-    <button
+        <button 
+        class="cu-btn bg-grey lg" 
+        form-type="submit" 
+        disabled="{{disabled}}"
         wx:if="{{canIUse}}"
         open-type="getUserInfo"
         bindgetuserinfo="bindGetUserInfo"
-    >
-    授权登录
-    </button>
+        >
+        提交修改
+        </button>
+      </view>
+    </form>
   </view>
 </template>
 
@@ -58,13 +59,22 @@ export default class userInfo extends wepy.page {
     gradeInput(e) {
       this.grade = e.detail.value
     },
-    myLogin() {
-      console.log(this.$parent.globalData)
-    },
     formSubmit(e) {
-      this.disabled = true
-      this.$apply()
+      // 查看是否授权
+      wx.getSetting({
+        success(res) {
+          if (res.authSetting['scope.userInfo']) {
+            this.changeUseInfo()
+          } else {
+            console.log('error')
+          }
+        }
+      })
+    },
+    changeUseInfo() {
       let that = this
+      that.disabled = true
+      that.$apply()
       const database = wx.cloud.database({
         env: 'nkushare-kynis'
       })
@@ -95,25 +105,11 @@ export default class userInfo extends wepy.page {
     }
   }
   onLoad() {
-    // 查看是否授权
-    wx.getSetting({
-      success(res) {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-          wx.getUserInfo({
-            success(res) {
-              console.log(res.userInfo)
-            }
-          })
-        }
-      }
-    })
     let that = this
     const database = wx.cloud.database({
       env: 'nkushare-kynis'
     })
     const user = database.collection('user')
-    console.log(that.$parent.globalData.userID)
     user.where({
       _openid: that.$parent.globalData.userID
     }).get({
@@ -129,7 +125,30 @@ export default class userInfo extends wepy.page {
     })
   }
   bindGetUserInfo(e) {
-    console.log(e.detail.userInfo)
+    if (e.detail.userInfo) {
+      let that = this
+      const database = wx.cloud.database({
+        env: 'nkushare-kynis'
+      })
+      const user = database.collection('user')
+      user.doc(that._id).update({
+        data: {
+          avatarUrl: e.detail.userInfo.avatarUrl
+        }
+      })
+    } else {
+      wx.showModal({
+        title: '警告',
+        content: '您点击了拒绝授权，将无法正常使用小程序，请授权之后再进入!!!',
+        showCancel: false,
+        confirmText: '返回授权',
+        success: function (res) {
+          if (res.confirm) {
+            console.log('用户点击了“返回授权”')
+          }
+        }
+      })
+    }
   }
 }
 </script>
