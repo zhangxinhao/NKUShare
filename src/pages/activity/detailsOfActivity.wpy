@@ -317,6 +317,8 @@ export default class detailsOfActivity extends wepy.page {
       if (this.userID === this.actTakes[i]._openid) {
         if (this.actTakes[i].type === 'C') {
           this.isCreator = true
+        } else {
+          this.isCreator = false
         }
         this.hasJoin = true
         this.setData({
