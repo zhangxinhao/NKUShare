@@ -162,7 +162,8 @@ export default class detailsOfActivity extends wepy.page {
       const takes = database.collection('take_activity')
       takes
         .where({
-          _openid: that.userID
+          _openid: that.userID,
+          act_id: that.actID
         })
         .get({
           success(res) {
