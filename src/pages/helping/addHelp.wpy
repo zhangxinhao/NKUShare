@@ -113,8 +113,6 @@ export default class launchActivity extends wepy.page {
           let temp = res.data[0].avatarUrl
           that.aurl = temp
           that.$apply()
-          console.log(that.aurl)
-          console.log(temp)
         }
       })
   }
@@ -138,14 +136,21 @@ export default class launchActivity extends wepy.page {
           end_loc: this.multiArray[1][this.multiIndex[1]],
           finished: false,
           avatarUrl: this.aurl
+        },
+        success(res) {
+          wx.showModal({
+            title: '亲爱的用户',
+            content: '您已创建成功',
+            showCancel: false,
+            // cancelText: '取消',
+            confirmText: '确认',
+            success: res => {
+              if (res.confirm) {
+                wx.navigateBack()
+              }
+            }
+          })
         }
-      })
-      .then(res => {
-        console.log(res)
-        wepy.showToast({
-          title: `成功添加！`,
-          icon: 'none'
-        })
       })
     },
     MultiChange(e) {
@@ -163,7 +168,7 @@ export default class launchActivity extends wepy.page {
     DateChange(e) {
       this.date = e.detail.value
     },
-    textareaBInput(e) {
+    textareaInput(e) {
       this.description = e.detail.value
     },
     titleChange(e) {

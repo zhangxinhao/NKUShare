@@ -75,7 +75,7 @@
             我要帮助
           </button>
         </view>
-        <view wx:if="{{hasCreated || hasJoin}}" class="margin-top margin-bottom">
+        <view wx:if="{{hasJoin}}" class="margin-top margin-bottom">
           <button class="cu-btn round bg-blue lg" role="button" aria-label="" aria-disabled="false" bindtap="showModal" data-target="DialogModal1">
             评价
           </button>
@@ -190,16 +190,21 @@ export default class OrderDetail extends wepy.page {
   }
 
   GoToHelp(e) {
+    let that = this
+
     const database = wx.cloud.database({
       env: 'nkushare-kynis'
     })
-
     const help = database.collection('help')
-    help.doc(this.helpID).update({
+    help.doc(that.helpID).update({
       data: {
-        helper: this.userID
+        helper: that.userID
       },
       success(res) {
+        wepy.showToast({
+          title: `已确认！`,
+          icon: 'none'
+        })
         console.log(res.data)
       }
     })
@@ -245,6 +250,10 @@ export default class OrderDetail extends wepy.page {
               commentArray: that.commentArray
             })
             that.$apply()
+            wepy.showToast({
+              title: `已评论！`,
+              icon: 'none'
+            })
           }
         })
       }
@@ -269,16 +278,16 @@ export default class OrderDetail extends wepy.page {
     const helpComment = database.collection('help_comment')
 
     help.where({
-      _id: this.helpID
+      _id: that.helpID
     }).get({
       success(res) {
-        if (res.data._openID === that.userID) {
+        if (res.data[0]._openid === that.userID) {
           that.hasCreated = true
           that.setData({
             hasCreated: that.hasCreated
           })
         }
-        if (res.data.helped === that.userID) {
+        if (res.data[0].helper === that.userID) {
           that.hasJoin = true
           that.setData({
             hasJoin: that.hasJoin

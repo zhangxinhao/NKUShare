@@ -139,7 +139,6 @@ export default class Index extends wepy.page {
       this.$navigate({
         url: '../pages/helping/post?id=' + e.currentTarget.dataset.id
       })
-      console.log(e.currentTarget.dataset.id)
     },
     cardSwiper(e) {
       this.setData({
