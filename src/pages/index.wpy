@@ -26,7 +26,9 @@
           <view class="cu-item shadow">
             <view class="cu-list menu-avatar" data-id="{{ item._id }}" @tap="showDetail">
               <view class="cu-item">
-                <view class="cu-avatar round lg" src="{{item.avatarUrl}}"></view>
+                <view class="cu-avatar round lg" 
+                style="background-image:url({{item.avatarUrl}});"
+                ></view>
                 <view class="content flex-sub">
                   <view class="text-black solid-bottom text-lg padding">{{item.helped}}</view>
                   <view class="text-gray text-sm flex justify-between padding-left padding-top">日期：{{item.date}}</view>
