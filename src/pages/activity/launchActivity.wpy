@@ -41,29 +41,6 @@
           <view class="picker">{{ddlTime}}</view>
         </picker>
       </view>
-      <view class="cu-bar bg-white margin-top">
-        <view class="action">图片上传</view>
-        <view class="action">{{imgList.length}}/4</view>
-      </view>
-      <view class="cu-form-group">
-        <view class="grid col-4 grid-square flex-sub">
-          <view
-            class="bg-img"
-            wx:for="{{imgList}}"
-            wx:key="{{index}}"
-            bindtap="ViewImage"
-            data-url="{{imgList[index]}}"
-          >
-            <image src="{{imgList[index]}}" mode="aspectFill" />
-            <view class="cu-tag bg-red" catchtap="DelImg" data-index="{{index}}">
-              <text class="cuIcon-close"></text>
-            </view>
-          </view>
-          <view class="solids" bindtap="ChooseImage" wx:if="{{imgList.length<4}}">
-            <text class="cuIcon-cameraadd"></text>
-          </view>
-        </view>
-      </view>
       <view class="cu-form-group align-start">
         <view class="title">详细描述</view>
         <textarea
@@ -96,7 +73,6 @@ export default class launchActivity extends wepy.page {
     ddlTime: '12:01',
     date: '2018-12-26',
     modalName: null,
-    imgList: [],
     textAreaValue: ''
   }
 
@@ -136,7 +112,6 @@ export default class launchActivity extends wepy.page {
           num_min: that.numMin,
           num_max: that.numMax,
           bonus: 10,
-          picture: that.imgList,
           state: '待生效'
         },
         success(res) {
@@ -196,39 +171,6 @@ export default class launchActivity extends wepy.page {
     },
     textareaInput(e) {
       this.textareaValue = e.detail.value
-    },
-    ViewImage(e) {
-      wx.previewImage({
-        urls: this.imgList,
-        current: e.currentTarget.dataset.url
-      })
-    },
-    DelImg(e) {
-      wx.showModal({
-        title: '亲爱的用户',
-        content: '确定要删除这张照片吗？',
-        cancelText: '取消',
-        confirmText: '确认',
-        success: res => {
-          if (res.confirm) {
-            this.imgList.splice(e.currentTarget.dataset.index, 1)
-          }
-        }
-      })
-    },
-    ChooseImage() {
-      wx.chooseImage({
-        count: 4, // 默认9
-        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: ['album'], // 从相册选择
-        success: res => {
-          if (this.imgList.length !== 0) {
-            this.imgList = this.imgList.concat(res.tempFilePaths)
-          } else {
-            this.imgList = res.tempFilePaths
-          }
-        }
-      })
     }
   }
 }
