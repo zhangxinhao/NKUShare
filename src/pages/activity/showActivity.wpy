@@ -28,6 +28,7 @@
 </style>
 <template>
   <view class="container">
+    <view class="cu-item shadow solid-bottom margin-top"></view>
     <view class="cu-list menu {{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}">
       <view wx:for="{{list}}" wx:key class="cu-item">
         <view class="content padding-tb-sm">
@@ -64,7 +65,7 @@
     </view>
     <view class="float-container">
       <view class="float-action" @tap="addActivity">
-        <image src="../../static/lostFound/plus.png"></image>
+        <image src="../../static/lostFound/plus.png"/>
       </view>
     </view>
   </view>
