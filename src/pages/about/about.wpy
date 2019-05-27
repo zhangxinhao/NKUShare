@@ -117,54 +117,8 @@ import wepy from 'wepy'
 
 export default class about extends wepy.page {
   data = {
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
   }
   methods = {
-    myLogin() {
-      let that = this
-      wx.login({
-        success: function(data) {
-          wx.getUserInfo({
-            success: function(userinfo) {
-              console.log(userinfo)
-              that.avatarUrl = userinfo.userInfo.avatarUrl
-              console.log(userinfo.userInfo.avatarUrl)
-              that.storeUserInfo(userinfo.userInfo)
-            }
-          })
-        }
-      })
-    },
-    // 将用户信息存入user表中
-    storeUserInfo: function(e) {
-      e.college = 'unknown'
-      e.grade = 'unknown'
-      e.stuID = 'unknown'
-      e.credit = 100
-      e.realname = 'unknown'
-      let that = this
-
-      const database = wx.cloud.database({
-        env: 'nkushare-kynis'
-      })
-
-      const userTable = database.collection('user')
-      userTable.where({
-        _openid: that.userID
-      }).get({
-        success(res) {
-          console.log('已存在该用户')
-        },
-        fail(res) {
-          userTable.add({
-            data: e,
-            success(res) {
-              console.log('create user successfully!')
-            }
-          })
-        }
-      })
-    },
     userInfo() {
       wepy.navigateTo({
         url: './userInfo'
@@ -173,7 +127,6 @@ export default class about extends wepy.page {
   }
   onLoad() {
     this.userID = this.$parent.globalData.userID
-    this.methods.myLogin()
   }
 }
 </script>
