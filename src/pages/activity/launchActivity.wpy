@@ -11,11 +11,11 @@
       </view>
       <view class="cu-form-group">
         <view class="title">人数上限</view>
-        <input placeholder="请输入最高参加活动人数" name="input" bindchange="numMaxChange"/>
+        <input type="number" placeholder="请输入最高参加活动人数" name="input" bindchange="numMaxChange"/>
       </view>
       <view class="cu-form-group">
         <view class="title">人数下限</view>
-        <input placeholder="请输入最低参加活动人数下限" name="input" bindchange="numMinChange"/>
+        <input type="number" placeholder="请输入最低参加活动人数下限" name="input" bindchange="numMinChange"/>
       </view>
       <view class="cu-form-group">
         <view class="title">日期选择</view>
