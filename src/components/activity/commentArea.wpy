@@ -1,4 +1,8 @@
 <style scoped>
+.cu-list+.cu-list {
+  margin-top:0rpx;
+}
+</style>
 </style>
 <template>
   <view>
@@ -24,8 +28,8 @@
         </view>
       </view>
     </repeat>
-    <view class="cu-bar input">
-      <input placeholder="输入消息..." maxlength="200" name="input" bindchange="addComment"/>
+    <view class="cu-bar input margin-top">
+      <input placeholder="输入消息..." maxlength="200" name="input" bindchange="addComment" value="{{content}}"/>
       <button class="cu-btn bg-green shadow">发送</button>
     </view>
   </view>
@@ -50,6 +54,14 @@ export default class commentArea extends wepy.component {
   methods = {
     addComment: function(e) {
       this.content = e.detail.value
+      if (this.content.length === 0) {
+        wx.showToast({
+          title: '不能发送空消息',
+          icon: 'none',
+          duration: 2000
+        })
+        return
+      }
       const database = wx.cloud.database({
         env: 'nkushare-kynis'
       })
@@ -70,7 +82,11 @@ export default class commentArea extends wepy.component {
         comment: that.content
       }
       comment.add({
-        data: newComment
+        data: newComment,
+        success(res) {
+          that.content = ''
+          that.$apply()
+        }
       })
       this.commentList.push(newComment)
     }
@@ -92,9 +108,6 @@ export default class commentArea extends wepy.component {
       .get({
         success(res) {
           that.commentList = res.data
-          that.setData({
-            commentList: that.commentList
-          })
           that.$apply()
         }
       })
