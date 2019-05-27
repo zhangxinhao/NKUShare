@@ -53,25 +53,31 @@ export default class commentArea extends wepy.component {
       const database = wx.cloud.database({
         env: 'nkushare-kynis'
       })
-      const comment = database.collection('comment')
+      const comment = database.collection('activity_comment')
       var myDate = new Date()
       var mouth = myDate.getMonth() + 1
       var date = mouth + '-' + myDate.getDate()
       var time = myDate.getHours() + '-' + myDate.getMinutes()
       let that = this
+      let newComment = {
+        event_id: that.actID,
+        name: that.name,
+        avatarUrl: that.avatarUrl,
+        date: date,
+        time: time,
+        type: 'activity',
+        userID: that.userID,
+        comment: that.content
+      }
       comment.add({
-        data: {
-          event_id: that.actID,
-          name: that.name,
-          avatarUrl: that.avatarUrl,
-          date: date,
-          time: time,
-          type: 'activity',
-          userID: that.userID,
-          comment: that.content
-        }
+        data: newComment
       })
-      this.getCommentArea()
+      this.commentList.push(newComment)
+      wx.showToast({
+        title: '评论成功',
+        icon: 'success',
+        duration: 2000
+      })
     }
   }
   onLoad() {
@@ -82,7 +88,7 @@ export default class commentArea extends wepy.component {
     const database = wx.cloud.database({
       env: 'nkushare-kynis'
     })
-    const commentTable = database.collection('comment')
+    const commentTable = database.collection('activity_comment')
     let that = this
     commentTable
       .where({
@@ -91,7 +97,6 @@ export default class commentArea extends wepy.component {
       .get({
         success(res) {
           that.commentList = res.data
-          that.$apply()
           that.setData({
             commentList: that.commentList
           })
