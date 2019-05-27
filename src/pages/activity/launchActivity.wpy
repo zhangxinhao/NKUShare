@@ -66,8 +66,8 @@ export default class launchActivity extends wepy.page {
     useID: '',
     title: '',
     location: '',
-    numMax: Number,
-    numMin: Number,
+    numMax: null,
+    numMin: null,
     startTime: '12:01',
     endTime: '12:01',
     ddlTime: '12:01',
@@ -87,8 +87,12 @@ export default class launchActivity extends wepy.page {
 
   methods = {
     launchConfirm(e) {
-      // wx.navigateBack()
-      // 提示发起成功或者失败
+      // 显示loading提示框
+      wx.showLoading({
+        title: '活动创建中',
+        // 防止触摸穿透
+        mask: true
+      })
       let that = this
 
       const database = wx.cloud.database({
@@ -125,6 +129,7 @@ export default class launchActivity extends wepy.page {
               userID: that.userID
             },
             success(res) {
+              wx.hideLoading()
               wx.showModal({
                 title: '亲爱的用户',
                 content: '您已创建成功',
