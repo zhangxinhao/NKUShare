@@ -249,9 +249,6 @@ export default class detailsOfActivity extends wepy.page {
       // 防止触摸穿透
       mask: true
     })
-    setTimeout(function () {
-      wx.hideLoading()
-    }, 2000)
     this.actID = options.id
     this.userID = this.$parent.globalData.userID
     this.$broadcast('getActID', this.actID, this.userID)
@@ -308,6 +305,7 @@ export default class detailsOfActivity extends wepy.page {
                 sponsorName: that.sponsorName,
                 sponsorCollege: that.sponsorCollege
               })
+              wx.hideLoading()
             }
           })
           that.$apply()

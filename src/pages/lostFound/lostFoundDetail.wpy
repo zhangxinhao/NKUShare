@@ -73,21 +73,25 @@
       </view>
       <view class="cu-list menu">
         <repeat for="{{commentArray}}" key="index" index="index" item="item">
-          <view class="cu-item">
-            <view class="content padding-tb-sm">
-              <view>
-                <text class="cuIcon-myfill text-blue margin-right-xs"></text>{{item.name}}</view>
-              <view class="text-gray text-sm">
-                <text class=" margin-right-xs"></text>{{item.comment}}</view>
-            </view>
-            <view class="action">
-              <view class="text-grey text-xs">{{dayFormat.dayFormat(item.time)}}</view>
-              <view class="text-grey text-xs">{{timeFormat.timeFormat(item.time)}}</view>
+          <view class="cu-list menu-avatar">
+            <view class="cu-item">
+              <view class="cu-avatar round lg" style="background-image:url({{item.avatarUrl}});"></view>
+              <view class="content">
+                <view>
+                  <text class="text-blue margin-right-xs"></text>{{item.name}}
+                </view>
+                <view class="text-gray text-sm">
+                  <text class=" margin-right-xs"></text>{{item.comment}}
+                </view>
+              </view>
+              <view class="action">
+                <view class="text-grey text-xs">{{dayFormat.dayFormat(item.time)}}</view>
+                <view class="text-grey text-xs">{{timeFormat.timeFormat(item.time)}}</view>
+              </view>
             </view>
           </view>
         </repeat>
       </view>
-      </repeat>
       <view class="cu-bar input margin-top">
         <input placeholder="输入..." maxlength="200" bindinput='messageChange' value="{{message}}" />
         <button class="cu-btn bg-green shadow" bindtap='submitMessage'>发送</button>
@@ -129,7 +133,8 @@ export default class LostFoundDetail extends wepy.page {
     message: '',
     userID: '',
     userName: '',
-    test: []
+    test: [],
+    avatarUrl: ''
   }
 
   methods = {
@@ -147,6 +152,7 @@ export default class LostFoundDetail extends wepy.page {
           comment: that.message,
           event_id: that.lostFoundID,
           name: that.userName,
+          avatarUrl: that.avatarUrl,
           time: new Date(),
           user_id: that.userID
         },
@@ -158,9 +164,6 @@ export default class LostFoundDetail extends wepy.page {
           }).get({
             success(res) {
               that.commentArray = res.data
-              that.setData({
-                commentArray: that.commentArray
-              })
               that.$apply()
             }
           })
@@ -203,6 +206,7 @@ export default class LostFoundDetail extends wepy.page {
             that.test.push(res.tempFilePath)
             that.imgList = res.tempFilePath
             that.$apply()
+            wx.hideLoading()
           },
           fail: console.error
         })
@@ -224,13 +228,37 @@ export default class LostFoundDetail extends wepy.page {
   }
 
   onLoad(options) {
+    wx.showLoading({
+      title: '加载中...',
+      // 防止触摸穿透
+      mask: true
+    })
     this.userID = this.$parent.globalData.userID
     this.userName = this.$parent.globalData.userName
     this.lostFoundID = options.id
     this.getDetail()
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+    const User = database.collection('user')
+    let that = this
+    User.where({
+      _openid: that.userID
+    }).get({
+      success(res) {
+        let UserInfo = res.data
+        that.userName = UserInfo[0].name
+        that.avatarUrl = UserInfo[0].avatarUrl
+        that.$apply()
+      }
+    })
   }
 }
 </script>
 
-<style>
+<style scoped>
+.cu-list+.cu-list {
+  margin-top:0rpx;
+}
+
 </style>

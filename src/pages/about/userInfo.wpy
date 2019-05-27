@@ -61,47 +61,16 @@ export default class userInfo extends wepy.page {
     },
     formSubmit(e) {
       // 查看是否授权
+      let that = this
       wx.getSetting({
         success(res) {
           if (res.authSetting['scope.userInfo']) {
-            this.changeUseInfo()
+            that.changeUseInfo()
           } else {
             console.log('error')
           }
         }
       })
-    },
-    changeUseInfo() {
-      let that = this
-      that.disabled = true
-      that.$apply()
-      const database = wx.cloud.database({
-        env: 'nkushare-kynis'
-      })
-      const user = database.collection('user')
-      user.doc(that._id).update({
-        data: {
-          name: that.name,
-          stuID: that.stuID,
-          college: that.college,
-          grade: that.grade
-        }
-      })
-      .then(
-        wx.showModal({
-          title: '亲爱的用户',
-          content: '您已修改成功',
-          showCancel: false,
-          confirmText: '确认',
-          success: res => {
-            if (res.confirm) {
-              wx.navigateBack()
-            }
-          }
-        })
-      )
-      that.$parent.globalData.userName = that.name
-      that.$apply()
     }
   }
   onLoad() {
@@ -149,6 +118,38 @@ export default class userInfo extends wepy.page {
         }
       })
     }
+  }
+  changeUseInfo() {
+    let that = this
+    that.disabled = true
+    that.$apply()
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+    const user = database.collection('user')
+    user.doc(that._id).update({
+      data: {
+        name: that.name,
+        stuID: that.stuID,
+        college: that.college,
+        grade: that.grade
+      }
+    })
+    .then(
+      wx.showModal({
+        title: '亲爱的用户',
+        content: '您已修改成功',
+        showCancel: false,
+        confirmText: '确认',
+        success: res => {
+          if (res.confirm) {
+            wx.navigateBack()
+          }
+        }
+      })
+    )
+    that.$parent.globalData.userName = that.name
+    that.$apply()
   }
 }
 </script>

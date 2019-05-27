@@ -75,7 +75,7 @@ map,
         <!-- <image src="/static/logo.png" class="png" mode="widthFix"></image> -->
         <open-data type="userAvatarUrl" class="round lg" mode="widthFix" id="userinfo"></open-data>
         <view class="text-xl">
-          <open-data type="userNickName" lang="zh_CN"></open-data>
+          {{userName}}
         </view>
         <image src="https://image.weilanwl.com/gif/wave.gif" mode="scaleToFill" class="gif-wave"/>
       </view>
@@ -87,7 +87,7 @@ map,
           </button>
         </view>
         <view class="cu-item arrow">
-          <navigator class="content" url="/pages/about/about/about" hover-class="none">
+          <navigator class="content" url="/pages/about/about" hover-class="none">
             <image src="/static/logo.png" class="png" mode="aspectFit"/>
             <text class="text-grey">关于我们</text>
           </navigator>
@@ -117,6 +117,7 @@ import wepy from 'wepy'
 
 export default class about extends wepy.page {
   data = {
+    userName: ''
   }
   methods = {
     userInfo() {
@@ -126,7 +127,7 @@ export default class about extends wepy.page {
     }
   }
   onLoad() {
-    this.userID = this.$parent.globalData.userID
+    this.userName = this.$parent.globalData.userName
   }
 }
 </script>

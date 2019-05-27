@@ -54,8 +54,18 @@ export default class showLostFound extends wepy.page {
   }
   methods = {
     addCard () {
-      wepy.navigateTo({
-        url: './addLostFound'
+      wx.getSetting({
+        success(res) {
+          if (res.authSetting['scope.userInfo']) {
+            wepy.navigateTo({
+              url: './addLostFound'
+            })
+          } else {
+            wepy.navigateTo({
+              url: '../about/userInfo'
+            })
+          }
+        }
       })
     }
   }
