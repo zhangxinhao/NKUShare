@@ -45,8 +45,20 @@ export default class Campus extends wepy.page {
             url: './orderList?campus=' + that.balitai
           })
         } else {
-          wepy.navigateTo({
-            url: '../about/userInfo'
+          wx.showModal({
+            title: '亲爱的用户',
+            content: '您未授权，请前往授权',
+            showCancel: true,
+            cancelText: '取消',
+            confirmText: '确认',
+            success: res => {
+              if (res.confirm) {
+                wepy.navigateTo({
+                  url: '../about/userInfo'
+                })
+              } else if (res.cancel) {
+              }
+            }
           })
         }
       }
@@ -62,8 +74,20 @@ export default class Campus extends wepy.page {
             url: './orderList?campus=' + that.jinnan
           })
         } else {
-          wepy.navigateTo({
-            url: '../about/userInfo'
+          wx.showModal({
+            title: '亲爱的用户',
+            content: '您未授权，请前往授权',
+            showCancel: true,
+            cancelText: '取消',
+            confirmText: '确认',
+            success: res => {
+              if (res.confirm) {
+                wepy.navigateTo({
+                  url: '../about/userInfo'
+                })
+              } else if (res.cancel) {
+              }
+            }
           })
         }
       }
@@ -79,8 +103,20 @@ export default class Campus extends wepy.page {
             url: './orderList?campus=' + that.teda
           })
         } else {
-          wepy.navigateTo({
-            url: '../about/userInfo'
+          wx.showModal({
+            title: '亲爱的用户',
+            content: '您未授权，请前往授权',
+            showCancel: true,
+            cancelText: '取消',
+            confirmText: '确认',
+            success: res => {
+              if (res.confirm) {
+                wepy.navigateTo({
+                  url: '../about/userInfo'
+                })
+              } else if (res.cancel) {
+              }
+            }
           })
         }
       }

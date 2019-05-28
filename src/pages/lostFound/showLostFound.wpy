@@ -72,8 +72,7 @@ export default class showLostFound extends wepy.page {
                   wepy.navigateTo({
                     url: '../about/userInfo'
                   })
-                } else if (res.cancel){
-                  return
+                } else if (res.cancel) {
                 }
               }
             })
