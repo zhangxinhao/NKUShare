@@ -95,7 +95,9 @@ export default class launchActivity extends wepy.page {
     multiArray: [
       ['八里台', '津南', '泰达'],
       ['八里台', '津南', '泰达']
-    ]
+    ],
+    fileID: '',
+    itemID: ''
   }
   onLoad() {
     this.helped = this.$parent.globalData.userName
@@ -118,6 +120,7 @@ export default class launchActivity extends wepy.page {
   }
   methods = {
     launchConfirm(e) {
+      let that = this
       const database = wx.cloud.database({})
       const test = database.collection('help')
       test.add({
@@ -138,18 +141,39 @@ export default class launchActivity extends wepy.page {
           avatarUrl: this.aurl
         },
         success(res) {
-          wx.showModal({
-            title: '亲爱的用户',
-            content: '您已创建成功',
-            showCancel: false,
-            // cancelText: '取消',
-            confirmText: '确认',
-            success: res => {
-              if (res.confirm) {
-                wx.navigateBack()
-              }
+          that.itemID = res._id
+        }
+      })
+      wx.cloud.uploadFile({
+        cloudPath: that.title + Date.parse(new Date()),
+        filePath: that.imgList[0],
+        success: res => {
+          that.fileID = res.fileID
+          that.$apply()
+          console.log('上传成功', res)
+          wx.cloud.callFunction({
+            name: 'changeHelpImagePath',
+            data: {
+              fileID: that.fileID,
+              itemID: that.itemID
             }
+          }).then(res => {
+            wx.showModal({
+              title: '亲爱的用户',
+              content: '您已创建成功',
+              showCancel: false,
+              confirmText: '确认',
+              success: res => {
+                if (res.confirm) {
+                  wx.navigateBack()
+                }
+              }
+            })
+            console.log(res.result)
           })
+        },
+        fail: (error) => {
+          console.log(error)
         }
       })
     },
