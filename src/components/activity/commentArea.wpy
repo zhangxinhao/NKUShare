@@ -29,8 +29,8 @@
       </view>
     </repeat>
     <view class="cu-bar input margin-top">
-      <input placeholder="输入消息..." maxlength="200" name="input" bindchange="addComment" value="{{content}}"/>
-      <button class="cu-btn bg-green shadow">发送</button>
+      <input placeholder="输入消息..." maxlength="200" name="input" bindinput='messageChange' value="{{content}}"/>
+      <button class="cu-btn bg-green shadow" bindtap="addComment">发送</button>
     </view>
   </view>
 </template>
@@ -52,8 +52,10 @@ export default class commentArea extends wepy.component {
     }
   }
   methods = {
-    addComment: function(e) {
+    messageChange(e) {
       this.content = e.detail.value
+    },
+    addComment: function(e) {
       if (this.content.length === 0) {
         wx.showToast({
           title: '不能发送空消息',

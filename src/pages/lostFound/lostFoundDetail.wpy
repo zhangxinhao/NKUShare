@@ -1,15 +1,14 @@
 <template>
   <view class="padding-sm">
-    <view cu-card>
-      <view class="cu-bar bg-white solid-bottom margin-top">
-        <view class="action">
-          <text class="cuIcon-title text-orange "></text> {{lostFoundTitle}}
-        </view>
+    <view class="cu-card bg-white radius shadow-blur grid col-1 margin-bottom">
+      
+      <view class="text-xl padding" role="" aria-label="">
+        <text class="text-black text-bold">{{ lostFoundTitle }}</text>
       </view>
       <view class="cu-list menu {{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}">
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <button class="cu-btn content" open-type="contact">
-            <text class="cuIcon-btn text-olive"></text>
+            <text class="cuIcon-profilefill text-olive"></text>
             <text class="text-grey">发布者:</text>
           </button>
           <view class="action">
@@ -18,7 +17,7 @@
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
-            <text class="cuIcon-circlefill text-grey"></text>
+            <text class="cuIcon-calendar text-grey"></text>
             <text class="text-grey">日期:</text>
           </view>
           <view class="action">
@@ -27,7 +26,7 @@
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
-            <text class="cuIcon-circlefill text-grey"></text>
+            <text class="cuIcon-time text-grey"></text>
             <text class="text-grey">时间:</text>
           </view>
           <view class="action">
@@ -36,7 +35,7 @@
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
-            <text class="cuIcon-tagfill text-red"></text>
+            <text class="cuIcon-location text-red"></text>
             <text class="text-grey">地点:</text>
           </view>
           <view class="action">
@@ -139,10 +138,11 @@ export default class LostFoundDetail extends wepy.page {
 
   methods = {
     submitMessage(e) {
+      let that = this
       wx.getSetting({
         success(res) {
           if (res.authSetting['scope.userInfo']) {
-            this.addComment(e)
+            that.addComment(e)
           } else {
             wx.showModal({
               title: '亲爱的用户',
@@ -163,38 +163,6 @@ export default class LostFoundDetail extends wepy.page {
         }
       })
     },
-    addComment(e) {
-      let that = this
-
-      const database = wx.cloud.database({
-        env: 'nkushare-kynis'
-      })
-
-      const comment = database.collection('lost_found_comment')
-
-      comment.add({
-        data: {
-          comment: that.message,
-          event_id: that.lostFoundID,
-          name: that.userName,
-          avatarUrl: that.avatarUrl,
-          time: new Date(),
-          user_id: that.userID
-        },
-        success(res) {
-          that.message = ''
-          that.$apply()
-          comment.where({
-            event_id: that.lostFoundID
-          }).get({
-            success(res) {
-              that.commentArray = res.data
-              that.$apply()
-            }
-          })
-        }
-      })
-    },
     messageChange(e) {
       this.message = e.detail.value
     },
@@ -205,7 +173,43 @@ export default class LostFoundDetail extends wepy.page {
       })
     }
   }
-
+  addComment(e) {
+    let that = this
+    if (that.message.length === 0) {
+      wx.showToast({
+        title: '不能发送空消息',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+    const comment = database.collection('lost_found_comment')
+    comment.add({
+      data: {
+        comment: that.message,
+        event_id: that.lostFoundID,
+        name: that.userName,
+        avatarUrl: that.avatarUrl,
+        time: new Date(),
+        user_id: that.userID
+      },
+      success(res) {
+        that.message = ''
+        that.$apply()
+        comment.where({
+          event_id: that.lostFoundID
+        }).get({
+          success(res) {
+            that.commentArray = res.data
+            that.$apply()
+          }
+        })
+      }
+    })
+  }
   getDetail() {
     let that = this
     const database = wx.cloud.database({
