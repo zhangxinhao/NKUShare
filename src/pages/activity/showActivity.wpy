@@ -27,45 +27,46 @@
 </style>
 </style>
 <template>
-  <view class="container">
-    <view class="cu-item shadow solid-bottom margin-top"></view>
-    <view class="cu-list menu {{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}">
-      <view wx:for="{{list}}" wx:key class="cu-item">
-        <view class="content padding-tb-sm">
-          <view>
-            <text class="cuIcon-clothesfill text-blue margin-right-xs"></text>
-            活动主题：{{item.title}}
+  <view class="padding-sm">
+    <view class="container">
+      <view class="cu-list menu {{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}">
+        <view wx:for="{{list}}" wx:key class="cu-item">
+          <view class="content padding-tb-sm">
+            <view>
+              <text class="cuIcon-newshotfill text-blue margin-right-xs"></text>
+              活动主题：{{item.title}}
+            </view>
+            <view class="text-gray text-sm">
+              <text class="cuIcon-infofill margin-right-xs"></text>
+              时间:{{item.begin}}
+            </view>
+            <view class="text-gray text-sm">
+              <text class="cuIcon-infofill margin-right-xs"></text>
+              地点:{{item.location}}
+            </view>
+            <view class="text-gray text-sm">
+              <text class="cuIcon-infofill margin-right-xs"></text>
+              人数：{{item.num_min}}~{{item.num_max}}
+            </view>
           </view>
-          <view class="text-gray text-sm">
-            <text class="cuIcon-infofill margin-right-xs"></text>
-            时间:{{item.begin}}
-          </view>
-          <view class="text-gray text-sm">
-            <text class="cuIcon-infofill margin-right-xs"></text>
-            地点:{{item.location}}
-          </view>
-          <view class="text-gray text-sm">
-            <text class="cuIcon-infofill margin-right-xs"></text>
-            人数：{{item.num_min}}~{{item.num_max}}
-          </view>
-        </view>
-        <view class="action">
-          <view wx:if="{{ !item.outOfDate }}">
-            <button
-              class="cu-btn bg-red shadow-blur round"
-              bindtap="showDetails"
-              data-id="{{ item._id }}"
-            >点击查看</button>
-          </view>
-          <view wx:else>
-            <button class="cu-btn bg-red shadow-blur round" disabled>已过期</button>
+          <view class="action">
+            <view wx:if="{{ !item.outOfDate }}">
+              <button
+                class="cu-btn bg-red shadow-blur round"
+                bindtap="showDetails"
+                data-id="{{ item._id }}"
+              >点击查看</button>
+            </view>
+            <view wx:else>
+              <button class="cu-btn bg-red shadow-blur round" disabled>已过期</button>
+            </view>
           </view>
         </view>
       </view>
-    </view>
-    <view class="float-container">
-      <view class="float-action" @tap="addActivity">
-        <image src="../../static/lostFound/plus.png"/>
+      <view class="float-container">
+        <view class="float-action" @tap="addActivity">
+          <image src="../../static/lostFound/plus.png"/>
+        </view>
       </view>
     </view>
   </view>
@@ -117,7 +118,12 @@ export default class showActivity extends wepy.page {
   }
 
   onLoad() {
-    this.getActivityList()
+    // this.getActivityList()
+    wx.showLoading({
+      title: '加载中...',
+      // 防止触摸穿透
+      mask: true
+    })
   }
   onShow() {
     this.getActivityList()
@@ -139,6 +145,7 @@ export default class showActivity extends wepy.page {
           }
         }
         that.$apply()
+        wx.hideLoading()
       }
     })
   }

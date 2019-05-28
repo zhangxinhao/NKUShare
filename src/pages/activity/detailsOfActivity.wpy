@@ -1,124 +1,130 @@
 <style>
 </style>
 <template>
-  <view>
-    <view class="text-xl padding" role="" aria-label="">
-      <text class="text-black text-bold">活动主题:{{ actDetails.title }}</text>
-    </view>
-    <view class="cu-list menu {{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}">
-      <view class="cu-item {{menuArrow?'arrow':''}}">
-        <view class="content">
-          <text class="cuIcon-circlefill text-grey"></text>
-          <text class="text-grey">发起者:</text>
-        </view>
-        <view class="action">
-          <text class="text-grey text-sm">{{sponsorName}} {{sponsorCollege}}</text>
-        </view>
+  <view class="padding-sm">
+    <view class="cu-card bg-white radius shadow-blur grid col-1 margin-bottom">
+      <view class="text-xl padding" role="" aria-label="">
+        <text class="text-black text-bold">活动主题:{{ actDetails.title }}</text>
       </view>
-      <view class="cu-item {{menuArrow?'arrow':''}}">
-        <view class="content">
-          <text class="cuIcon-btn text-olive"></text>
-          <text class="text-grey">活动开始时间</text>
-        </view>
-        <view class="action">
-          <text class="text-grey text-sm">{{actDetails.date}}~{{actDetails.begin}}</text>
-        </view>
-      </view>
-      <view class="cu-item {{menuArrow?'arrow':''}}">
-        <view class="content">
-          <text class="cuIcon-btn text-green"></text>
-          <text class="text-grey">报名截止时间</text>
-        </view>
-        <view class="action">
-          <text class="text-grey text-sm">{{actDetails.date}}~{{actDetails.register_end}}</text>
-        </view>
-      </view>
-      <view class="cu-item {{menuArrow?'arrow':''}}">
-        <view class="content">
-          <text class="cuIcon-btn text-green"></text>
-          <text class="text-grey">活动地点</text>
-        </view>
-        <view class="action">
-          <text class="text-grey text-sm">{{actDetails.location}}</text>
-        </view>
-      </view>
-      <view class="cu-item {{menuArrow?'arrow':''}}">
-        <view class="content">
-          <text class="cuIcon-btn text-green"></text>
-          <text class="text-grey">活动人数</text>
-        </view>
-        <view class="action">
-          <text class="text-grey text-sm">{{actDetails.num_min}}~{{actDetails.num_max}}</text>
-        </view>
-      </view>
-      <view class="cu-item {{menuArrow?'arrow':''}}">
-        <view class="content">
-          <text class="cuIcon-emojiflashfill text-pink"></text>
-          <text class="text-grey">参与成员</text>
-        </view>
-        <view class="action">
-          <view class="cu-avatar-group">
-            <repeat for="{{attendeesAvatar}}" key="index" index="index" item="item">
-              <view class="cu-avatar round sm" style="background-image:url({{item}});"></view>
-            </repeat>
+      <view
+        class="cu-list menu {{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}"
+      >
+        <view class="cu-item {{menuArrow?'arrow':''}}">
+          <view class="content">
+            <text class="cuIcon-profilefill text-olive"></text>
+            <text class="text-grey">发起者:</text>
           </view>
-        </view>
-      </view>
-      <view class="cu-item">
-        <view class="content padding-tb-sm">
-          <view>
-            <text class="cuIcon-clothesfill text-blue margin-right-xs"></text>详细描述
-          </view>
-          <view class="text-gray text-sm">
-            <text class="cuIcon-infofill margin-right-xs"></text>
-            {{ actDetails.description }}
-          </view>
-        </view>
-      </view>
-    </view>
-    <view wx:if="{{hasJoin==false}}" class="padding flex flex-direction">
-      <button class="cu-btn bg-grey lg" @tap="attend">报名参加</button>
-    </view>
-    <view wx:if="{{hasJoin==true}}" class="padding flex flex-direction">
-      <button
-        class="cu-btn round bg-blue lg"
-        role="button"
-        aria-label=""
-        aria-disabled="false"
-        bindtap="showModal"
-        data-target="DialogModal1"
-      >活动反馈评价</button>
-      <view wx:if="{{isCreator==false}}" class="padding flex flex-direction">
-        <button
-          class="cu-btn round bg-red lg"
-          role="button"
-          aria-label=""
-          aria-disabled="false"
-          bindtap="quit"
-        >退出活动</button>
-      </view>
-      <comments/>
-    </view>
-    <view class="cu-modal {{modalName=='DialogModal1'?'show':''}}">
-      <view class="cu-dialog">
-        <view class="cu-bar bg-white justify-end">
-          <view class="content">评价</view>
-          <view class="action" bindtap="hideModal">
-            <text class="cuIcon-close text-red"></text>
-          </view>
-        </view>
-        <view class="padding-xl">
-          <view class="cu-form-group margin-top">
-            <view class="title">评分星级</view>
-            <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
-              <view class="picker">{{index?picker[index]:'请选择其中一种'}}</view>
-            </picker>
-          </view>
-        </view>
-        <view class="cu-bar bg-white justify-end">
           <view class="action">
-            <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
-            <button class="cu-btn bg-green margin-left" bindtap="hideModal">确认评价</button>
+            <text class="text-grey text-sm">{{sponsorName}} {{sponsorCollege}}</text>
+          </view>
+        </view>
+        <view class="cu-item {{menuArrow?'arrow':''}}">
+          <view class="content">
+            <text class="cuIcon-calendar text-grey"></text>
+            <text class="text-grey">报名截止时间</text>
+          </view>
+          <view class="action">
+            <text class="text-grey text-sm">{{actDetails.date}}-{{actDetails.register_end}}</text>
+          </view>
+        </view>
+        <view class="cu-item {{menuArrow?'arrow':''}}">
+          <view class="content">
+            <text class="cuIcon-time text-grey"></text>
+            <text class="text-grey">活动开始时间</text>
+          </view>
+          <view class="action">
+            <text class="text-grey text-sm">{{actDetails.date}}-{{actDetails.begin}}</text>
+          </view>
+        </view>
+        <view class="cu-item {{menuArrow?'arrow':''}}">
+          <view class="content">
+            <text class="cuIcon-location text-red"></text>
+            <text class="text-grey">活动地点</text>
+          </view>
+          <view class="action">
+            <text class="text-grey text-sm">{{actDetails.location}}</text>
+          </view>
+        </view>
+        <view class="cu-item {{menuArrow?'arrow':''}}">
+          <view class="content">
+            <text class="cuIcon-people text-green"></text>
+            <text class="text-grey">活动人数</text>
+          </view>
+          <view class="action">
+            <text class="text-grey text-sm">{{actDetails.num_min}}~{{actDetails.num_max}}</text>
+          </view>
+        </view>
+        <view class="cu-item {{menuArrow?'arrow':''}}">
+          <view class="content">
+            <text class="cuIcon-friend text-green"></text>
+            <text class="text-grey">参与成员</text>
+          </view>
+          <view class="action">
+            <view class="cu-avatar-group">
+              <repeat for="{{attendeesAvatar}}" key="index" index="index" item="item">
+                <view class="cu-avatar round sm" style="background-image:url({{item}});"></view>
+              </repeat>
+            </view>
+          </view>
+        </view>
+        <view class="cu-item">
+          <view class="content padding-tb-sm">
+            <view>
+              <text class="cuIcon-post text-blue margin-right-xs"></text>详细描述
+            </view>
+            <view class="text-gray text-sm">
+              <text class="cuIcon-infofill margin-right-xs"></text>
+              {{ actDetails.description }}
+            </view>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{hasJoin==false || hasAuthorized==false}}" class="padding flex flex-direction">
+        <button class="cu-btn bg-grey lg" @tap="attend">报名参加</button>
+      </view>
+      <view wx:if="{{hasJoin==true && hasAuthorized==true}}" class="padding flex flex-direction">
+        <view class="padding-xs flex flex-direction">
+          <button
+            class="cu-btn round bg-blue lg"
+            role="button"
+            aria-label=""
+            aria-disabled="false"
+            bindtap="showModal"
+            data-target="DialogModal1"
+          >活动反馈评价</button>
+        </view>
+        <view wx:if="{{isCreator==false}}" class="padding-xs flex flex-direction">
+          <button
+            class="cu-btn round bg-red lg"
+            role="button"
+            aria-label=""
+            aria-disabled="false"
+            bindtap="quit"
+          >退出活动</button>
+        </view>
+        <comments/>
+      </view>
+      <view class="cu-modal {{modalName=='DialogModal1'?'show':''}}">
+        <view class="cu-dialog">
+          <view class="cu-bar bg-white justify-end">
+            <view class="content">评价</view>
+            <view class="action" bindtap="hideModal">
+              <text class="cuIcon-close text-red"></text>
+            </view>
+          </view>
+          <view class="padding-xl">
+            <view class="cu-form-group margin-top">
+              <view class="title">评分星级</view>
+              <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+                <view class="picker">{{index?picker[index]:'请选择其中一种'}}</view>
+              </picker>
+            </view>
+          </view>
+          <view class="cu-bar bg-white justify-end">
+            <view class="action">
+              <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
+              <button class="cu-btn bg-green margin-left" bindtap="hideModal">确认评价</button>
+            </view>
           </view>
         </view>
       </view>
@@ -149,69 +155,77 @@ export default class detailsOfActivity extends wepy.page {
     isCreator: false,
     // 当前用户是否已加入活动，创建者和参与者此值均为true
     hasJoin: false,
+    // 判断用户是否已对小程序授权
+    hasAuthorized: false,
     modalName: null,
     picker: ['1', '2', '3', '4', '5']
   }
   computed = {}
   methods = {
     attend(e) {
-      let that = this
-      // 判断授权状态
-      wx.getSetting({
-        success(res) {
-          if (res.authSetting['scope.userInfo']) {
-            that.attendActivity()
-          } else {
-            wx.showModal({
-              title: '亲爱的用户',
-              content: '您未授权，请前往授权',
-              showCancel: true,
-              cancelText: '取消',
-              confirmText: '确认',
-              success: res => {
-                if (res.confirm) {
-                  wepy.navigateTo({
-                    url: '../about/userInfo'
-                  })
-                } else if (res.cancel) {
-                  return true
-                }
-              }
-            })
+      if (this.hasAuthorized) {
+        this.attendActivity()
+      } else {
+        wx.showModal({
+          title: '亲爱的用户',
+          content: '您未授权，请前往授权',
+          showCancel: true,
+          cancelText: '取消',
+          confirmText: '确认',
+          success: res => {
+            if (res.confirm) {
+              wepy.redirectTo({
+                url: '../about/userInfo'
+              })
+            } else if (res.cancel) {
+            }
           }
-        }
-      })
+        })
+      }
     },
     quit: function(e) {
-      // 显示loading提示框
-      wx.showLoading({
-        title: '退出活动中',
-        // 防止触摸穿透
-        mask: true
-      })
-      let that = this
-      wx.cloud.callFunction({
-        name: 'quitActivity',
-        data: {
-          act_id: that.actID,
-          userID: that.userID,
-          type: 'A'
-        },
-        complete: res => {
-          that.hasJoin = false
-          that.setData({
-            hasJoin: that.hasJoin
-          })
-          that.requestNewUser()
-          wx.hideLoading()
-          wx.showModal({
-            title: '亲爱的用户',
-            content: '您已成功退出',
-            showCancel: false,
-            // cancelText: '取消',
-            confirmText: '确认',
-            success: res => {}
-          })
+      // 退出确认提示
+      wx.showModal({
+        title: '亲爱的用户',
+        content: '您确认要退出吗？',
+        showCancel: true,
+        cancelText: '取消',
+        confirmText: '确认',
+        success: res => {
+          if (res.confirm) {
+            // 显示loading提示框
+            wx.showLoading({
+              title: '退出活动中',
+              // 防止触摸穿透
+              mask: true
+            })
+            let that = this
+            wx.cloud.callFunction({
+              name: 'quitActivity',
+              data: {
+                act_id: that.actID,
+                userID: that.userID,
+                type: 'A'
+              },
+              complete: res => {
+                that.hasJoin = false
+                that.setData({
+                  hasJoin: that.hasJoin
+                })
+                that.requestNewUser()
+                wx.hideLoading()
+                wx.showModal({
+                  title: '亲爱的用户',
+                  content: '您已成功退出',
+                  showCancel: false,
+                  // cancelText: '取消',
+                  confirmText: '确认',
+                  success: res => {}
+                })
+              }
+            })
+          } else if (res.cancle) {
+          }
         }
       })
     },
@@ -235,6 +249,7 @@ export default class detailsOfActivity extends wepy.page {
     this.actID = options.id
     this.userID = this.$parent.globalData.userID
     this.$broadcast('getActID', this.actID, this.userID)
+    this.judgeHadAuthorized()
     this.getDetails()
   }
   getDetails() {
@@ -296,6 +311,8 @@ export default class detailsOfActivity extends wepy.page {
       })
   }
   judgeHasJoin() {
+    this.hasJoin = false
+    this.isCreator = false
     for (var i = 0; i < this.actTakes.length; i++) {
       if (this.userID === this.actTakes[i]._openid) {
         if (this.actTakes[i].type === 'C') {
@@ -406,6 +423,19 @@ export default class detailsOfActivity extends wepy.page {
           }
         }
       })
+  }
+  judgeHadAuthorized() {
+    this.hasAuthorized = false
+    let that = this
+    // 判断授权状态
+    wx.getSetting({
+      success(res) {
+        if (res.authSetting['scope.userInfo']) {
+          that.hasAuthorized = true
+          that.$apply()
+        }
+      }
+    })
   }
 }
 </script>
