@@ -81,8 +81,31 @@ export default class showActivity extends wepy.page {
   }
   methods = {
     addActivity: function(e) {
-      wepy.navigateTo({
-        url: './launchActivity'
+      wx.getSetting({
+        success(res) {
+          if (res.authSetting['scope.userInfo']) {
+            wepy.navigateTo({
+              url: './launchActivity'
+            })
+          } else {
+            wx.showModal({
+              title: '亲爱的用户',
+              content: '您未授权，请前往授权',
+              showCancel: true,
+              cancelText: '取消',
+              confirmText: '确认',
+              success: res => {
+                if (res.confirm) {
+                  wepy.navigateTo({
+                    url: '../about/userInfo'
+                  })
+                } else if (res.cancel){
+                  return
+                }
+              }
+            })
+          }
+        }
       })
     },
     showDetails: function(e) {
