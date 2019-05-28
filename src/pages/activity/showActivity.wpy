@@ -117,7 +117,12 @@ export default class showActivity extends wepy.page {
   }
 
   onLoad() {
-    this.getActivityList()
+    // this.getActivityList()
+    wx.showLoading({
+      title: '加载中...',
+      // 防止触摸穿透
+      mask: true
+    })
   }
   onShow() {
     this.getActivityList()
@@ -139,6 +144,7 @@ export default class showActivity extends wepy.page {
           }
         }
         that.$apply()
+        wx.hideLoading()
       }
     })
   }

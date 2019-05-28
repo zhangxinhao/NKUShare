@@ -76,10 +76,10 @@
         </view>
       </view>
     </view>
-    <view wx:if="{{hasJoin==false}}" class="padding flex flex-direction">
+    <view wx:if="{{hasJoin==false || hasAuthorized==false}}" class="padding flex flex-direction">
       <button class="cu-btn bg-grey lg" @tap="attend">报名参加</button>
     </view>
-    <view wx:if="{{hasJoin==true}}" class="padding flex flex-direction">
+    <view wx:if="{{hasJoin==true && hasAuthorized==true}}" class="padding flex flex-direction">
       <button
         class="cu-btn round bg-blue lg"
         role="button"
@@ -149,38 +149,34 @@ export default class detailsOfActivity extends wepy.page {
     isCreator: false,
     // 当前用户是否已加入活动，创建者和参与者此值均为true
     hasJoin: false,
+    // 判断用户是否已对小程序授权
+    hasAuthorized: false,
     modalName: null,
     picker: ['1', '2', '3', '4', '5']
   }
   computed = {}
   methods = {
     attend(e) {
-      let that = this
-      // 判断授权状态
-      wx.getSetting({
-        success(res) {
-          if (res.authSetting['scope.userInfo']) {
-            that.attendActivity()
-          } else {
-            wx.showModal({
-              title: '亲爱的用户',
-              content: '您未授权，请前往授权',
-              showCancel: true,
-              cancelText: '取消',
-              confirmText: '确认',
-              success: res => {
-                if (res.confirm) {
-                  wepy.navigateTo({
-                    url: '../about/userInfo'
-                  })
-                } else if (res.cancel) {
-                  return true
-                }
-              }
-            })
+      if (this.hasAuthorized) {
+        this.attendActivity()
+      } else {
+        wx.showModal({
+          title: '亲爱的用户',
+          content: '您未授权，请前往授权',
+          showCancel: true,
+          cancelText: '取消',
+          confirmText: '确认',
+          success: res => {
+            if (res.confirm) {
+              wepy.redirectTo({
+                url: '../about/userInfo'
+              })
+            } else if (res.cancel) {
+              return true
+            }
           }
-        }
-      })
+        })
+      }
     },
     quit: function(e) {
       // 显示loading提示框
@@ -235,6 +231,7 @@ export default class detailsOfActivity extends wepy.page {
     this.actID = options.id
     this.userID = this.$parent.globalData.userID
     this.$broadcast('getActID', this.actID, this.userID)
+    this.judgeHadAuthorized()
     this.getDetails()
   }
   getDetails() {
@@ -296,6 +293,8 @@ export default class detailsOfActivity extends wepy.page {
       })
   }
   judgeHasJoin() {
+    this.hasJoin = false
+    this.isCreator = false
     for (var i = 0; i < this.actTakes.length; i++) {
       if (this.userID === this.actTakes[i]._openid) {
         if (this.actTakes[i].type === 'C') {
@@ -406,6 +405,19 @@ export default class detailsOfActivity extends wepy.page {
           }
         }
       })
+  }
+  judgeHadAuthorized() {
+    this.hasAuthorized = false
+    let that = this
+    // 判断授权状态
+    wx.getSetting({
+      success(res) {
+        if (res.authSetting['scope.userInfo']) {
+          that.hasAuthorized = true
+          that.$apply()
+        }
+      }
+    })
   }
 }
 </script>
