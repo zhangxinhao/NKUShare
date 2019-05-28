@@ -68,13 +68,20 @@
             <text class="text-grey text-sm"> {{ helpDetail.description }}</text>
           </view>
         </view>
-        <view class="cu-item {{menuArrow?'arrow':''}}">
-          <view class="content">
-            <text class="cuIcon-comment text-grey"></text>
-            <text class="text-grey">图片:</text>
-          </view>
-          <view class="action">
-            <text class="text-grey text-sm"> {{ helpDetail.picture }}</text>
+        <view class="cu-card dynamic {{isCard?'no-card':''}}">
+          <view class="cu-item shadow">
+            <view class="text-gray text-sm text-right padding">
+            </view>
+            <view class="grid flex-sub padding-lr {{isCard?'col-3 grid-square':'col-1'}}">
+              <view class="bg-img {{isCard?'':'only-img'}}" 
+                style="background-image:url({{helpDetail.picture}});" 
+                wx:for="{{isCard?9:1}}" 
+                wx:key="{{index}}" 
+                @tap="ViewImage"
+                data-url="{{helpDetail.picture}}">
+              </view>
+            </view>
+            <view class="text-gray text-sm text-right padding"></view>
           </view>
         </view>
       </view>
@@ -187,7 +194,9 @@ export default class OrderDetail extends wepy.page {
     userName: '',
     message: '',
     hasCreated: false,
-    textareaInput: ''
+    textareaInput: '',
+    test: [],
+    avatarUrl: ''
   }
 
   messageChange(e) {
@@ -200,25 +209,33 @@ export default class OrderDetail extends wepy.page {
 
   GoToHelp(e) {
     let that = this
-
-    const database = wx.cloud.database({
-      env: 'nkushare-kynis'
-    })
-    const help = database.collection('help')
-    help.doc(that.helpID).update({
+    wx.cloud.callFunction({
+      name: 'changeHelper',
       data: {
-        helper: that.userID
-      },
-      success(res) {
-        wepy.showToast({
-          title: `已确认！`,
-          icon: 'none'
-        })
-        console.log(res.data)
+        helpID: that.helpID,
+        userID: that.userID
       }
+    }).then(res => {
+      wx.showModal({
+        title: '亲爱的用户',
+        content: '已确定帮助',
+        showCancel: false,
+        confirmText: '确认',
+        success: res => {
+          if (res.confirm) {
+            wx.navigateBack()
+          }
+        }
+      })
+      console.log(res.result)
     })
   }
-
+  ViewImage(e) {
+    wx.previewImage({
+      urls: this.test,
+      current: e.currentTarget.dataset.url
+    })
+  }
   showModal(e) {
     this.modalName = e.currentTarget.dataset.target
   }
@@ -242,6 +259,7 @@ export default class OrderDetail extends wepy.page {
         // _id: 'todo-identifiant-aleatoire', // 可选自定义 _id，在此处场景下用数据库自动分配的就可以了
         comment: that.message,
         event_id: that.helpID,
+        avatarUrl: that.avatarUrl,
         name: that.userName,
         time: new Date(),
         type: 'help',
@@ -270,10 +288,30 @@ export default class OrderDetail extends wepy.page {
   }
 
   onLoad(options) {
+    wx.showLoading({
+      title: '加载中...',
+      // 防止触摸穿透
+      mask: true
+    })
     this.userID = this.$parent.globalData.userID
     this.userName = this.$parent.globalData.userName
     this.helpID = options.id
     this.getDetail()
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+    const User = database.collection('user')
+    let that = this
+    User.where({
+      _openid: that.userID
+    }).get({
+      success(res) {
+        let UserInfo = res.data
+        that.userName = UserInfo[0].name
+        that.avatarUrl = UserInfo[0].avatarUrl
+        that.$apply()
+      }
+    })
   }
 
   getDetail() {
@@ -304,11 +342,22 @@ export default class OrderDetail extends wepy.page {
         }
         let detail = res.data
         that.helpDetail = detail[0]
-        that.label = that.helpDetail.good_label
+        console.log(detail[0].picture)
+        wx.cloud.downloadFile({
+          fileID: detail[0].picture,
+          success: res => {
+            that.test.push(res.tempFilePath)
+            that.helpDetail.picture = res.tempFilePath
+            that.$apply()
+            wx.hideLoading()
+          },
+          fail: console.error
+        })
         that.setData({
           helpDetail: that.helpDetail,
           label: that.label
         })
+        that.$apply()
       }
     })
 
