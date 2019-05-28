@@ -30,6 +30,10 @@
 import wepy from 'wepy'
 
 export default class Campus extends wepy.page {
+  config = {
+    navigationBarTitleText: '拼单啦!'
+  }
+
   data = {
     teda: 'TD',
     balitai: 'BLT',
