@@ -5,7 +5,7 @@
         <view class="title">标题</view>
         <input value="{{title}}" placeholder="请简要描述一下" bindchange="titleChange"/>
       </view>
-      <view class="cu-form-group">
+      <!-- <view class="cu-form-group">
         <view class="title">手机号码</view>
         <input placeholder="请输入手机号码" />
         <view class="cu-capsule radius">
@@ -16,7 +16,7 @@
             中国大陆
           </view>
         </view>
-      </view>
+      </view> -->
       <view class="cu-form-group">
         <view class="title">商品类型</view>
         <picker bindchange="typeChange" value="{{typeIndex}}" range="{{typePicker}}">
@@ -67,7 +67,7 @@
       </view> -->
       <view class="cu-bar bg-white margin-top">
         <view class="action">
-          图片上传
+          图片上传(可选)
         </view>
         <view class="action">
           {{imgList.length}}/4
@@ -274,6 +274,12 @@ export default class NewOrder extends wepy.page {
   }
 
   submitOrder(e) {
+    wx.showLoading({
+      title: '创建拼单中',
+      // 防止触摸穿透
+      mask: true
+    })
+
     let that = this
 
     const database = wx.cloud.database({
@@ -322,6 +328,17 @@ export default class NewOrder extends wepy.page {
         },
         success(res) {
           // res 是一个对象，其中有 _id 字段标记刚创建的记录的 id
+
+          wx.hideLoading()
+          wx.showModal({
+            title: '亲爱的用户',
+            content: '您已成功创建',
+            showCancel: false,
+            // cancelText: '取消',
+            confirmText: '跳转中...',
+            success: res => {}
+          })
+
           let orderID = res._id
 
           takeorder.add({

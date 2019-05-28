@@ -32,15 +32,6 @@
             <text class="text-grey text-sm"> {{ dateFormat.dateFormat(orderDetail.end) }}</text>
           </view>
         </view>
-        <!-- <view class="cu-item {{menuArrow?'arrow':''}}">
-          <view class="content">
-            <text class="cuIcon-warn text-green"></text>
-            <text class="text-grey">订单描述</text>
-          </view>
-          <view class="action">
-            <text class="text-grey text-sm">小目标还没有实现！</text>
-          </view>
-        </view> -->
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
             <text class="cuIcon-emojiflashfill text-pink"></text>
@@ -102,8 +93,8 @@
           <view class="cu-list menu-avatar">
             <view class="cu-item">
               <view
-                  class="cu-avatar round lg"
-                  style="background-image:url({{item.avatarUrl}});">
+                class="cu-avatar round lg"
+                style="background-image:url({{item.avatarUrl}});">
               </view>
               <view class="content">
                 <view class="text-grey">{{item.name}}</view>
@@ -190,7 +181,8 @@ export default class OrderDetail extends wepy.page {
     message: '',
     hasCreated: false,
     textareaInput: '',
-    attendeesAvatar: []
+    attendeesAvatar: [],
+    avatarUrl: ''
   }
 
   messageChange(e) {
@@ -202,6 +194,11 @@ export default class OrderDetail extends wepy.page {
   }
 
   joinOrder(e) {
+    wx.showLoading({
+      title: '加入拼单中',
+      // 防止触摸穿透
+      mask: true
+    })
     let that = this
 
     const database = wx.cloud.database({
@@ -220,27 +217,15 @@ export default class OrderDetail extends wepy.page {
         that.setData({
           hasJoin: that.hasJoin
         })
-      }
-    })
-  }
-
-  leaveOrder(e) {
-    let that = this
-
-    const database = wx.cloud.database({
-      env: 'nkushare-kynis'
-    })
-
-    const takeorder = database.collection('take_order')
-    takeorder.where({
-      orderID: that.orderID,
-      type: 'A',
-      userID: that.userID
-    }).remove({
-      success(res) {
-        that.hasJoin = false
-        that.setData({
-          hasJoin: that.hasJoin
+        that.requestNewUser()
+        wx.hideLoading()
+        wx.showModal({
+          title: '亲爱的用户',
+          content: '您已成功加入',
+          showCancel: false,
+          // cancelText: '取消',
+          confirmText: '确认',
+          success: res => {}
         })
       }
     })
@@ -255,6 +240,15 @@ export default class OrderDetail extends wepy.page {
   }
 
   submitMessage(e) {
+    if (this.message.length === 0) {
+      wx.showToast({
+        title: '不能发送空消息',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
+
     let that = this
 
     const database = wx.cloud.database({
@@ -272,7 +266,8 @@ export default class OrderDetail extends wepy.page {
         name: that.userName,
         time: new Date(),
         type: 'order',
-        user_id: that.userID
+        user_id: that.userID,
+        avatarUrl: that.avatarUrl
       },
       success(res) {
         that.message = ''
@@ -285,8 +280,28 @@ export default class OrderDetail extends wepy.page {
             that.setData({
               commentArray: that.commentArray
             })
+            that.message = ''
             that.$apply()
           }
+        })
+      }
+    })
+  }
+
+  getCommentAvator() {
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+    const User = database.collection('user')
+    let that = this
+    User.where({
+      _openid: that.userID
+    }).get({
+      success(res) {
+        let UserInfo = res.data
+        that.avatarUrl = UserInfo[0].avatarUrl
+        that.setData({
+          avatarUrl: that.avatarUrl
         })
       }
     })
@@ -297,6 +312,7 @@ export default class OrderDetail extends wepy.page {
     this.userName = this.$parent.globalData.userName
     this.orderID = options.id
     this.getDetail()
+    this.getCommentAvator()
   }
 
   getUserAvator(e) {
@@ -323,7 +339,7 @@ export default class OrderDetail extends wepy.page {
   quit(e) {
     // 显示loading提示框
     wx.showLoading({
-      title: '退出活动中',
+      title: '退出拼单中',
       // 防止触摸穿透
       mask: true
     })
