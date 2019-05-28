@@ -22,6 +22,11 @@
           南开大学泰达校区
         </button>
       </view>
+      <view class="float-container">
+        <view class="float-action" @tap="goAddOrder">
+          <image src="../../static/lostFound/plus.png" />
+        </view>
+      </view>
     </view>
   </view>
 </template>
@@ -38,6 +43,12 @@ export default class Campus extends wepy.page {
     teda: 'TD',
     balitai: 'BLT',
     jinnan: 'JN'
+  }
+
+  goAddOrder(e) {
+    this.$navigate({
+      url: './newOrder'
+    })
   }
 
   toBLT(e) {
@@ -130,4 +141,29 @@ export default class Campus extends wepy.page {
 </script>
 
 <style>
+.float-container {
+  position: fixed;
+  bottom: 40rpx;
+  right: 40rpx;
+  overflow: hidden;
+}
+.float-action {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: #E14848;
+  z-index: 100;
+  text-align: center;
+  opacity: .5;
+  margin-left: 40rpx;
+  float: right;
+}
+.float-action:active {
+  opacity: 1
+}
+.float-action image {
+    width: 60rpx;
+    height: 60rpx;
+    margin-top: 20rpx;
+}
 </style>

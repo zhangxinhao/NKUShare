@@ -14,7 +14,7 @@
         <image src="http://188.131.238.75/orderlist/crab.jpeg" mode='aspectFill' />
       </swiper-item>
     </swiper>
-    <view class="cu-bar search bg-white">
+    <!-- <view class="cu-bar search bg-white">
       <view class="search-form round">
         <text class="cuIcon-search"></text>
         <input type="text" placeholder="搜索" confirm-type="search" />
@@ -23,7 +23,7 @@
         <button class="cu-btn bg-green shadow-blur round margin-right">搜索</button>
         <button class="cu-btn bg-blue shadow-blur round" bindtap='goAddOrder'>新建订单</button>
       </view>
-    </view>
+    </view> -->
     
     <view wx:for="{{list}}" wx:key>
       <view class="cu-bar bg-white solid-bottom margin-top">
