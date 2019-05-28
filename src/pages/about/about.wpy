@@ -87,7 +87,7 @@ map,
           </button>
         </view>
         <view class="cu-item arrow">
-          <navigator class="content" url="/pages/about/about" hover-class="none">
+          <navigator class="content" url="./aboutus" hover-class="none">
             <image src="/static/logo.png" class="png" mode="aspectFit"/>
             <text class="text-grey">关于我们</text>
           </navigator>
@@ -116,6 +116,7 @@ map,
 import wepy from 'wepy'
 
 export default class about extends wepy.page {
+  config = {navigationBarTitleText: '个人中心'};
   data = {
     userName: ''
   }
@@ -123,6 +124,12 @@ export default class about extends wepy.page {
     userInfo() {
       wepy.navigateTo({
         url: './userInfo'
+      })
+    },
+    showQrcode() {
+      wx.previewImage({
+        urls: ['https://6e6b-nkushare-kynis-1257274182.tcb.qcloud.la/QRCode.png?sign=26bb34f140a8eb9a68bdb6b71094bb00&t=1559052579'],
+        current: 'https://6e6b-nkushare-kynis-1257274182.tcb.qcloud.la/QRCode.png?sign=26bb34f140a8eb9a68bdb6b71094bb00&t=1559052579'
       })
     }
   }

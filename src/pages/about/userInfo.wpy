@@ -20,13 +20,12 @@
       <view class="padding flex flex-direction">
         <button 
         class="cu-btn bg-grey lg" 
-        form-type="submit" 
-        disabled="{{disabled}}"
+        form-type="submit"
         wx:if="{{canIUse}}"
         open-type="getUserInfo"
         bindgetuserinfo="bindGetUserInfo"
         >
-        提交修改
+        确认授权
         </button>
       </view>
     </form>
@@ -37,14 +36,14 @@
 import wepy from 'wepy'
 
 export default class userInfo extends wepy.page {
+  config = {navigationBarTitleText: '个人信息'};
   data = {
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     name: '无',
     stuID: '无',
     college: '无',
     grade: '无',
-    _id: '',
-    disabled: false
+    _id: ''
   }
   methods = {
     nameInput(e) {
@@ -60,7 +59,6 @@ export default class userInfo extends wepy.page {
       this.grade = e.detail.value
     },
     formSubmit(e) {
-      // 查看是否授权
       let that = this
       wx.getSetting({
         success(res) {
@@ -138,7 +136,7 @@ export default class userInfo extends wepy.page {
     .then(
       wx.showModal({
         title: '亲爱的用户',
-        content: '您已修改成功',
+        content: '提交成功',
         showCancel: false,
         confirmText: '确认',
         success: res => {

@@ -79,6 +79,7 @@
 <script>
 import wepy from 'wepy'
 export default class addLostFound extends wepy.page {
+  config = {navigationBarTitleText: '添加失物招领'};
   data = {
     index: -1,
     picker: ['失物招领', '寻物启事'],
@@ -93,6 +94,49 @@ export default class addLostFound extends wepy.page {
     itemID: '',
     lostFoundType: '',
     disabled: false
+  }
+  validateInfo() {
+    if (this.index === -1) {
+      wx.showToast({
+        title: '创建失败!请选择类型!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+    if (this.lostFoundTitle === '') {
+      wx.showToast({
+        title: '创建失败!标题不能为空!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+    if (this.lostFoundLocation === '') {
+      wx.showToast({
+        title: '创建失败!地点不能为空!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+    if (this.textAreaValue === '') {
+      wx.showToast({
+        title: '创建失败!详细描述不能为空!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+    if (this.imgList.length === 0) {
+      wx.showToast({
+        title: '创建失败!图片不能为空!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+    return true
   }
   methods = {
     titleInput(e) {
@@ -120,9 +164,9 @@ export default class addLostFound extends wepy.page {
     },
     ChooseImage() {
       wx.chooseImage({
-        count: 1, // 默认9
-        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: ['album', 'camera'], // 从相册选择
+        count: 1,
+        sizeType: ['original', 'compressed'],
+        sourceType: ['album', 'camera'],
         success: (res) => {
           if (this.data.imgList.length !== 0) {
             this.setData({
@@ -157,9 +201,11 @@ export default class addLostFound extends wepy.page {
       })
     },
     formSubmit(e) {
+      if (!this.validateInfo()) {
+        return
+      }
       wx.showLoading({
         title: '上传中...',
-        // 防止触摸穿透
         mask: true
       })
       this.disabled = true
@@ -189,7 +235,6 @@ export default class addLostFound extends wepy.page {
         success: res => {
           that.fileID = res.fileID
           that.$apply()
-          console.log('上传成功', res)
           wx.cloud.callFunction({
             name: 'changeImagePath',
             data: {
@@ -209,7 +254,6 @@ export default class addLostFound extends wepy.page {
                 }
               }
             })
-            console.log(res.result)
           })
         },
         fail: (error) => {

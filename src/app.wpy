@@ -23,7 +23,8 @@ export default class extends wepy.app {
       'pages/lostFound/lostFoundDetail',
       'pages/lostFound/showLostFound',
       'pages/about/about',
-      'pages/about/userInfo'
+      'pages/about/userInfo',
+      'pages/about/aboutus'
     ],
     window: {
       backgroundTextStyle: 'light',
