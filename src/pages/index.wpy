@@ -102,12 +102,6 @@ export default class Index extends wepy.page {
   config = {navigationBarTitleText: '帮帮！'};
   data = {
     list: [],
-    avatar: [
-      'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
-      'https://ossweb-img.qq.com/images/lol/web201310/skin/big81005.jpg',
-      'https://ossweb-img.qq.com/images/lol/web201310/skin/big25002.jpg',
-      'https://ossweb-img.qq.com/images/lol/web201310/skin/big91012.jpg'
-    ],
     date: '2019-05-13',
     multiIndex: [0, 1],
     multiArray: [
@@ -126,7 +120,7 @@ export default class Index extends wepy.page {
     }, {
       id: 2,
       type: 'image',
-      url: '../static/help/package.jpg'
+      url: '../static/help/package1.jpg'
     }]
   }
   methods = {
