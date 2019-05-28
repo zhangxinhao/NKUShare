@@ -39,9 +39,9 @@
             <view class="text-gray text-sm">
               <text class="cuIcon-infofill margin-right-xs"></text> 人数限制为: {{ item.num_min }}-{{ item.num_max }}人</view>
             <view class="text-gray text-sm">
-              <text class="cuIcon-infofill margin-right-xs"></text> 创建时间为: {{ dateFormat.dateFormat(item.start) }}</view>
+              <text class="cuIcon-infofill margin-right-xs"></text> 开始时间为: {{ item.begin }}</view>
             <view class="text-gray text-sm">
-              <text class="cuIcon-infofill margin-right-xs"></text> 截止时间为: {{ dateFormat.dateFormat(item.end) }}</view>
+              <text class="cuIcon-infofill margin-right-xs"></text> 报名截止时间为: {{ item.register_end }}</view>
           </view>
           <view class="action">
             <view wx:if="{{ !item.outOfDate }}">
@@ -59,15 +59,10 @@
 
 <script>
 import wepy from 'wepy'
-import dateFormat from './dateFormat.wxs'
 
 export default class OrderList extends wepy.page {
   config = {
     navigationBarTitleText: '订单列表'
-  }
-
-  wxs = {
-    dateFormat: dateFormat
   }
 
   data = {
@@ -129,7 +124,7 @@ export default class OrderList extends wepy.page {
         that.list[0].orders = res.data
         let orders = that.list[0].orders
         for (let j = 0; j < orders.length; j++) {
-          if (orders[j].end.getTime() < new Date().getTime()) {
+          if (new Date(orders[j].date + ' ' + orders[j].register_end).getTime() < new Date().getTime()) {
             orders[j].outOfDate = true
           } else {
             orders[j].outOfDate = false
@@ -150,7 +145,7 @@ export default class OrderList extends wepy.page {
         that.list[1].orders = res.data
         let orders = that.list[1].orders
         for (let j = 0; j < orders.length; j++) {
-          if (orders[j].end.getTime() < new Date().getTime()) {
+          if (new Date(orders[j].date + ' ' + orders[j].register_end).getTime() < new Date().getTime()) {
             orders[j].outOfDate = true
           } else {
             orders[j].outOfDate = false
@@ -171,7 +166,7 @@ export default class OrderList extends wepy.page {
         that.list[2].orders = res.data
         let orders = that.list[2].orders
         for (let j = 0; j < orders.length; j++) {
-          if (orders[j].end.getTime() < new Date().getTime()) {
+          if (new Date(orders[j].date + ' ' + orders[j].register_end).getTime() < new Date().getTime()) {
             orders[j].outOfDate = true
           } else {
             orders[j].outOfDate = false

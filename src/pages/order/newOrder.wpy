@@ -33,6 +33,30 @@
           </view>
         </picker>
       </view>
+            <view class="cu-form-group">
+        <view class="title">日期选择</view>
+        <picker mode="date" value="date" start="2015-09-01" end="2020-09-01" bindchange="DateChange">
+          <view class="picker">{{date}}</view>
+        </picker>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">开始时间选择</view>
+        <picker mode="time" value="startTime" start="06:00" end="24:00" bindchange="StartTimeChange">
+          <view class="picker">{{startTime}}</view>
+        </picker>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">结束时间选择</view>
+        <picker mode="time" value="endTime" start="06:00" end="24:00" bindchange="EndTimeChange">
+          <view class="picker">{{endTime}}</view>
+        </picker>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">报名截止时间选择</view>
+        <picker mode="time" value="ddlTime" start="06:00" end="24:00" bindchange="DdlTimeChange">
+          <view class="picker">{{ddlTime}}</view>
+        </picker>
+      </view>
       <view class="cu-form-group">
         <view class="title">最少人数</view>
         <picker bindchange="minNumChange" value="{{minNumIndex}}" range="{{minNumPicker}}">
@@ -49,22 +73,6 @@
           </view>
         </picker>
       </view>
-      <!-- <view class="cu-form-group">
-        <view class="title">时间选择</view>
-        <picker mode="time" value="{{time}}" start="09:01" end="21:01" bindchange="TimeChange">
-          <view class="picker">
-            {{time}}
-          </view>
-        </picker>
-      </view> -->
-      <!-- <view class="cu-form-group">
-        <view class="title">日期选择</view>
-        <picker mode="date" value="{{date}}" start="2015-09-01" end="2020-09-01" bindchange="DateChange">
-          <view class="picker">
-            {{date}}
-          </view>
-        </picker>
-      </view> -->
       <view class="cu-form-group align-start">
         <view class="title">商品详细描述</view>
         <textarea maxlength="-1" disabled="{{modalName!=null}}" bindinput="textareaInput" placeholder="请尽量详细描述商品和有关条件"></textarea>
@@ -99,9 +107,10 @@ export default class NewOrder extends wepy.page {
     maxNumPicker: [2, 3, 4, 5, 6, 7, 8, 9, 10],
     typePicker: ['奶茶', '麻辣烫', '其他'],
     locationPicker: ['八里台', '津南', '泰达'],
-    time: '12:01',
-    date: '2018-12-25',
-    region: ['广东省', '广州市', '海珠区'],
+    startTime: '00:00',
+    endTime: '00:00',
+    ddlTime: '00:00',
+    date: '2019-05-29',
     modalName: null,
     textareaValue: ''
   }
@@ -113,6 +122,10 @@ export default class NewOrder extends wepy.page {
     this.minNumIndex = null
     this.maxNumIndex = null
     this.textareaValue = ''
+    this.startTime = '00:00'
+    this.endTime = '00:00'
+    this.ddlTime = '00:00'
+    this.date = '2019-05-29'
 
     wx.cloud.callFunction({
       name: 'getOpenID',
@@ -140,26 +153,6 @@ export default class NewOrder extends wepy.page {
 
   locationChange(e) {
     this.locationIndex = e.detail.value
-  }
-
-  TimeChange(e) {
-    this.setData({
-      time: e.detail.value
-    })
-
-    console.log(new Date())
-  }
-
-  DateChange(e) {
-    this.setData({
-      date: e.detail.value
-    })
-  }
-
-  RegionChange(e) {
-    this.setData({
-      region: e.detail.value
-    })
   }
 
   textareaInput(e) {
@@ -231,10 +224,6 @@ export default class NewOrder extends wepy.page {
     const order = database.collection('order')
     const takeorder = database.collection('take_order')
 
-    let startTime = new Date()
-    let endTime = new Date()
-    endTime.setHours(endTime.getHours() + 2)
-
     let location
     if (this.locationIndex === 0) {
       location = 'BLT'
@@ -260,8 +249,10 @@ export default class NewOrder extends wepy.page {
           // _id: 'todo-identifiant-aleatoire', // 可选自定义 _id，在此处场景下用数据库自动分配的就可以了
           description: that.textareaValue,
           title: that.title,
-          start: startTime,
-          end: endTime,
+          date: that.date,
+          register_end: that.ddlTime,
+          begin: that.startTime,
+          end: that.endTime,
           location_label: location,
           good_label: good,
           num_min: that.minNumPicker[that.minNumIndex],
@@ -269,20 +260,7 @@ export default class NewOrder extends wepy.page {
           state: '拼单中'
         },
         success(res) {
-          // res 是一个对象，其中有 _id 字段标记刚创建的记录的 id
-
-          wx.hideLoading()
-          wx.showModal({
-            title: '亲爱的用户',
-            content: '您已成功创建',
-            showCancel: false,
-            // cancelText: '取消',
-            confirmText: '跳转中',
-            success: res => {}
-          })
-
           let orderID = res._id
-
           takeorder.add({
             data: {
               orderID: orderID,
@@ -290,14 +268,40 @@ export default class NewOrder extends wepy.page {
               userID: that.userID
             },
             success(res) {
-              wx.navigateBack({
-                url: './chooseCampus'
+              wx.hideLoading()
+              wx.showModal({
+                title: '亲爱的用户',
+                content: '您已成功创建',
+                showCancel: false,
+                // cancelText: '取消',
+                confirmText: '确认',
+                success: res => {
+                  if (res.confirm) {
+                    wx.navigateBack()
+                  }
+                }
               })
             }
           })
         }
       })
     }
+  }
+
+  StartTimeChange(e) {
+    this.startTime = e.detail.value
+  }
+
+  EndTimeChange(e) {
+    this.endTime = e.detail.value
+  }
+
+  DdlTimeChange(e) {
+    this.ddlTime = e.detail.value
+  }
+
+  DateChange(e) {
+    this.date = e.detail.value
   }
 }
 </script>
