@@ -74,17 +74,18 @@
             </view>
             <view class="grid flex-sub padding-lr {{isCard?'col-3 grid-square':'col-1'}}">
               <view class="bg-img {{isCard?'':'only-img'}}" 
-                style="background-image:url({{helpDetail.picture}});" 
+                style="background-image:url({{imgList}});" 
                 wx:for="{{isCard?9:1}}" 
                 wx:key="{{index}}" 
                 @tap="ViewImage"
-                data-url="{{helpDetail.picture}}">
+                data-url="{{imgList}}">
               </view>
             </view>
             <view class="text-gray text-sm text-right padding"></view>
           </view>
         </view>
       </view>
+      
       <view class="text-center">
         <view wx:if="{{hasCreated==false && hasJoin==false && havetake==false}}" class="margin-top margin-bottom">
           <button class="cu-btn round bg-red lg" role="button" aria-label="" aria-disabled="false" bindtap='GoToHelp'>
@@ -126,7 +127,7 @@
           </view>
         </repeat>
         <view class="cu-bar input margin-bottom">
-          <input placeholder="输入消息..." maxlength="200" bindinput='messageChange' />
+          <input placeholder="输入消息..." maxlength="200" bindinput='messageChange' value="{{message}}"/>
           <button class="cu-btn bg-green shadow" bindtap='submitMessage'>发送</button>
         </view>
       </view>
@@ -197,7 +198,8 @@ export default class OrderDetail extends wepy.page {
     textareaInput: '',
     test: [],
     avatarUrl: '',
-    havetake: false
+    havetake: false,
+    imgList: []
   }
 
   messageChange(e) {
@@ -246,14 +248,19 @@ export default class OrderDetail extends wepy.page {
   }
 
   submitMessage(e) {
+    if (this.message.length === 0) {
+      wx.showToast({
+        title: '不能发送空消息',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
     let that = this
-
     const database = wx.cloud.database({
       env: 'nkushare-kynis'
     })
-
     const comment = database.collection('help_comment')
-
     comment.add({
       // data 字段表示需新增的 JSON 数据
       data: {
@@ -268,7 +275,7 @@ export default class OrderDetail extends wepy.page {
       },
       success(res) {
         that.message = ''
-
+        that.$apply()
         comment.where({
           event_id: that.helpID
         }).get({
@@ -349,12 +356,11 @@ export default class OrderDetail extends wepy.page {
         }
         let detail = res.data
         that.helpDetail = detail[0]
-        console.log(detail[0].picture)
         wx.cloud.downloadFile({
           fileID: detail[0].picture,
           success: res => {
             that.test.push(res.tempFilePath)
-            that.helpDetail.picture = res.tempFilePath
+            that.imgList = res.tempFilePath
             that.$apply()
             wx.hideLoading()
           },
