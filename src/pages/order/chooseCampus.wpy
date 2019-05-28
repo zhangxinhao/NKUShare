@@ -8,30 +8,18 @@
         <text class="text-black text-bold">请选择您所在的校区</text>
       </view>
       <view class="margin-top margin-bottom">
-        <button class="cu-btn round bg-red lg" role="button" aria-label="" aria-disabled="false">
-          <navigator
-            url="/pages/order/orderList?campus={{balitai}}"
-            hover-class="navigator-hover">
-            南开大学八里台校区
-          </navigator>
+        <button class="cu-btn round bg-red lg" role="button" aria-label="" aria-disabled="false" bindtap="toBLT">
+          南开大学八里台校区
         </button>
       </view>
       <view class="margin-bottom">
-        <button class="cu-btn round bg-yellow lg" role="button" aria-label="" aria-disabled="false">
-          <navigator
-            url="/pages/order/orderList?campus={{jinnan}}"
-            hover-class="navigator-hover">
-            南开大学津南校区
-          </navigator>
+        <button class="cu-btn round bg-yellow lg" role="button" aria-label="" aria-disabled="false" bindtap="toJN">
+          南开大学津南校区
         </button>
       </view>
       <view class="margin-bottom">
-        <button class="cu-btn round bg-blue lg" role="button" aria-label="" aria-disabled="false">
-          <navigator
-            url="/pages/order/orderList?campus={{teda}}"
-            hover-class="navigator-hover">
-            南开大学泰达校区
-          </navigator>
+        <button class="cu-btn round bg-blue lg" role="button" aria-label="" aria-disabled="false" bindtap="toTD">
+          南开大学泰达校区
         </button>
       </view>
     </view>
@@ -48,7 +36,55 @@ export default class Campus extends wepy.page {
     jinnan: 'JN'
   }
 
-  method = {
+  toBLT(e) {
+    let that = this
+    wx.getSetting({
+      success(res) {
+        if (res.authSetting['scope.userInfo']) {
+          wepy.navigateTo({
+            url: './orderList?campus=' + that.balitai
+          })
+        } else {
+          wepy.navigateTo({
+            url: '../about/userInfo'
+          })
+        }
+      }
+    })
+  }
+
+  toJN(e) {
+    let that = this
+    wx.getSetting({
+      success(res) {
+        if (res.authSetting['scope.userInfo']) {
+          wepy.navigateTo({
+            url: './orderList?campus=' + that.jinnan
+          })
+        } else {
+          wepy.navigateTo({
+            url: '../about/userInfo'
+          })
+        }
+      }
+    })
+  }
+
+  toTD(e) {
+    let that = this
+    wx.getSetting({
+      success(res) {
+        if (res.authSetting['scope.userInfo']) {
+          wepy.navigateTo({
+            url: './orderList?campus=' + that.teda
+          })
+        } else {
+          wepy.navigateTo({
+            url: '../about/userInfo'
+          })
+        }
+      }
+    })
   }
 }
 </script>
