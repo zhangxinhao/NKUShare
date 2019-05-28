@@ -3,41 +3,65 @@
     <form>
       <view class="cu-form-group margin-top">
         <view class="title">主题</view>
-        <input placeholder="请输入活动主题" name="input" bindchange="titleChange"/>
+        <input placeholder="请输入活动主题" value="{{title}}" name="input" bindchange="titleChange"/>
       </view>
       <view class="cu-form-group">
         <view class="title">地点</view>
-        <input placeholder="请输入活动地点" name="input" bindchange="locationChange"/>
+        <input placeholder="请输入活动地点" value="{{location}}" name="input" bindchange="locationChange"/>
       </view>
       <view class="cu-form-group">
         <view class="title">人数上限</view>
-        <input type="number" placeholder="请输入最高参加活动人数" name="input" bindchange="numMaxChange"/>
+        <input
+          type="number"
+          placeholder="请输入最高参加活动人数"
+          value="{{numMax}}"
+          name="input"
+          bindchange="numMaxChange"
+        />
       </view>
       <view class="cu-form-group">
         <view class="title">人数下限</view>
-        <input type="number" placeholder="请输入最低参加活动人数下限" name="input" bindchange="numMinChange"/>
+        <input
+          type="number"
+          placeholder="请输入最低参加活动人数下限"
+          value="{{numMin}}"
+          name="input"
+          bindchange="numMinChange"
+        />
       </view>
       <view class="cu-form-group">
         <view class="title">日期选择</view>
-        <picker mode="date" value="date" start="2015-09-01" end="2020-09-01" @change="DateChange">
+        <picker
+          mode="date"
+          value="{{date}}"
+          start="2015-09-01"
+          end="2020-09-01"
+          @change="DateChange"
+        >
           <view class="picker">{{date}}</view>
         </picker>
       </view>
       <view class="cu-form-group">
         <view class="title">开始时间选择</view>
-        <picker mode="time" value="startTime" start="06:00" end="24:00" @change="StartTimeChange">
+        <picker
+          mode="time"
+          value="{{startTime}}"
+          start="06:00"
+          end="24:00"
+          @change="StartTimeChange"
+        >
           <view class="picker">{{startTime}}</view>
         </picker>
       </view>
       <view class="cu-form-group">
         <view class="title">结束时间选择</view>
-        <picker mode="time" value="endTime" start="06:00" end="24:00" @change="EndTimeChange">
+        <picker mode="time" value="{{endTime}}" start="06:00" end="24:00" @change="EndTimeChange">
           <view class="picker">{{endTime}}</view>
         </picker>
       </view>
       <view class="cu-form-group">
         <view class="title">报名截止时间选择</view>
-        <picker mode="time" value="ddlTime" start="06:00" end="24:00" @change="DdlTimeChange">
+        <picker mode="time" value="{{ddlTime}}" start="06:00" end="24:00" @change="DdlTimeChange">
           <view class="picker">{{ddlTime}}</view>
         </picker>
       </view>
@@ -48,6 +72,7 @@
           disabled="{{modalName!==null}}"
           @input="textareaInput"
           placeholder="多行文本输入框"
+          value="{{textareaValue}}"
         ></textarea>
       </view>
     </form>
@@ -68,26 +93,38 @@ export default class launchActivity extends wepy.page {
     location: '',
     numMax: null,
     numMin: null,
-    startTime: '12:01',
-    endTime: '12:01',
-    ddlTime: '12:01',
-    date: '2018-12-26',
+    startTime: '12:00',
+    endTime: '12:00',
+    ddlTime: '12:00',
+    date: new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
     modalName: null,
     textAreaValue: ''
   }
 
-  onload() {
-    wx.cloud.callFunction({
-      name: 'getOpenID',
-      complete: res => {
-        this.userID = res.result.openid
-      }
-    })
+  onLoad() {
+    this.userID = this.$parent.globalData.userID
+    this.useID = ''
+    this.title = ''
+    this.location = ''
+    this.numMax = null
+    this.numMin = null
+    this.startTime = '12:00'
+    this.endTime = '12:00'
+    this.ddlTime = '12:00'
+    this.date = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate()
+    this.modalName = null
+    this.textAreaValue = ''
+  }
+
+  onUnload() {
   }
 
   methods = {
     launchConfirm(e) {
       // 显示loading提示框
+      if (!this.validateInfo()) {
+        return
+      }
       wx.showLoading({
         title: '活动创建中',
         // 防止触摸穿透
@@ -177,6 +214,90 @@ export default class launchActivity extends wepy.page {
     textareaInput(e) {
       this.textareaValue = e.detail.value
     }
+  }
+  validateInfo() {
+    if (this.title === '') {
+      wx.showToast({
+        title: '创建失败!标题不能为空!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+
+    // 活动地址为空
+    if (this.location === '') {
+      wx.showToast({
+        title: '创建失败!地址不能为空!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+
+    // 人数上下限为空
+    if (
+      this.numMax === null ||
+      this.numMin === null ||
+      this.numMax === 0 ||
+      this.numMin === 0
+    ) {
+      wx.showToast({
+        title: '创建失败!人数不能为空!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+
+    // 人数上下限大小错误
+    if (this.numMax <= this.numMin) {
+      wx.showToast({
+        title: '创建失败!人数上限应高于下限',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+
+    // 日期过期
+    if (
+      new Date(this.date).getTime() <
+      new Date(new Date().toLocaleDateString()).getTime()
+    ) {
+      wx.showToast({
+        title: '创建失败!日期已过!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+
+    // 时间过期
+    if (
+      new Date(this.date + ' ' + this.ddlTime).getTime() <=
+        new Date().getTime() ||
+      this.endTime <= this.startTime ||
+      this.startTime <= this.ddlTime
+    ) {
+      wx.showToast({
+        title: '创建失败!日期不符合规范!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+
+    // 活动描述为空
+    if (this.textareaValue === '') {
+      wx.showToast({
+        title: '创建失败!活动描述不能为空!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+    return true
   }
 }
 </script>
