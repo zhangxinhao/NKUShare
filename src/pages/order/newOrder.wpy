@@ -65,27 +65,6 @@
           </view>
         </picker>
       </view> -->
-      <view class="cu-bar bg-white margin-top">
-        <view class="action">
-          图片上传(可选)
-        </view>
-        <view class="action">
-          {{imgList.length}}/4
-        </view>
-      </view>
-      <view class="cu-form-group">
-        <view class="grid col-4 grid-square flex-sub">
-          <view class="bg-img" wx:for="{{imgList}}" wx:key="{{index}}" bindtap="ViewImage" data-url="{{imgList[index]}}">
-            <image src='{{imgList[index]}}' mode='aspectFill' />
-            <view class="cu-tag bg-red" catchtap="DelImg" data-index="{{index}}">
-              <text class="cuIcon-close"></text>
-            </view>
-          </view>
-          <view class="solids" bindtap="ChooseImage" wx:if="{{imgList.length<4}}">
-            <text class="cuIcon-cameraadd"></text>
-          </view>
-        </view>
-      </view>
       <view class="cu-form-group align-start">
         <view class="title">商品详细描述</view>
         <textarea maxlength="-1" disabled="{{modalName!=null}}" bindinput="textareaInput" placeholder="请尽量详细描述商品和有关条件"></textarea>
@@ -123,12 +102,18 @@ export default class NewOrder extends wepy.page {
     time: '12:01',
     date: '2018-12-25',
     region: ['广东省', '广州市', '海珠区'],
-    imgList: [],
     modalName: null,
     textareaValue: ''
   }
 
   onLoad() {
+    this.title = ''
+    this.typeIndex = null
+    this.locationIndex = null
+    this.minNumIndex = null
+    this.maxNumIndex = null
+    this.textareaValue = ''
+
     wx.cloud.callFunction({
       name: 'getOpenID',
       complete: res => {
@@ -174,49 +159,6 @@ export default class NewOrder extends wepy.page {
   RegionChange(e) {
     this.setData({
       region: e.detail.value
-    })
-  }
-
-  ChooseImage() {
-    wx.chooseImage({
-      count: 4, // 默认9
-      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-      sourceType: ['album'], // 从相册选择
-      success: (res) => {
-        if (this.data.imgList.length !== 0) {
-          this.setData({
-            imgList: this.data.imgList.concat(res.tempFilePaths)
-          })
-        } else {
-          this.setData({
-            imgList: res.tempFilePaths
-          })
-        }
-      }
-    })
-  }
-
-  ViewImage(e) {
-    wx.previewImage({
-      urls: this.data.imgList,
-      current: e.currentTarget.dataset.url
-    })
-  }
-
-  DelImg(e) {
-    wx.showModal({
-      title: '您好',
-      content: '确定要删除吗？',
-      cancelText: '再看看',
-      confirmText: '再见',
-      success: res => {
-        if (res.confirm) {
-          this.data.imgList.splice(e.currentTarget.dataset.index, 1)
-          this.setData({
-            imgList: this.data.imgList
-          })
-        }
-      }
     })
   }
 
@@ -335,7 +277,7 @@ export default class NewOrder extends wepy.page {
             content: '您已成功创建',
             showCancel: false,
             // cancelText: '取消',
-            confirmText: '跳转中...',
+            confirmText: '跳转中',
             success: res => {}
           })
 
