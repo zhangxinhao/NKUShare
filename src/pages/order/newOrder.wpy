@@ -349,7 +349,7 @@ export default class NewOrder extends wepy.page {
             },
             success(res) {
               wx.navigateBack({
-                url: './orderList'
+                url: './chooseCampus'
               })
             }
           })
