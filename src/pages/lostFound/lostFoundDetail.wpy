@@ -139,6 +139,31 @@ export default class LostFoundDetail extends wepy.page {
 
   methods = {
     submitMessage(e) {
+      wx.getSetting({
+        success(res) {
+          if (res.authSetting['scope.userInfo']) {
+            this.addComment(e)
+          } else {
+            wx.showModal({
+              title: '亲爱的用户',
+              content: '您未授权，请前往授权',
+              showCancel: true,
+              cancelText: '取消',
+              confirmText: '确认',
+              success: res => {
+                if (res.confirm) {
+                  wepy.navigateTo({
+                    url: '../about/userInfo'
+                  })
+                } else if (res.cancel) {
+                }
+              }
+            })
+          }
+        }
+      })
+    },
+    addComment(e) {
       let that = this
 
       const database = wx.cloud.database({

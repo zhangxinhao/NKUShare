@@ -125,13 +125,57 @@ export default class Index extends wepy.page {
   }
   methods = {
     addHelp () {
-      wepy.navigateTo({
-        url: '../pages/helping/addHelp'
+      wx.getSetting({
+        success(res) {
+          if (res.authSetting['scope.userInfo']) {
+            wepy.navigateTo({
+              url: '../pages/helping/addHelp'
+            })
+          } else {
+            wx.showModal({
+              title: '亲爱的用户',
+              content: '您未授权，请前往授权',
+              showCancel: true,
+              cancelText: '取消',
+              confirmText: '确认',
+              success: res => {
+                if (res.confirm) {
+                  wepy.navigateTo({
+                    url: '../about/userInfo'
+                  })
+                } else if (res.cancel) {
+                }
+              }
+            })
+          }
+        }
       })
     },
     showDetail(e) {
-      this.$navigate({
-        url: '../pages/helping/post?id=' + e.currentTarget.dataset.id
+      wx.getSetting({
+        success(res) {
+          if (res.authSetting['scope.userInfo']) {
+            this.$navigate({
+              url: '../pages/helping/post?id=' + e.currentTarget.dataset.id
+            })
+          } else {
+            wx.showModal({
+              title: '亲爱的用户',
+              content: '您未授权，请前往授权',
+              showCancel: true,
+              cancelText: '取消',
+              confirmText: '确认',
+              success: res => {
+                if (res.confirm) {
+                  wepy.navigateTo({
+                    url: '../about/userInfo'
+                  })
+                } else if (res.cancel) {
+                }
+              }
+            })
+          }
+        }
       })
     },
     cardSwiper(e) {
