@@ -89,28 +89,30 @@
             <text class="cuIcon-title text-orange"></text>消息列表
           </view>
         </view>
-        <repeat for="{{commentArray}}" key="index" index="index" item="item">
-          <view class="cu-list menu-avatar">
-            <view class="cu-item">
-              <view
-                class="cu-avatar round lg"
-                style="background-image:url({{item.avatarUrl}});">
-              </view>
-              <view class="content">
-                <view class="text-grey">{{item.name}}</view>
-                <view class="text-gray text-sm flex">
-                  <text class="text-cut">
-                    {{item.comment}}
-                  </text>
+        <view class="cu-list menu">
+          <repeat for="{{commentArray}}" key="index" index="index" item="item">
+            <view class="cu-list menu-avatar">
+              <view class="cu-item">
+                <view
+                  class="cu-avatar round lg"
+                  style="background-image:url({{item.avatarUrl}});">
+                </view>
+                <view class="content" style="line-height:1em">
+                  <view class="text-grey">{{item.name}}</view>
+                  <view class="text-gray text-sm flex">
+                    <text class="text-cut">
+                      {{item.comment}}
+                    </text>
+                  </view>
+                </view>
+                <view class="action">
+                  <view class="text-grey text-xs">{{dayFormat.dayFormat(item.time)}}</view>
+                  <view class="text-grey text-xs">{{timeFormat.timeFormat(item.time)}}</view>
                 </view>
               </view>
-              <view class="action">
-                <view class="text-grey text-xs">{{dayFormat.dayFormat(item.time)}}</view>
-                <view class="text-grey text-xs">{{timeFormat.timeFormat(item.time)}}</view>
-              </view>
             </view>
-          </view>
-        </repeat>
+          </repeat>
+        </view>
         <view class="cu-bar input margin-bottom">
           <input placeholder="输入消息..." maxlength="200" bindchange='addMessage' value="{{ message }}"/>
           <button class="cu-btn bg-green shadow">发送</button>
