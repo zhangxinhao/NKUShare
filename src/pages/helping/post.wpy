@@ -86,7 +86,7 @@
         </view>
       </view>
       <view class="text-center">
-        <view wx:if="{{hasCreated==false && hasJoin==false}}" class="margin-top margin-bottom">
+        <view wx:if="{{hasCreated==false && hasJoin==false && havetake==false}}" class="margin-top margin-bottom">
           <button class="cu-btn round bg-red lg" role="button" aria-label="" aria-disabled="false" bindtap='GoToHelp'>
             我要帮助
           </button>
@@ -196,7 +196,8 @@ export default class OrderDetail extends wepy.page {
     hasCreated: false,
     textareaInput: '',
     test: [],
-    avatarUrl: ''
+    avatarUrl: '',
+    havetake: false
   }
 
   messageChange(e) {
@@ -338,6 +339,12 @@ export default class OrderDetail extends wepy.page {
           that.hasJoin = true
           that.setData({
             hasJoin: that.hasJoin
+          })
+        }
+        if (res.data[0].helper !== '') {
+          that.havetake = true
+          that.setData({
+            havetake: that.havetake
           })
         }
         let detail = res.data
