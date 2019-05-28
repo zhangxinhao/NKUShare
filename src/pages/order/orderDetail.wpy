@@ -114,8 +114,8 @@
           </repeat>
         </view>
         <view class="cu-bar input margin-bottom">
-          <input placeholder="输入消息..." maxlength="200" bindchange='addMessage' value="{{ message }}"/>
-          <button class="cu-btn bg-green shadow">发送</button>
+          <input placeholder="输入消息..." maxlength="200" bindinput='messageChange' value="{{ message }}"/>
+          <button class="cu-btn bg-green shadow" bindtap="addComment">发送</button>
         </view>
       </view>
 
@@ -237,8 +237,11 @@ export default class OrderDetail extends wepy.page {
     this.modalName = null
   }
 
-  addMessage(e) {
+  messageChange(e) {
     this.message = e.detail.value
+  }
+
+  addComment(e) {
     if (this.message.length === 0) {
       wx.showToast({
         title: '不能发送空消息',
@@ -275,11 +278,13 @@ export default class OrderDetail extends wepy.page {
             that.setData({
               commentArray: that.commentArray
             })
+
+            that.message = ''
+            that.setData({
+              message: that.message
+            })
+            that.$apply()
           }
-        })
-        that.message = ''
-        that.setData({
-          message: that.message
         })
       }
     })
