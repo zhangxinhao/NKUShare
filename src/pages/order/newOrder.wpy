@@ -35,26 +35,26 @@
       </view>
             <view class="cu-form-group">
         <view class="title">日期选择</view>
-        <picker mode="date" value="date" start="2015-09-01" end="2020-09-01" bindchange="DateChange">
+        <picker mode="date" value="date" start="2019-05-01" end="2025-09-01" bindchange="DateChange">
           <view class="picker">{{date}}</view>
         </picker>
       </view>
       <view class="cu-form-group">
         <view class="title">开始时间选择</view>
-        <picker mode="time" value="startTime" start="06:00" end="24:00" bindchange="StartTimeChange">
+        <picker mode="time" value="startTime" start="00:00" end="24:00" bindchange="StartTimeChange">
           <view class="picker">{{startTime}}</view>
         </picker>
       </view>
       <view class="cu-form-group">
-        <view class="title">结束时间选择</view>
-        <picker mode="time" value="endTime" start="06:00" end="24:00" bindchange="EndTimeChange">
-          <view class="picker">{{endTime}}</view>
+        <view class="title">报名截止时间选择</view>
+        <picker mode="time" value="ddlTime" start="00:00" end="24:00" bindchange="DdlTimeChange">
+          <view class="picker">{{ddlTime}}</view>
         </picker>
       </view>
       <view class="cu-form-group">
-        <view class="title">报名截止时间选择</view>
-        <picker mode="time" value="ddlTime" start="06:00" end="24:00" bindchange="DdlTimeChange">
-          <view class="picker">{{ddlTime}}</view>
+        <view class="title">结束时间选择</view>
+        <picker mode="time" value="endTime" start="00:00" end="24:00" bindchange="EndTimeChange">
+          <view class="picker">{{endTime}}</view>
         </picker>
       </view>
       <view class="cu-form-group">
@@ -107,10 +107,10 @@ export default class NewOrder extends wepy.page {
     maxNumPicker: [2, 3, 4, 5, 6, 7, 8, 9, 10],
     typePicker: ['奶茶', '麻辣烫', '其他'],
     locationPicker: ['八里台', '津南', '泰达'],
-    startTime: '00:00',
-    endTime: '00:00',
-    ddlTime: '00:00',
-    date: '2019-05-29',
+    startTime: '12:00',
+    endTime: '12:00',
+    ddlTime: '12:00',
+    date: new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
     modalName: null,
     textareaValue: ''
   }
@@ -121,11 +121,12 @@ export default class NewOrder extends wepy.page {
     this.locationIndex = null
     this.minNumIndex = null
     this.maxNumIndex = null
-    this.textareaValue = ''
-    this.startTime = '00:00'
-    this.endTime = '00:00'
-    this.ddlTime = '00:00'
-    this.date = '2019-05-29'
+    this.modalName = null
+    this.textAreaValue = ''
+    this.startTime = '12:00'
+    this.endTime = '12:00'
+    this.ddlTime = '12:00'
+    this.date = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate()
 
     wx.cloud.callFunction({
       name: 'getOpenID',
@@ -160,7 +161,7 @@ export default class NewOrder extends wepy.page {
   }
 
   validateInfo() {
-    if (this.minNumIndex === null || this.maxNumIndex === null || this.minNumPicker[this.minNumIndex] > this.maxNumPicker[this.maxNumIndex]) {
+    if (this.minNumIndex === null || this.maxNumIndex === null || this.minNumPicker[this.minNumIndex] >= this.maxNumPicker[this.maxNumIndex]) {
       wx.showToast({
         title: '创建失败!请调整人数符合规范!',
         icon: 'none',
@@ -199,6 +200,34 @@ export default class NewOrder extends wepy.page {
     if (this.locationIndex === null) {
       wx.showToast({
         title: '创建失败!地址信息不能为空!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+
+    // 日期过期
+    if (
+      new Date(this.date).getTime() <
+      new Date(new Date().toLocaleDateString()).getTime()
+    ) {
+      wx.showToast({
+        title: '创建失败!日期已过!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+
+    // 时间过期
+    if (
+      new Date(this.date + ' ' + this.ddlTime).getTime() <=
+        new Date().getTime() ||
+      this.endTime <= this.startTime ||
+      this.startTime >= this.ddlTime
+    ) {
+      wx.showToast({
+        title: '创建失败!日期不符合规范!',
         icon: 'none',
         duration: 2000
       })
