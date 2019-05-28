@@ -155,49 +155,32 @@ export default class detailsOfActivity extends wepy.page {
   computed = {}
   methods = {
     attend(e) {
-      // 显示loading提示框
-      wx.showLoading({
-        title: '加入活动中',
-        // 防止触摸穿透
-        mask: true
-      })
       let that = this
-      const database = wx.cloud.database({
-        env: 'nkushare-kynis'
-      })
-      const takes = database.collection('take_activity')
-      takes
-        .where({
-          _openid: that.userID,
-          act_id: that.actID
-        })
-        .get({
-          success(res) {
-            if (res.data.length === 0) {
-              takes.add({
-                data: {
-                  userID: that.userID,
-                  act_id: that.actID,
-                  type: 'A'
-                },
-                success(res) {
-                  that.requestNewUser()
-                  wx.hideLoading()
-                  wx.showModal({
-                    title: '亲爱的用户',
-                    content: '您已报名成功',
-                    showCancel: false,
-                    // cancelText: '取消',
-                    confirmText: '确认',
-                    success: res => {}
+      // 判断授权状态
+      wx.getSetting({
+        success(res) {
+          if (res.authSetting['scope.userInfo']) {
+            that.attendActivity()
+          } else {
+            wx.showModal({
+              title: '亲爱的用户',
+              content: '您未授权，请前往授权',
+              showCancel: true,
+              cancelText: '取消',
+              confirmText: '确认',
+              success: res => {
+                if (res.confirm) {
+                  wepy.navigateTo({
+                    url: '../about/userInfo'
                   })
+                } else if (res.cancel) {
+                  return true
                 }
-              })
-            } else {
-              console.log('该用户已报名')
-            }
+              }
+            })
           }
-        })
+        }
+      })
     },
     quit: function(e) {
       // 显示loading提示框
@@ -376,6 +359,51 @@ export default class detailsOfActivity extends wepy.page {
             that.getUserAvator(that.actTakes[i]._openid)
           }
           that.$apply()
+        }
+      })
+  }
+  attendActivity() {
+    // 显示loading提示框
+    wx.showLoading({
+      title: '加入活动中',
+      // 防止触摸穿透
+      mask: true
+    })
+    let that = this
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+    const takes = database.collection('take_activity')
+    takes
+      .where({
+        _openid: that.userID,
+        act_id: that.actID
+      })
+      .get({
+        success(res) {
+          if (res.data.length === 0) {
+            takes.add({
+              data: {
+                userID: that.userID,
+                act_id: that.actID,
+                type: 'A'
+              },
+              success(res) {
+                that.requestNewUser()
+                wx.hideLoading()
+                wx.showModal({
+                  title: '亲爱的用户',
+                  content: '您已报名成功',
+                  showCancel: false,
+                  // cancelText: '取消',
+                  confirmText: '确认',
+                  success: res => {}
+                })
+              }
+            })
+          } else {
+            console.log('该用户已报名')
+          }
         }
       })
   }
