@@ -71,7 +71,7 @@
       </view>
     </form>
     <view class="padding flex flex-direction">
-      <button class="cu-btn bg-grey lg" @tap="launchConfirm">确认请求帮助</button>
+      <button class="cu-btn bg-grey lg" @tap="launchConfirm" disabled="{{disabled}}">确认请求帮助</button>
     </view>
   </view>
 </template>
@@ -98,7 +98,8 @@ export default class launchActivity extends wepy.page {
       ['八里台', '津南', '泰达']
     ],
     fileID: '',
-    itemID: ''
+    itemID: '',
+    disabled: false
   }
   onLoad() {
     this.helped = this.$parent.globalData.userName
@@ -119,8 +120,36 @@ export default class launchActivity extends wepy.page {
         }
       })
   }
+  validateInfo() {
+    if (this.title === '') {
+      wx.showToast({
+        title: '创建失败!标题不能为空!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+    if (this.description === '') {
+      wx.showToast({
+        title: '创建失败!详细描述不能为空!',
+        icon: 'none',
+        duration: 2000
+      })
+      return false
+    }
+    return true
+  }
   methods = {
     launchConfirm(e) {
+      if (!this.validateInfo()) {
+        return
+      }
+      wx.showLoading({
+        title: '上传中...',
+        mask: true
+      })
+      this.disabled = true
+      this.$apply()
       let that = this
       const database = wx.cloud.database({})
       const test = database.collection('help')
