@@ -49,6 +49,7 @@ import wepy from 'wepy'
 import lostFoundCard from '@/components/lostFound/lostFoundCard'
 
 export default class showLostFound extends wepy.page {
+  config = {navigationBarTitleText: '失物招领'};
   data = {
     list: []
   }

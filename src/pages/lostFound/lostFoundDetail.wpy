@@ -1,7 +1,6 @@
 <template>
   <view class="padding-sm">
     <view class="cu-card bg-white radius shadow-blur grid col-1 margin-bottom">
-      
       <view class="text-xl padding" role="" aria-label="">
         <text class="text-black text-bold">{{ lostFoundTitle }}</text>
       </view>
@@ -63,7 +62,6 @@
         <view class="text-gray text-sm text-right padding"></view>
       </view>
     </view>
-
     <view>
       <view class="cu-bar bg-white solid-bottom margin-top">
         <view class="action">
@@ -109,13 +107,11 @@ export default class LostFoundDetail extends wepy.page {
   config = {
     navigationBarTitleText: '详情'
   }
-
   wxs = {
     dateFormat: dateFormat,
     dayFormat: dayFormat,
     timeFormat: timeFormat
   }
-
   data = {
     index: -1,
     picker: ['失物招领', '寻物启事'],
@@ -127,7 +123,7 @@ export default class LostFoundDetail extends wepy.page {
     modalName: null,
     imgList: [],
     textAreaValue: '',
-    lostFoundID: '6cd397ca5cdfe5b700e3009b7fe40fbf',
+    lostFoundID: '',
     commentArray: [],
     message: '',
     userID: '',
@@ -135,7 +131,6 @@ export default class LostFoundDetail extends wepy.page {
     test: [],
     avatarUrl: ''
   }
-
   methods = {
     submitMessage(e) {
       let that = this
@@ -242,7 +237,6 @@ export default class LostFoundDetail extends wepy.page {
         that.$apply()
       }
     })
-
     const comment = database.collection('lost_found_comment')
     comment.where({
       event_id: this.lostFoundID
@@ -255,11 +249,9 @@ export default class LostFoundDetail extends wepy.page {
       }
     })
   }
-
   onLoad(options) {
     wx.showLoading({
       title: '加载中...',
-      // 防止触摸穿透
       mask: true
     })
     this.userID = this.$parent.globalData.userID

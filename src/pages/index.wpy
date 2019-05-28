@@ -99,7 +99,7 @@
 import wepy from 'wepy'
 
 export default class Index extends wepy.page {
-  config = {navigationBarTitleText: '帮帮！'};
+  config = {navigationBarTitleText: '帮帮'};
   data = {
     list: [],
     date: '2019-05-13',

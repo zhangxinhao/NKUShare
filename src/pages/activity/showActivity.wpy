@@ -74,6 +74,7 @@
 <script>
 import wepy from 'wepy'
 export default class showActivity extends wepy.page {
+  config = {navigationBarTitleText: '活动'};
   data = {
     act_id: [],
     list: [] // 所有活动信息列表

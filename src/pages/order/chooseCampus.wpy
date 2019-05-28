@@ -36,7 +36,7 @@ import wepy from 'wepy'
 
 export default class Campus extends wepy.page {
   config = {
-    navigationBarTitleText: '拼单啦!'
+    navigationBarTitleText: '拼单'
   }
 
   data = {
