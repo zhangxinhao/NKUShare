@@ -35,7 +35,7 @@
         <view wx:for="{{item.orders}}" wx:key class="cu-item">
           <view class="content padding-tb-sm">
             <view>
-              <text class="cuIcon-clothesfill text-blue margin-right-xs"></text>{{item.title}}</view>
+              <text class="cuIcon-newshotfill text-blue margin-right-xs"></text>{{item.title}}</view>
             <view class="text-gray text-sm">
               <text class="cuIcon-infofill margin-right-xs"></text> 人数限制为: {{ item.num_min }}-{{ item.num_max }}人</view>
             <view class="text-gray text-sm">
