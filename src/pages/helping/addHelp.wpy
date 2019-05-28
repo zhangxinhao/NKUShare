@@ -36,12 +36,13 @@
             <view class="picker">{{end_time}}</view>
         </picker>
       </view>
-      <view class="cu-form-group align-start">
+      <view class="cu-form-group">
         <view class="title">详细描述</view>
         <input
           maxlength="200"
           @input="textareaInput"
-          placeholder="输入描述"/>
+          name="input"
+          placeholder="输入描述 200字以内"/>
       </view>
       <view class="cu-bar bg-white margin-top">
         <view class="action">
@@ -65,7 +66,7 @@
         </view>
       </view>
       <view class="cu-form-group">
-        <view class="bonus">奖励金</view>
+        <view class="title">奖励金</view>
         <input placeholder="奖励金数目" name="input" bindchange="bonusChange"/>
       </view>
     </form>

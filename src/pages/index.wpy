@@ -67,7 +67,7 @@
   line-height: 1.3em;
 }
 .cu-list.menu-avatar>.cu-item {
-  height: 220rpx;
+  height: 230rpx;
 }
 .float-container {
   position: fixed;
@@ -141,7 +141,7 @@ export default class Index extends wepy.page {
               success: res => {
                 if (res.confirm) {
                   wepy.navigateTo({
-                    url: '../about/userInfo'
+                    url: '../pages/about/userInfo'
                   })
                 } else if (res.cancel) {
                 }
@@ -168,7 +168,7 @@ export default class Index extends wepy.page {
               success: res => {
                 if (res.confirm) {
                   wepy.navigateTo({
-                    url: '../about/userInfo'
+                    url: '../pages/about/userInfo'
                   })
                 } else if (res.cancel) {
                 }
