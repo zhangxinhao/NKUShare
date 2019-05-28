@@ -112,8 +112,8 @@
           </view>
         </repeat>
         <view class="cu-bar input margin-bottom">
-          <input placeholder="输入消息..." maxlength="200" bindinput='messageChange' />
-          <button class="cu-btn bg-green shadow" bindtap='submitMessage'>发送</button>
+          <input placeholder="输入消息..." maxlength="200" bindchange='addMessage' value="{{ message }}"/>
+          <button class="cu-btn bg-green shadow">发送</button>
         </view>
       </view>
 
@@ -185,10 +185,6 @@ export default class OrderDetail extends wepy.page {
     avatarUrl: ''
   }
 
-  messageChange(e) {
-    this.message = e.detail.value
-  }
-
   PickerChange(e) {
     this.index = e.detail.value
   }
@@ -239,7 +235,8 @@ export default class OrderDetail extends wepy.page {
     this.modalName = null
   }
 
-  submitMessage(e) {
+  addMessage(e) {
+    this.message = e.detail.value
     if (this.message.length === 0) {
       wx.showToast({
         title: '不能发送空消息',
@@ -250,11 +247,9 @@ export default class OrderDetail extends wepy.page {
     }
 
     let that = this
-
     const database = wx.cloud.database({
       env: 'nkushare-kynis'
     })
-
     const comment = database.collection('comment')
 
     comment.add({
@@ -270,8 +265,6 @@ export default class OrderDetail extends wepy.page {
         avatarUrl: that.avatarUrl
       },
       success(res) {
-        that.message = ''
-
         comment.where({
           event_id: that.orderID
         }).get({
@@ -280,9 +273,11 @@ export default class OrderDetail extends wepy.page {
             that.setData({
               commentArray: that.commentArray
             })
-            that.message = ''
-            that.$apply()
           }
+        })
+        that.message = ''
+        that.setData({
+          message: that.message
         })
       }
     })
