@@ -44,16 +44,14 @@
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
             <text class="cuIcon-emojiflashfill text-pink"></text>
-            <text class="text-grey">头像组</text>
+            <text class="text-grey">参与人员</text>
           </view>
           <view class="action">
             <view class="cu-avatar-group">
-              <view class="cu-avatar round sm" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10004.jpg);"></view>
-              <view class="cu-avatar round sm" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10003.jpg);"></view>
-              <view class="cu-avatar round sm" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10002.jpg);"></view>
-              <view class="cu-avatar round sm" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg);"></view>
+              <repeat for="{{attendeesAvatar}}" key="index" index="index" item="item">
+                <view class="cu-avatar round sm" style="background-image:url({{item}});"></view>
+              </repeat>
             </view>
-            <text class="text-grey text-sm">4 人</text>
           </view>
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
@@ -83,7 +81,7 @@
           </button>
         </view>
         <view wx:if="{{hasJoin==true}}" class="margin-top margin-bottom">
-          <button class="cu-btn round bg-red lg" role="button" aria-label="" aria-disabled="false" bindtap='leaveOrder'>
+          <button class="cu-btn round bg-red lg" role="button" aria-label="" aria-disabled="false" bindtap='quit'>
             退出拼单
           </button>
         </view>
@@ -191,7 +189,8 @@ export default class OrderDetail extends wepy.page {
     userName: '',
     message: '',
     hasCreated: false,
-    textareaInput: ''
+    textareaInput: '',
+    attendeesAvatar: []
   }
 
   messageChange(e) {
@@ -300,6 +299,86 @@ export default class OrderDetail extends wepy.page {
     this.getDetail()
   }
 
+  getUserAvator(e) {
+    let that = this
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+    const userTable = database.collection('user')
+    userTable
+      .where({
+        _openid: e
+      })
+      .get({
+        success(res) {
+          let temp = res.data[0].avatarUrl
+          that.attendeesAvatar.push(temp)
+          that.setData({
+            attendeesAvatar: that.attendeesAvatar
+          })
+        }
+      })
+  }
+
+  quit(e) {
+    // 显示loading提示框
+    wx.showLoading({
+      title: '退出活动中',
+      // 防止触摸穿透
+      mask: true
+    })
+    let that = this
+    wx.cloud.callFunction({
+      name: 'quitOrder',
+      data: {
+        orderID: that.orderID,
+        userID: that.userID,
+        type: 'A'
+      },
+      complete: res => {
+        that.hasJoin = false
+        that.setData({
+          hasJoin: that.hasJoin
+        })
+        that.requestNewUser()
+        wx.hideLoading()
+        wx.showModal({
+          title: '亲爱的用户',
+          content: '您已成功退出',
+          showCancel: false,
+          // cancelText: '取消',
+          confirmText: '确认',
+          success: res => {}
+        })
+      }
+    })
+  }
+
+  requestNewUser() {
+    let that = this
+    const database = wx.cloud.database({
+      env: 'nkushare-kynis'
+    })
+    const takes = database.collection('take_order')
+    takes
+      .where({
+        orderID: that.orderID
+      })
+      .get({
+        success(res) {
+          that.actTakes = res.data
+          that.setData({
+            actTakes: that.actTakes
+          })
+          that.attendeesAvatar = []
+          for (var i = 0; i < that.actTakes.length; i++) {
+            that.getUserAvator(that.actTakes[i]._openid)
+          }
+          that.$apply()
+        }
+      })
+  }
+
   getDetail() {
     let that = this
 
@@ -345,6 +424,21 @@ export default class OrderDetail extends wepy.page {
             })
           }
         })
+      }
+    })
+
+    takeorder.where({
+      orderID: this.orderID
+    }).get({
+      success(res) {
+        that.actTakes = res.data
+        that.setData({
+          actTakes: that.actTakes
+        })
+        that.attendeesAvatar = []
+        for (var i = 0; i < that.actTakes.length; i++) {
+          that.getUserAvator(that.actTakes[i]._openid)
+        }
       }
     })
 
