@@ -88,7 +88,7 @@ export default class activityCard extends wepy.component {
   }
   onLoad() {
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const activity = database.collection('activity')
     let that = this

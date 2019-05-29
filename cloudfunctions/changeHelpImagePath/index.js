@@ -9,7 +9,7 @@ exports.main = async (event, context) => {
   const {fileID, itemID} = event
 
   const database = cloud.database({
-    env: 'nkushare-kynis'
+    env: 'nkshare-3ufbs'
   })
   await database.collection('help').doc(itemID).update({
     data: {

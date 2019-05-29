@@ -179,7 +179,7 @@ export default class LostFoundDetail extends wepy.page {
       return
     }
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const comment = database.collection('lost_found_comment')
     comment.add({
@@ -208,7 +208,7 @@ export default class LostFoundDetail extends wepy.page {
   getDetail() {
     let that = this
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const lostFound = database.collection('lost_found')
 
@@ -259,7 +259,7 @@ export default class LostFoundDetail extends wepy.page {
     this.lostFoundID = options.id
     this.getDetail()
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const User = database.collection('user')
     let that = this

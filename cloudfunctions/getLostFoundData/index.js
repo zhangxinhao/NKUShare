@@ -8,7 +8,7 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
 
   const database = cloud.database({
-    env: 'nkushare-kynis'
+    env: 'nkshare-3ufbs'
   })
   await database.collection('lost_found').get({
     success(res) {

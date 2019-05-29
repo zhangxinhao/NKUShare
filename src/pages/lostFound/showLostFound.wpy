@@ -84,7 +84,7 @@ export default class showLostFound extends wepy.page {
   }
   onShow() {
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const lostFound = database.collection('lost_found')
     let that = this

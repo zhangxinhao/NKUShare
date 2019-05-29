@@ -128,8 +128,8 @@ export default class about extends wepy.page {
     },
     showQrcode() {
       wx.previewImage({
-        urls: ['https://6e6b-nkushare-kynis-1257274182.tcb.qcloud.la/QRCode.png?sign=26bb34f140a8eb9a68bdb6b71094bb00&t=1559052579'],
-        current: 'https://6e6b-nkushare-kynis-1257274182.tcb.qcloud.la/QRCode.png?sign=26bb34f140a8eb9a68bdb6b71094bb00&t=1559052579'
+        urls: ['https://6e6b-nkshare-3ufbs-1259339814.tcb.qcloud.la/40F26222ACB16511363F8717AC63972D.jpg?sign=19cebe9a479587d0cc09b2f0c67b5e74&t=1559132983'],
+        current: 'https://6e6b-nkshare-3ufbs-1259339814.tcb.qcloud.la/40F26222ACB16511363F8717AC63972D.jpg?sign=19cebe9a479587d0cc09b2f0c67b5e74&t=1559132983'
       })
     }
   }
