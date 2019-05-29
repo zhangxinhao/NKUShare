@@ -71,7 +71,7 @@
         ></textarea>
       </view>
       <view class="padding flex flex-direction">
-        <button class="cu-btn bg-grey lg" form-type="submit" disabled="{{disabled}}">确认添加</button>
+        <button class="cu-btn bg-grey lg" form-type="submit">确认添加</button>
       </view>
     </form>
   </view>
@@ -86,14 +86,26 @@ export default class addLostFound extends wepy.page {
     lostFoundTitle: '',
     lostFoundLocation: '',
     time: '12:01',
-    date: '2018-12-26',
+    date: '',
     modalName: null,
     imgList: [],
     textAreaValue: '',
     fileID: '',
     itemID: '',
-    lostFoundType: '',
-    disabled: false
+    lostFoundType: ''
+  }
+  onLoad() {
+    this.userID = this.$parent.globalData.userID
+    this.lostFoundTitle = ''
+    this.lostFoundLocation = ''
+    this.time = '12:00'
+    this.date = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate()
+    this.modalName = null
+    this.imgList = []
+    this.textAreaValue = ''
+    this.fileID = ''
+    this.itemID = ''
+    this.lostFoundType = ''
   }
   validateInfo() {
     if (this.index === -1) {

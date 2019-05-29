@@ -92,7 +92,15 @@ export default class showLostFound extends wepy.page {
       success(res) {
         that.list = res.data
         that.$apply()
+        wx.hideLoading()
       }
+    })
+  }
+  onLoad() {
+    wx.showLoading({
+      title: '加载中...',
+      // 防止触摸穿透
+      mask: true
     })
   }
   components = {
