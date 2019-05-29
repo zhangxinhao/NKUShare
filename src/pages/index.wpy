@@ -9,10 +9,12 @@
       </swiper-item>
     </swiper>
 	  <view class="cu-form-group">
+      <text class="cuIcon-calendar text-mauve"></text>
       <view class="title">日期</view>
       <picker mode="date" value="{{date}}" start="2015-09-01" end="2020-09-01" @change="DateChange">
         <view class="picker">{{date}}</view>
       </picker>
+      <text class="cuIcon-location text-mauve"></text>
       <view class="title">地址</view>
       <picker mode="multiSelector" @change="MultiChange" value="{{multiIndex}}" range="{{multiArray}}">
         <view class="picker">
@@ -247,6 +249,13 @@ export default class Index extends wepy.page {
       finished: false
     }).get({
       success(res) {
+        if (res.data.length === 0) {
+          wx.showToast({
+            title: '目前没有帮帮post噢，快去创建一个吧！',
+            icon: 'none',
+            duration: 2000
+          })
+        }
         that.list = res.data
         that.setData({
           list: that.list

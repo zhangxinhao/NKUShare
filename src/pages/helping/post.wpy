@@ -7,7 +7,7 @@
       <view class="cu-list menu {{menuCard?'card-menu margin-top':''}}">
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
-            <text class="cuIcon-profilefill text-grey"></text>
+            <text class="cuIcon-profilefill text-orange"></text>
             <text class="text-grey">创建者:</text>
           </view>
           <view class="action">
@@ -16,7 +16,7 @@
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
-            <text class="cuIcon-calendar text-grey"></text>
+            <text class="cuIcon-calendar text-yellow"></text>
             <text class="text-grey">创建日期</text>
           </view>
           <view class="action">
@@ -25,7 +25,7 @@
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
-            <text class="cuIcon-time text-grey"></text>
+            <text class="cuIcon-time text-olive"></text>
             <text class="text-grey">创建时间</text>
           </view>
           <view class="action">
@@ -34,7 +34,7 @@
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
-            <text class="cuIcon-time text-grey"></text>
+            <text class="cuIcon-time text-green"></text>
             <text class="text-grey">截止时间</text>
           </view>
           <view class="action">
@@ -43,7 +43,7 @@
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
-            <text class="cuIcon-location text-grey"></text>
+            <text class="cuIcon-location text-cyan"></text>
             <text class="text-grey">地址：</text>
           </view>
           <view class="action">
@@ -52,7 +52,7 @@
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
-            <text class="cuIcon-moneybag text-grey"></text>
+            <text class="cuIcon-moneybag text-blue"></text>
             <text class="text-grey">奖励金:</text>
           </view>
           <view class="action">
@@ -61,7 +61,7 @@
         </view>
         <view class="cu-item {{menuArrow?'arrow':''}}">
           <view class="content">
-            <text class="cuIcon-comment text-grey"></text>
+            <text class="cuIcon-comment text-mauve"></text>
             <text class="text-grey">详细描述:</text>
           </view>
           <view class="action">
@@ -221,9 +221,9 @@ export default class OrderDetail extends wepy.page {
     }).then(res => {
       wx.showModal({
         title: '亲爱的用户',
-        content: '已确定帮助',
+        content: '您已确认帮助',
         showCancel: false,
-        confirmText: '确认',
+        confirmText: '知道了',
         success: res => {
           if (res.confirm) {
             wx.navigateBack()
