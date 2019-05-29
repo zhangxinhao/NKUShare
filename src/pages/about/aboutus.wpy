@@ -31,12 +31,12 @@
 <template>
   <view>
     <view class='margin-xl bg-white padding-xl radius shadow-lg'>
-      <view class='text-center margin-bottom text-lg  text-grey'>关于我们</view>
+      <view class='text-center margin-bottom text-lg  text-grey'>关于NKUShare</view>
       <view class='text-content'>
-        <view>Hi！开发者~欢迎使用ColorUI组件库！</view>
-        <view class='margin-top-sm'>该项目是我个人开发的一款高颜值的微信小程序组件库。这个项目不仅有一些漂亮的基础元素，还有一些实用的组件。扩展中心也会不定期更新一些小程序的解决方案，或者你有一些好的想法可以在GitHub里提交给我，我会加入到扩展里。</view>
-        <view class='margin-top-sm'>项目是开源的，不收取任何费用，如果这个项目有帮到你，或者你觉得很赞，可以在GitHub里扫描赞赏码支持一下！</view>
-        <view class='margin-top-sm'>该项目你可以用到除组件库小程序的任何项目。作者我也是花了时间和精力的，我不希望你拷贝一份，做一些修改发布就变成了一个独立的项目，当然！扩展再发布是可以的，但前提是注明一下我这个原作者٩(๑❛ᴗ❛๑)۶</view>
+        <view>Hi! 亲爱的同学们，欢迎使用NKUShare!</view>
+        <view class='margin-top-sm'>我们发现，在校园内部，因为时间和空间的原因，在日常生活的许多方面，同学们无法及时分享消息，造成了一些不便，例如点外卖拼单、约人打球、代取快递，遗失物品等；同学们缺少一个可以及时共享信息的平台。为了解决这些用户痛点，提升学生的生活质量，共建互帮互助的校园文化，我们着手建立信息共享平台NKUShare。</view>
+        <view class='margin-top-sm'>NKUShare由南开大学软件学院同学开发，基于wepy框架和微信云开发，引入了ColorUI组件库；组件库的引入给极好的优化了用户体验，特此向组件库的作者表示感谢！</view>
+        <view class='margin-top-sm'>由于开发工期较短，NKUShare可能还不尽完善，不足之处请各位同学在意见反馈栏里填写，我们会尽快处理。</view>
         <view class='margin-top-sm'>更多功能敬请期待！</view>
       </view>
     </view>
