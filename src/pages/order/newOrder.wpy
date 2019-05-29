@@ -224,7 +224,7 @@ export default class NewOrder extends wepy.page {
       new Date(this.date + ' ' + this.ddlTime).getTime() <=
         new Date().getTime() ||
       this.endTime <= this.startTime ||
-      this.startTime >= this.ddlTime
+      this.startTime <= this.ddlTime
     ) {
       wx.showToast({
         title: '创建失败!日期不符合规范!',
