@@ -225,8 +225,9 @@ export default class OrderDetail extends wepy.page {
         showCancel: false,
         confirmText: '知道了',
         success: res => {
+          that.hasJoin = true
           that.setData({
-            hasJoin: true
+            hasJoin: that.hasJoin
           })
           that.$apply()
         }
