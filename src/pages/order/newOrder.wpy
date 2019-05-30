@@ -40,15 +40,15 @@
         </picker>
       </view>
       <view class="cu-form-group">
-        <view class="title">开始时间选择</view>
-        <picker mode="time" value="startTime" start="00:00" end="24:00" bindchange="StartTimeChange">
-          <view class="picker">{{startTime}}</view>
-        </picker>
-      </view>
-      <view class="cu-form-group">
         <view class="title">报名截止时间选择</view>
         <picker mode="time" value="ddlTime" start="00:00" end="24:00" bindchange="DdlTimeChange">
           <view class="picker">{{ddlTime}}</view>
+        </picker>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">开始时间选择</view>
+        <picker mode="time" value="startTime" start="00:00" end="24:00" bindchange="StartTimeChange">
+          <view class="picker">{{startTime}}</view>
         </picker>
       </view>
       <view class="cu-form-group">
@@ -254,9 +254,9 @@ export default class NewOrder extends wepy.page {
     const takeorder = database.collection('take_order')
 
     let location
-    if (this.locationIndex === 0) {
+    if (this.locationIndex === '0') {
       location = 'BLT'
-    } else if (this.locationIndex === 1) {
+    } else if (this.locationIndex === '1') {
       location = 'JN'
     } else {
       location = 'TD'

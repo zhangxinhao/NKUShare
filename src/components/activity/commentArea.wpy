@@ -71,7 +71,7 @@ export default class commentArea extends wepy.component {
       var myDate = new Date()
       var mouth = myDate.getMonth() + 1
       var date = mouth + '-' + myDate.getDate()
-      var time = myDate.getHours() + '-' + myDate.getMinutes()
+      var time = myDate.getHours() + ':' + myDate.getMinutes()
       let that = this
       let newComment = {
         event_id: that.actID,

@@ -133,7 +133,7 @@ export default class about extends wepy.page {
       })
     }
   }
-  onLoad() {
+  onShow() {
     this.userName = this.$parent.globalData.userName
   }
 }

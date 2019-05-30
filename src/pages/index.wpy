@@ -37,6 +37,11 @@
                   <view class="text-gray text-sm flex justify-between padding-left">奖励金：{{item.bonus}}</view>
                   <view class="text-gray text-sm flex justify-between padding-left padding-bottom">地点：从{{item.start_loc}}到{{item.end_loc}}</view>
                 </view>
+                <view class="action">
+                  <view wx:if="{{ item.finished }}">
+                    <button class="cu-btn bg-red text-sm shadow-blur round" disabled>已帮助！</button>
+                  </view>
+                </view>
               </view>
               <view class="bg-grey padding-sm radius margin-top-sm  text-sm flex">
                 <view>{{item.title}}</view>
@@ -54,6 +59,9 @@
   </view>
  </template>
  <style scoped>
+ .cu-list.menu-avatar>.cu-item .action {
+   width:160rpx;
+ }
  .cu-form-group picker .picker {
   text-align: left;
 }
@@ -245,9 +253,7 @@ export default class Index extends wepy.page {
     })
     const order = database.collection('help')
     let that = this
-    order.where({
-      finished: false
-    }).get({
+    order.get({
       success(res) {
         if (res.data.length === 0) {
           wx.showToast({

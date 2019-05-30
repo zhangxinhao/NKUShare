@@ -13,7 +13,8 @@ exports.main = async (event, context) => {
   })
   await database.collection('help').doc(helpID).update({
     data: {
-      helper: userID
+      helper: userID,
+      finished: true
     }
   })
   return {

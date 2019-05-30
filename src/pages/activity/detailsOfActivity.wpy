@@ -158,7 +158,8 @@ export default class detailsOfActivity extends wepy.page {
     // 判断用户是否已对小程序授权
     hasAuthorized: false,
     modalName: null,
-    picker: ['1', '2', '3', '4', '5']
+    picker: ['1', '2', '3', '4', '5'],
+    index: null
   }
   computed = {}
   methods = {
