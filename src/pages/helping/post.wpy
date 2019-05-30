@@ -231,7 +231,6 @@ export default class OrderDetail extends wepy.page {
           that.$apply()
         }
       })
-      console.log(res.result)
     })
   }
   ViewImage(e) {
