@@ -74,7 +74,7 @@ export default class userInfo extends wepy.page {
   onLoad() {
     let that = this
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const user = database.collection('user')
     user.where({
@@ -95,7 +95,7 @@ export default class userInfo extends wepy.page {
     if (e.detail.userInfo) {
       let that = this
       const database = wx.cloud.database({
-        env: 'nkushare-kynis'
+        env: 'nkshare-3ufbs'
       })
       const user = database.collection('user')
       user.doc(that._id).update({
@@ -122,7 +122,7 @@ export default class userInfo extends wepy.page {
     that.disabled = true
     that.$apply()
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const user = database.collection('user')
     user.doc(that._id).update({

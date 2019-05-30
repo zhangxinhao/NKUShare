@@ -7,7 +7,7 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
 
   const database = cloud.database({
-    env: 'nkushare-kynis'
+    env: 'nkshare-3ufbs'
   })
   return await database.collection('take_activity').where({
     _openid: event.userID,

@@ -109,7 +109,7 @@ export default class OrderList extends wepy.page {
 
   getOrderList() {
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
 
     const order = database.collection('order')

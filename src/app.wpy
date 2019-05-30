@@ -87,7 +87,7 @@ export default class extends wepy.app {
       complete: res => {
         this.globalData.userID = res.result.openid
         const database = wx.cloud.database({
-          env: 'nkushare-kynis'
+          env: 'nkshare-3ufbs'
         })
         const user = database.collection('user')
         let that = this

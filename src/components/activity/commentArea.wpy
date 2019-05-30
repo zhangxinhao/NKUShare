@@ -65,7 +65,7 @@ export default class commentArea extends wepy.component {
         return
       }
       const database = wx.cloud.database({
-        env: 'nkushare-kynis'
+        env: 'nkshare-3ufbs'
       })
       const comment = database.collection('activity_comment')
       var myDate = new Date()
@@ -99,7 +99,7 @@ export default class commentArea extends wepy.component {
   }
   getCommentArea() {
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const commentTable = database.collection('activity_comment')
     let that = this
@@ -116,7 +116,7 @@ export default class commentArea extends wepy.component {
   }
   getUserInfo() {
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const User = database.collection('user')
     let that = this

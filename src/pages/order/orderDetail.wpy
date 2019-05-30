@@ -207,7 +207,7 @@ export default class OrderDetail extends wepy.page {
     let that = this
 
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
 
     const takeorder = database.collection('take_order')
@@ -260,7 +260,7 @@ export default class OrderDetail extends wepy.page {
 
     let that = this
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const comment = database.collection('comment')
 
@@ -299,7 +299,7 @@ export default class OrderDetail extends wepy.page {
 
   getCommentAvator() {
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const User = database.collection('user')
     let that = this
@@ -327,7 +327,7 @@ export default class OrderDetail extends wepy.page {
   getUserAvator(e) {
     let that = this
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const userTable = database.collection('user')
     userTable
@@ -382,7 +382,7 @@ export default class OrderDetail extends wepy.page {
   requestNewUser() {
     let that = this
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const takes = database.collection('take_order')
     takes
@@ -408,7 +408,7 @@ export default class OrderDetail extends wepy.page {
     let that = this
 
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
 
     const order = database.collection('order')

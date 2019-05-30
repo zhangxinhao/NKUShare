@@ -224,7 +224,7 @@ export default class addLostFound extends wepy.page {
       this.$apply()
       let that = this
       const database = wx.cloud.database({
-        env: 'nkushare-kynis'
+        env: 'nkshare-3ufbs'
       })
       const test = database.collection('lost_found')
       test.add({

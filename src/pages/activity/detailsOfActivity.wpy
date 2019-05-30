@@ -254,7 +254,7 @@ export default class detailsOfActivity extends wepy.page {
   }
   getDetails() {
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const activity = database.collection('activity')
     const takes = database.collection('take_activity')
@@ -289,7 +289,7 @@ export default class detailsOfActivity extends wepy.page {
           }
           // 获取发起者信息
           const database = wx.cloud.database({
-            env: 'nkushare-kynis'
+            env: 'nkshare-3ufbs'
           })
           const User = database.collection('user')
           User.where({
@@ -337,7 +337,7 @@ export default class detailsOfActivity extends wepy.page {
   getUserAvator(e) {
     let that = this
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const userTable = database.collection('user')
     userTable
@@ -357,7 +357,7 @@ export default class detailsOfActivity extends wepy.page {
   requestNewUser() {
     let that = this
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const takes = database.collection('take_activity')
     takes
@@ -388,7 +388,7 @@ export default class detailsOfActivity extends wepy.page {
     })
     let that = this
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const takes = database.collection('take_activity')
     takes

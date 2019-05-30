@@ -105,7 +105,7 @@ export default class launchActivity extends wepy.page {
     this.helped = this.$parent.globalData.userName
     let that = this
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const userTable = database.collection('user')
     userTable

@@ -133,7 +133,7 @@ export default class launchActivity extends wepy.page {
       let that = this
 
       const database = wx.cloud.database({
-        env: 'nkushare-kynis'
+        env: 'nkshare-3ufbs'
       })
 
       const activity = database.collection('activity')

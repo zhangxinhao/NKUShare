@@ -10,8 +10,8 @@
 		"checkInvalidKey": true
 	},
 	"compileType": "miniprogram",
-	"appid": "wxf48ca9dda53199be",
-	"projectname": "nkushare",
+	"appid": "wxf76aa93a2c8e945b",
+	"projectname": "NKshare",
 	"miniprogramRoot": "dist/",
 	"cloudfunctionRoot": "cloudfunctions/",
 	"simulatorType": "wechat",

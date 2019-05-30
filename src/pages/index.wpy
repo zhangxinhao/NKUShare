@@ -188,7 +188,7 @@ export default class Index extends wepy.page {
     DateChange(e) {
       this.date = e.detail.value
       const database = wx.cloud.database({
-        env: 'nkushare-kynis'
+        env: 'nkshare-3ufbs'
       })
       const order = database.collection('help')
       let that = this
@@ -207,7 +207,7 @@ export default class Index extends wepy.page {
     MultiChange(e) {
       this.multiIndex = e.detail.value
       const database = wx.cloud.database({
-        env: 'nkushare-kynis'
+        env: 'nkshare-3ufbs'
       })
       const order = database.collection('help')
       let that = this
@@ -241,7 +241,7 @@ export default class Index extends wepy.page {
   }
   getOrderList() {
     const database = wx.cloud.database({
-      env: 'nkushare-kynis'
+      env: 'nkshare-3ufbs'
     })
     const order = database.collection('help')
     let that = this
