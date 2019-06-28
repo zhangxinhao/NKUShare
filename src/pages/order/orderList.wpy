@@ -130,6 +130,17 @@ export default class OrderList extends wepy.page {
             orders[j].outOfDate = false
           }
         }
+        // 对奶茶拼单时间进行排序
+        for (let j = orders.length - 1; j > 0; j--) {
+          for (let k = 0; k < j; k++) {
+            if (new Date(orders[k].date + ' ' + orders[k].begin).getTime() < new Date(orders[k + 1].date + ' ' + orders[k + 1].begin).getTime()) {
+              let temp = orders[k]
+              orders[k] = orders[k + 1]
+              orders[k + 1] = temp
+            }
+          }
+        }
+        // 排序完成
         that.list[0].orders = orders
         that.setData({
           list: that.list
@@ -151,6 +162,17 @@ export default class OrderList extends wepy.page {
             orders[j].outOfDate = false
           }
         }
+        // 对麻辣烫拼单时间进行排序
+        for (let j = orders.length - 1; j > 0; j--) {
+          for (let k = 0; k < j; k++) {
+            if (new Date(orders[k].date + ' ' + orders[k].begin).getTime() < new Date(orders[k + 1].date + ' ' + orders[k + 1].begin).getTime()) {
+              let temp = orders[k]
+              orders[k] = orders[k + 1]
+              orders[k + 1] = temp
+            }
+          }
+        }
+        // 排序完成
         that.list[1].orders = orders
         that.setData({
           list: that.list
@@ -172,6 +194,17 @@ export default class OrderList extends wepy.page {
             orders[j].outOfDate = false
           }
         }
+        // 对其它拼单时间进行排序
+        for (let j = orders.length - 1; j > 0; j--) {
+          for (let k = 0; k < j; k++) {
+            if (new Date(orders[k].date + ' ' + orders[k].begin).getTime() < new Date(orders[k + 1].date + ' ' + orders[k + 1].begin).getTime()) {
+              let temp = orders[k]
+              orders[k] = orders[k + 1]
+              orders[k + 1] = temp
+            }
+          }
+        }
+        // 排序完成
         that.list[2].orders = orders
         that.setData({
           list: that.list

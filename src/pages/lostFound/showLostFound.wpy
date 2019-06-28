@@ -91,6 +91,17 @@ export default class showLostFound extends wepy.page {
     lostFound.get({
       success(res) {
         that.list = res.data
+        // 根据时间进行排序
+        for (let j = that.list.length - 1; j > 0; j--) {
+          for (let k = 0; k < j; k++) {
+            if (new Date(that.list[k].date + ' ' + that.list[k].time).getTime() < new Date(that.list[k + 1].date + ' ' + that.list[k + 1].time).getTime()) {
+              let temp = that.list[k]
+              that.list[k] = that.list[k + 1]
+              that.list[k + 1] = temp
+            }
+          }
+        }
+        // 排序完成
         that.$apply()
         wx.hideLoading()
       }
