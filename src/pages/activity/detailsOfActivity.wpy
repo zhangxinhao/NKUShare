@@ -381,6 +381,20 @@ export default class detailsOfActivity extends wepy.page {
       })
   }
   attendActivity() {
+    if (this.actTakes.length >= this.actDetails.num_max) {
+      wx.showModal({
+        title: '活动人数已满',
+        content: '无法参与当前活动，请移步其它活动报名参加',
+        showCancel: false,
+        confirmText: '确认',
+        success (res) {
+          if (res.confirm) {
+            console.log('用户点击确定')
+          }
+        }
+      })
+      return
+    }
     // 显示loading提示框
     wx.showLoading({
       title: '加入活动中',
