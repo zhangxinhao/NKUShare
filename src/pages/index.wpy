@@ -109,10 +109,14 @@
 import wepy from 'wepy'
 
 export default class Index extends wepy.page {
-  config = {navigationBarTitleText: '帮帮'};
+  config = {
+    navigationBarTitleText: '帮帮',
+    enablePullDownRefresh: true,
+    backgroundTextStyle: 'dark'
+  }
   data = {
     list: [],
-    date: '2019-05-13',
+    date: '请选择查询时间',
     multiIndex: [0, 1],
     multiArray: [
       ['八里台', '津南', '泰达'],
@@ -202,10 +206,23 @@ export default class Index extends wepy.page {
       let that = this
       order.where({
         finished: false,
+        start_loc: this.multiArray[0][this.multiIndex[0]],
+        end_loc: this.multiArray[1][this.multiIndex[1]],
         date: this.date
       }).get({
         success(res) {
           that.list = res.data
+          // 按照创建时间进行排序
+          for (let j = that.list.length - 1; j > 0; j--) {
+            for (let k = 0; k < j; k++) {
+              if (new Date(that.list[k].date + ' ' + that.list[k].start_time).getTime() < new Date(that.list[k + 1].date + ' ' + that.list[k + 1].start_time).getTime()) {
+                let temp = that.list[k]
+                that.list[k] = that.list[k + 1]
+                that.list[k + 1] = temp
+              }
+            }
+          }
+          // 排序完毕
           that.setData({
             list: that.list
           })
@@ -219,18 +236,38 @@ export default class Index extends wepy.page {
       })
       const order = database.collection('help')
       let that = this
-      order.where({
-        finished: false,
-        start_loc: this.multiArray[0][this.multiIndex[0]],
-        end_loc: this.multiArray[1][this.multiIndex[1]]
-      }).get({
-        success(res) {
-          that.list = res.data
-          that.setData({
-            list: that.list
-          })
-        }
-      })
+      if (that.date !== '请选择查询时间') {
+        order.where({
+          finished: false,
+          start_loc: this.multiArray[0][this.multiIndex[0]],
+          end_loc: this.multiArray[1][this.multiIndex[1]],
+          date: that.date
+        }).get({
+          success(res) {
+            that.list = res.data
+            // 按照创建时间进行排序
+            for (let j = that.list.length - 1; j > 0; j--) {
+              for (let k = 0; k < j; k++) {
+                if (new Date(that.list[k].date + ' ' + that.list[k].start_time).getTime() < new Date(that.list[k + 1].date + ' ' + that.list[k + 1].start_time).getTime()) {
+                  let temp = that.list[k]
+                  that.list[k] = that.list[k + 1]
+                  that.list[k + 1] = temp
+                }
+              }
+            }
+            // 排序完毕
+            that.setData({
+              list: that.list
+            })
+          }
+        })
+      } else {
+        wx.showToast({
+          title: '请选择查询时间',
+          icon: 'none',
+          duration: 2000
+        })
+      }
     }
   }
   onLoad(options) {
@@ -238,14 +275,27 @@ export default class Index extends wepy.page {
       title: '加载中...',
       mask: true
     })
-
     this.getOrderList()
   }
   onReady() {
     wx.hideLoading()
   }
   onShow() {
+    this.date = '请选择查询时间'
+    this.multiIndex = [0, 1]
     this.getOrderList()
+  }
+  onPullDownRefresh() {
+    this.onShow()
+    setTimeout(function () {
+      // 不加这个方法真机下拉会一直处于刷新状态，无法复位
+      wepy.stopPullDownRefresh()
+      wx.showToast({
+        title: '刷新完成',
+        icon: 'none',
+        duration: 1000
+      })
+    }, 2000)
   }
   getOrderList() {
     const database = wx.cloud.database({
@@ -263,6 +313,17 @@ export default class Index extends wepy.page {
           })
         }
         that.list = res.data
+        // 按照创建时间进行排序
+        for (let j = that.list.length - 1; j > 0; j--) {
+          for (let k = 0; k < j; k++) {
+            if (new Date(that.list[k].date + ' ' + that.list[k].start_time).getTime() < new Date(that.list[k + 1].date + ' ' + that.list[k + 1].start_time).getTime()) {
+              let temp = that.list[k]
+              that.list[k] = that.list[k + 1]
+              that.list[k + 1] = temp
+            }
+          }
+        }
+        // 排序完毕
         that.setData({
           list: that.list
         })

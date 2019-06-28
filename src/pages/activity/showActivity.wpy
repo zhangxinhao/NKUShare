@@ -145,6 +145,17 @@ export default class showActivity extends wepy.page {
             that.list[j].outOfDate = false
           }
         }
+        // 根据活动开始时间对活动进行排序，开始时间越晚越考前显示
+        for (let j = that.list.length - 1; j > 0; j--) {
+          for (let k = 0; k < j; k++) {
+            if (new Date(that.list[k].date + ' ' + that.list[k].begin).getTime() < new Date(that.list[k + 1].date + ' ' + that.list[k + 1].begin).getTime()) {
+              let temp = that.list[k]
+              that.list[k] = that.list[k + 1]
+              that.list[k + 1] = temp
+            }
+          }
+        }
+        // 排序完成
         that.$apply()
         wx.hideLoading()
       }
