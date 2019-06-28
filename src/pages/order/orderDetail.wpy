@@ -180,6 +180,7 @@ export default class OrderDetail extends wepy.page {
     picker: ['1', '2', '3', '4', '5'],
     orderID: '',
     orderDetail: {},
+    actTakes: [],
     label: '',
     creatorID: '',
     creatorName: '',
@@ -199,6 +200,20 @@ export default class OrderDetail extends wepy.page {
   }
 
   joinOrder(e) {
+    if (this.actTakes.length >= this.orderDetail.num_max) {
+      wx.showModal({
+        title: '拼单人数已满',
+        content: '无法参与当前拼单，请移步其它拼单报名参加',
+        showCancel: false,
+        confirmText: '确认',
+        success (res) {
+          if (res.confirm) {
+            console.log('用户点击确定')
+          }
+        }
+      })
+      return
+    }
     wx.showLoading({
       title: '加入拼单中',
       // 防止触摸穿透
