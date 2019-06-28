@@ -205,45 +205,19 @@ export default class Index extends wepy.page {
       const order = database.collection('help')
       let that = this
       order.where({
-        finished: false,
+        // finished: false,
         start_loc: this.multiArray[0][this.multiIndex[0]],
         end_loc: this.multiArray[1][this.multiIndex[1]],
         date: this.date
       }).get({
         success(res) {
-          that.list = res.data
-          // 按照创建时间进行排序
-          for (let j = that.list.length - 1; j > 0; j--) {
-            for (let k = 0; k < j; k++) {
-              if (new Date(that.list[k].date + ' ' + that.list[k].start_time).getTime() < new Date(that.list[k + 1].date + ' ' + that.list[k + 1].start_time).getTime()) {
-                let temp = that.list[k]
-                that.list[k] = that.list[k + 1]
-                that.list[k + 1] = temp
-              }
-            }
-          }
-          // 排序完毕
-          that.setData({
-            list: that.list
-          })
-        }
-      })
-    },
-    MultiChange(e) {
-      this.multiIndex = e.detail.value
-      const database = wx.cloud.database({
-        env: 'nkshare-3ufbs'
-      })
-      const order = database.collection('help')
-      let that = this
-      if (that.date !== '请选择查询时间') {
-        order.where({
-          finished: false,
-          start_loc: this.multiArray[0][this.multiIndex[0]],
-          end_loc: this.multiArray[1][this.multiIndex[1]],
-          date: that.date
-        }).get({
-          success(res) {
+          if (res.data.length === 0) {
+            wx.showToast({
+              title: '未找到当前日期的帮帮记录，请更改条件重新查询',
+              icon: 'none',
+              duration: 2000
+            })
+          } else {
             that.list = res.data
             // 按照创建时间进行排序
             for (let j = that.list.length - 1; j > 0; j--) {
@@ -259,6 +233,48 @@ export default class Index extends wepy.page {
             that.setData({
               list: that.list
             })
+          }
+        }
+      })
+    },
+    MultiChange(e) {
+      this.multiIndex = e.detail.value
+      const database = wx.cloud.database({
+        env: 'nkshare-3ufbs'
+      })
+      const order = database.collection('help')
+      let that = this
+      if (that.date !== '请选择查询时间') {
+        order.where({
+          // finished: false,
+          start_loc: this.multiArray[0][this.multiIndex[0]],
+          end_loc: this.multiArray[1][this.multiIndex[1]],
+          date: that.date
+        }).get({
+          success(res) {
+            if (res.data.length === 0) {
+              wx.showToast({
+                title: '未找到当前查询条件下的帮帮记录，请更改条件重新查询',
+                icon: 'none',
+                duration: 2000
+              })
+            } else {
+              that.list = res.data
+              // 按照创建时间进行排序
+              for (let j = that.list.length - 1; j > 0; j--) {
+                for (let k = 0; k < j; k++) {
+                  if (new Date(that.list[k].date + ' ' + that.list[k].start_time).getTime() < new Date(that.list[k + 1].date + ' ' + that.list[k + 1].start_time).getTime()) {
+                    let temp = that.list[k]
+                    that.list[k] = that.list[k + 1]
+                    that.list[k + 1] = temp
+                  }
+                }
+              }
+              // 排序完毕
+              that.setData({
+                list: that.list
+              })
+            }
           }
         })
       } else {
